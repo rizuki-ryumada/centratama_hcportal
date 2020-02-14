@@ -26,6 +26,13 @@
 	<script src="<?= base_url('assets'); ?>/js/ckeditor/ckeditor.js"></script>
 	<script src="<?= base_url('assets'); ?>/js/OrgChartJS/orgchart.js"></script>
 	<style>
+		.highlight {
+			background-color: #2e279d;
+			border-radius: 24px;
+			color: white;
+			text-align: center;
+		}
+
 		.node.me rect {
 			fill: #FFCA28;
 		}
