@@ -121,8 +121,8 @@ $(document).ready(function() {
 
     $('#jenis-surat').change(function(){
         nTable.ajax.reload();
-    })
-})
+    });
+});
 
 
 $('.custom-file-input').on('change', function() {

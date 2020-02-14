@@ -7,12 +7,12 @@ class Jobpro_model extends CI_Model {
     public function getMyprofile($nik)
     {
         $this->db->select('employe.*, divisi.division, departemen.nama_departemen, position.position_name, position.id_atasan1 as posnameatasan1,
-                            profile_jabatan.tujuan_jabatan, profile_jabatan.id_posisi');
+                            position.id_atasan2, profile_jabatan.tujuan_jabatan, profile_jabatan.id_posisi');
         $this->db->from('employe');
-        $this->db->join('divisi', 'divisi.id = employe.id_div');
-        $this->db->join('departemen', 'departemen.id = employe.id_dep');
-        $this->db->join('position', 'position.id = employe.position_id');
-        $this->db->join('profile_jabatan', 'profile_jabatan.id_posisi = position.id');
+		$this->db->join('divisi', 'divisi.id = employe.id_div', 'left');
+		$this->db->join('departemen', 'departemen.id = employe.id_dep', 'left');
+		$this->db->join('position', 'position.id = employe.position_id', 'left');
+		$this->db->join('profile_jabatan', 'profile_jabatan.id_posisi = position.id', 'left');
         
         $this->db->where('employe.nik', $nik);
         return $this->db->get()->row_array();

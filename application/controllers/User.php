@@ -45,11 +45,10 @@ class User extends CI_Controller
             $this->load->view('templates/user_footer');
         } else {
             $name = $this->input->post('name');
-            $nik = $this->input->post('nik');
-
-            $this->db->set('name', $name);
+			$nik = $this->session->userdata('nik');
+			$this->db->set('emp_name', $name);
             $this->db->where('nik', $nik);
-            $this->db->update('user');
+            $this->db->update('employe');
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
             Your Profile Has Been Updated ! </div>');
             redirect('user');

@@ -38,27 +38,21 @@ class Jobs extends CI_Controller {
         $data['pos'] = $this->Jobpro_model->getAllPosition();
         $data['title'] = 'Job Profile';
         $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
-
-        $this->load->view('templates/user_header', $data);
-        $this->load->view('templates/user_sidebar', $data);
-        $this->load->view('templates/user_topbar', $data);
-        $this->load->view('jobs/index', $data);
-        $this->load->view('templates/jobs_footer');
-    }
-
-    public function jobprofile()
-    {
-        $nik = $this->session->userdata('nik');
-        $data['my'] = $this->Jobpro_model->getMyProfile($nik);
-        
-        $data['title'] = 'Job Profile';
-        $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
-        
-        $this->load->view('templates/user_header', $data);
-        $this->load->view('templates/user_sidebar', $data);
-        $this->load->view('templates/user_topbar', $data);
-        $this->load->view('user/job_profile', $data);
-        $this->load->view('templates/jobs_footer');
+		$statusApproval = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array();
+		if ($statusApproval) {
+			$data['approval'] = $statusApproval;
+			$this->load->view('templates/user_header', $data);
+			$this->load->view('templates/user_sidebar', $data);
+			$this->load->view('templates/user_topbar', $data);
+			$this->load->view('jobs/save_jobs', $data);
+			$this->load->view('templates/user_footer');
+		} else {
+			$this->load->view('templates/user_header', $data);
+			$this->load->view('templates/user_sidebar', $data);
+			$this->load->view('templates/user_topbar', $data);
+			$this->load->view('jobs/index', $data);
+			$this->load->view('templates/jobs_footer');
+		}
     }
 
     public function insatasan()
@@ -398,6 +392,20 @@ class Jobs extends CI_Controller {
 		$this->db->where('id_posisi', $this->input->post('id_posisi'));
 		$this->db->update('jumlah_staff', $data);
 		echo 'staff updated';
+	}
+	public function setApprove()
+	{
+		$data = [
+			'nik' => $this->input->post('nik'),
+			'id_posisi' => $this->input->post('id_posisi'),
+			'atasan1' => $this->input->post('atasan1'),
+			'atasan2' => $this->input->post('atasan2'),
+			'tanggal_pengajuan' => time(),
+			'status_approval' => 'Dikirim',
+			'is_active' => 1
+		];
+		$this->db->insert('job_approval', $data);
+		print_r($data);
 	}
 }
 

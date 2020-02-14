@@ -1,10 +1,10 @@
 <!-- Footer -->
 <footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; CentratamaGroup <?= date('Y'); ?> </span>
-        </div>
-    </div>
+	<div class="container my-auto">
+		<div class="copyright text-center my-auto">
+			<span>Copyright &copy; CentratamaGroup <?= date('Y'); ?> </span>
+		</div>
+	</div>
 </footer>
 <!-- End of Footer -->
 
@@ -16,7 +16,7 @@
 
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
+	<i class="fas fa-angle-up"></i>
 </a>
 
 <!-- Bootstrap core JavaScript-->
@@ -339,7 +339,7 @@
 						staf: staf
 					},
 					method: 'post',
-					success: function (data) {
+					success: function(data) {
 						console.log(data);
 					}
 				})
@@ -490,6 +490,28 @@
 				},
 				success: function() {
 					document.location.href = "<?= base_url('admin/roleaccess/'); ?>" + roleId;
+				}
+			});
+		});
+
+		$('.btnApprove').on('click', function() {
+			const nik = $(this).data('mynik');
+			const id_posisi = $(this).data('position');
+			const atasan1 = $(this).data('atasan1');
+			const atasan2 = $(this).data('atasan2');
+
+			$.ajax({
+				url: "<?= base_url('jobs/setApprove') ?>",
+				type: 'post',
+				data: {
+					nik: nik,
+					id_posisi: id_posisi,
+					atasan1: atasan1,
+					atasan2: atasan2
+				},
+				success: function(data) {
+					console.log(data);
+					location.reload();
 				}
 			});
 		});
