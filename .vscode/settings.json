@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "db_penilaian",
+            "dialect": "MySQL",
+            "name": "session_penilaian",
+            "password": "123penilaian",
+            "port": 3306,
+            "server": "172.16.10.35",
+            "username": "penilaian"
+        }
+    ]
+}
