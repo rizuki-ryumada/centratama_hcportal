@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_nomor extends CI_Model {
 	var $table = 'jenis_surat';
-    var $column_order = array(null, 'no_surat','perihal','pic','tanggal','note','surat_keluar.jenis_surat'); //set column field database for datatable orderable
+    var $column_order = array('no_surat','perihal','pic','tanggal','note','surat_keluar.jenis_surat'); //set column field database for datatable orderable
     var $column_search = array('no_surat','perihal','pic','tanggal','note','surat_keluar.jenis_surat'); //set column field database for datatable searchable 
 	var $order = array('surat_keluar.id' => 'asc'); // default order 
 	

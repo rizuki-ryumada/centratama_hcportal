@@ -66,7 +66,7 @@ class Surat extends CI_Controller {
             $row[] = $noSur->no_surat;
             $row[] = $noSur->perihal;
             $row[] = $noSur->pic;
-            $row[] = date("d  F  Y", strtotime($noSur->tanggal));
+            $row[] = date("d F Y", strtotime($noSur->tanggal));
             $row[] = $noSur->note;
             $row[] = $noSur->jns_surat;
 
