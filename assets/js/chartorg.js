@@ -135,6 +135,17 @@
 		return (new Date().getTime()) * 1000 + Math.floor(Math.random() * 1001);
 	  };
 
+	  
+	  function isEven(num){
+		  if(num % 2 === 0){
+			  return true;
+		  } else {
+			  return false;
+		  }
+	  };
+
+	//   alert(isEven(15));
+
 	   // datasource_assistant -> this variable from jobs/index.html
 	   // datasource -> this variable from jobs/index.html
 
@@ -152,9 +163,15 @@
 		createNode: function($node, data) {
 			$.each(datasource_assistant, function(i, item) {
 				console.log(item.atasan_assistant);
-
 				if (data.position_name === item.atasan_assistant){
-					var assistantNode = '<div class="assistant-node"><div class="connector"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+					if(isEven(i) == true){ //cek jika nilai i odd atau even, gunanya buat nodenya bisa tampil terpisah jika lebih dari satu assistant
+						var node_position  = 140;
+						var node_connector = -65;
+					} else {
+						var node_position  = -123;
+						var node_connector = 130;
+					}
+					var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
 					$node.append(assistantNode);
 				}
 			});

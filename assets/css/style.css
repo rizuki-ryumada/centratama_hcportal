@@ -83,28 +83,27 @@ display: none;
 #edit-panel.view-state .radio-panel input[type='radio']+label { vertical-align: -webkit-baseline-middle; }
 #btn-add-nodes { margin-left: 20px; }
 
-/* assistant node style */
+/* assistant node style - has been used in inline style on chartorg.js */
 .orgchart .assistant-node {
     display: inline-block;
     margin: 0;
     padding: 3px;
     border: 2px dashed transparent;
     text-align: center;
-    width: 130px;
-    left: 140px;
-    top: 30px;
+    width: 140px;
+    /* left: 140px; */ /* been used on chartorg.js */
+    top: 100px;
     z-index: 2;
     position: absolute;
 }
-
 .orgchart .assistant-node .connector {
     border-left: #1180FF dashed 2px;
     border-bottom: #1180FF dashed 2px;
     position: absolute;
-    left: -75px;
+    /* left: -65px; */ /* been used on chartorg.js */
     width: 72px;
     height: 12.5px;
-    top: 12.5px;
+    top: 21px;
 }
 
 /* my position style */

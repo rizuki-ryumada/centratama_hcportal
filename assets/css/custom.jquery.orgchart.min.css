@@ -120,7 +120,7 @@
 .orgchart .lines .downLine {
  background-color:#1180FF;
  margin:0 auto;
- height:75px;
+ height:110px;
  width:2px;
  float:none
 }
@@ -132,7 +132,7 @@
  padding:3px;
  border:2px dashed transparent;
  text-align:center;
- width:140px;
+ width:160px;
 }
 .orgchart.l2r .node,
 .orgchart.r2l .node {
@@ -172,7 +172,7 @@
  text-align:center;
  font-size:12px;
  font-weight:700;
- height:90px;
+ height:65px;
  line-height:20px;
  overflow:hidden;
  text-overflow:ellipsis;
