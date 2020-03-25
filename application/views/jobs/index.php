@@ -238,6 +238,7 @@
 									<td>
 										<select name="wen_sendiri" class="form-control" required>
 											<option value="">Wewenang Anda</option>
+											<option value="-">-</option>
 											<option value="R">R : Responsibility</option>
 											<option value="A">A : Accountability</option>
 											<option value="V">V : Veto</option>
@@ -248,6 +249,7 @@
 									<td>
 										<select name="wen_atasan1" class="form-control" required>
 											<option value="">Wewenang Atasan Pertama</option>
+											<option value="-">-</option>
 											<option value="R">R : Responsibility</option>
 											<option value="A">A : Accountability</option>
 											<option value="V">V : Veto</option>
@@ -258,6 +260,7 @@
 									<td>
 										<select name="wen_atasan2" class="form-control" required>
 											<option value="">Wewenang Atasan Kedua</option>
+											<option value="-">-</option>
 											<option value="R">R : Responsibility</option>
 											<option value="A">A : Accountability</option>
 											<option value="V">V : Veto</option>
@@ -571,11 +574,51 @@
 		</div>
 	</div> <!-- Dangerrrrrr -->
 	<div class="card shadow">
-		<div class="card-header">
+		<!-- <div class="card-header">
 			<h6 class="m-0 font-weight-bold text-black-50">Struktur Organisasi</h6>
+		</div> -->
+		
+		<div class="card-body"> <!-- the new orgchart -->
+			<!-- orgchart Container -->
+				<div id="chart-container"></div> 
+			<!-- /orgchart Container -->
+
+			<!-- orgchart edit panel -->
+				<!-- <div id="edit-panel">
+					<span id="chart-state-panel" class="radio-panel">
+						<input type="radio" name="chart-state" id="rd-view" value="view"><label for="rd-view">View</label>
+						<input type="radio" name="chart-state" id="rd-edit" value="edit" checked="true"><label for="rd-edit">Edit</label>
+					</span>
+					
+					<label class="selected-node-group">Selected node:</label>
+					<input type="text" id="selected-node" class="selected-node-group">
+					
+					<label>New node:</label>
+					<ul id="new-nodelist">
+						<li><input type="text" class="new-node"></li>
+					</ul>
+					
+					<i class="fa fa-plus-circle btn-inputs" id="btn-add-input"></i>
+					<i class="fa fa-minus-circle btn-inputs" id="btn-remove-input"></i>
+					
+					<span id="node-type-panel" class="radio-panel">
+						<input type="radio" name="node-type" id="rd-parent" value="parent"><label for="rd-parent">Parent(root)</label>
+						<input type="radio" name="node-type" id="rd-child" value="children"><label for="rd-child">Child</label>
+						<input type="radio" name="node-type" id="rd-sibling" value="siblings"><label for="rd-child">Sibling</label>
+					</span>
+
+					<button id="btn-add-nodes">Add</button>
+					<button id="btn-delete-nodes">Delete</button>
+					<button id="btn-reset">Reset</button>
+				</div> -->
+			<!-- /orgchart edit panel -->
 		</div>
+
 		<div class="card-body">
 			<div id="tree" />
+		</div>
+		<div class="card-body">
+			<button type="submit" class="mt-2 btn btn-primary btn-sm" id="simpan-chart">Save</button>
 		</div>
 	</div>
 </div>
@@ -654,3 +697,56 @@
 		</div>
 	</div>
 </div>
+
+<script>
+//masukkin data ke variabel javascript dari php
+
+//bikin 2 template buat print sama buat view
+//simpan data 
+
+var datasource = <?php echo $orgchart_data; ?>;
+var datasource_assistant = <?php echo($orgchart_data_assistant); ?>
+
+//pid 1
+//masukin data nodes ke form input juga
+//
+
+
+//id tampilkan id atasan 1 2 yang punya jabatan lebih tinggi
+//tampilkan id atasan 1 yang sama semua
+
+
+
+// var nodes = [
+// 	{
+// 		id: "1",
+// 		title: "Masukkan Jabatan Atasan Anda",
+// 		me: ""
+// 	},
+// 	{
+// 		id: "2",
+// 		pid: "1",
+// 		title: "Masukkan Jabatan",
+// 		me: ""
+// 	},
+// 	{
+// 		id: "3",
+// 		pid: "1",
+// 		title: "Masukkan Jabatan",
+// 		me: ""
+// 	},
+// 	{
+// 		id: "4",
+// 		pid: "1",
+// 		title: "Masukkan Jabatan",
+// 		me: ""
+// 	},
+// 	{
+// 		id: "5",
+// 		pid: "2",
+// 		title: "Masukkan Jabatan",
+// 		me: "Posisi Saya Ini Paling Tinggi Lo"
+// 	}
+// ];
+//
+</script>

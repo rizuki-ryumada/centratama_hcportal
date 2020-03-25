@@ -23,6 +23,10 @@
 <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+<!-- orgchart -->
+<script src="<?php base_url(); ?>assets/js/orgchart/jquery.orgchart.min.js"></script>
+	<script src="<?php base_url(); ?>assets/js/orgchart/html2canvas.min.js"></script>
+
 <script src="<?= base_url('assets/'); ?>vendor/jquery-tabledit/jquery.tabledit.min.js"></script>
 
 <!-- Core plugin JavaScript-->

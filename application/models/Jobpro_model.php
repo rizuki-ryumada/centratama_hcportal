@@ -106,8 +106,43 @@ class Jobpro_model extends CI_Model {
 	public function getStaff($id)
 	{
 		return $this->db->get_where('jumlah_staff', ['id_posisi' => $id])->row_array();
-	}
+    }
+    
+    //Ryu code starts here
+    public function getPositionDetail($id_posisi){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id' => $id_posisi, 'assistant' => 0));
+        return $this->db->get()->row_array();
+    }
 
+    public function getWhoisSama($id_atasan1){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id_atasan1' => $id_atasan1, 'assistant' => 0));
+        return $this->db->get()->result_array();
+    }
+
+    public function getPositionDetailAssistant($id_posisi){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id' => $id_posisi, 'assistant' => 1));
+        return $this->db->get()->row_array();
+    }
+
+    public function getWhoisSamaAssistant($id_atasan1){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id_atasan1' => $id_atasan1, 'assistant' => 1));
+        return $this->db->get()->result_array();
+    }
+
+    public function getAtasanAssistant($id_atasan1){
+        $this->db->select('position_name');
+        $this->db->from('position');
+        $this->db->where(array('id' => $id_atasan1));
+        return $this->db->get()->row_array();
+    }
 }
 
 /* End of file Jobpro_model.php */
