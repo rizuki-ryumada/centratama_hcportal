@@ -704,8 +704,51 @@
 //bikin 2 template buat print sama buat view
 //simpan data 
 
-var datasource = <?php echo $orgchart_data; ?>;
-var datasource_assistant = <?php echo($orgchart_data_assistant); ?>
+var datasource = <?php echo $orgchart_data; ?>; 
+var datasource_assistant = <?php echo($orgchart_data_assistant); ?>;
+// var datasource_assistant = [
+//     {
+//         "id": "194",
+//         "position_name": "Employee Relation & Safety Officer",
+//         "dept_id": "26",
+//         "div_id": "6",
+//         "id_atasan1": "196",
+//         "id_atasan2": "1",
+//         "assistant": "1",
+//         "atasan_assistant": "Human Capital Division Head"
+//     },
+//     {
+//         "id": "195",
+//         "position_name": "HCIS Officer",
+//         "dept_id": "26",
+//         "div_id": "6",
+//         "id_atasan1": "196",
+//         "id_atasan2": "1",
+//         "assistant": "1",
+//         "atasan_assistant": "Human Capital Division Head"
+//     },
+//     {
+//         "id": "195",
+//         "position_name": "HCIS Officer",
+//         "dept_id": "26",
+//         "div_id": "6",
+//         "id_atasan1": "196",
+//         "id_atasan2": "1",
+//         "assistant": "1",
+//         "atasan_assistant": "Human Capital Division Head"
+//     },
+//     {
+//         "id": "195",
+//         "position_name": "HCIS Officer",
+//         "dept_id": "26",
+//         "div_id": "6",
+//         "id_atasan1": "196",
+//         "id_atasan2": "1",
+//         "assistant": "1",
+//         "atasan_assistant": "Human Capital Division Head"
+//     }
+// ];
+
 
 //pid 1
 //masukin data nodes ke form input juga

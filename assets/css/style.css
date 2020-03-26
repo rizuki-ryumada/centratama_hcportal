@@ -92,7 +92,7 @@ display: none;
     text-align: center;
     width: 140px;
     /* left: 140px; */ /* been used on chartorg.js */
-    top: 100px;
+    /* top: 100px; */ /* been used on chartorg.js */
     z-index: 2;
     position: absolute;
 }

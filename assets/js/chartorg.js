@@ -150,7 +150,7 @@
 	   // datasource -> this variable from jobs/index.html
 
 	//    console.log(datasource_assistant[0].position_name);
-
+	
 	  var oc = $('#chart-container').orgchart({
 		data : datasource,
 		// chartClass: 'edit-state',
@@ -164,9 +164,16 @@
 			$.each(datasource_assistant, function(i, item) {
 				// console.log(item.atasan_assistant);
 
-				console.log(i);
-
-				if (data.position_name === item.atasan_assistant){
+				if (data.position_name === item.atasan_assistant){//cek apa posistion name
+					if (i>1){//assistant lebih dari 2
+						$(document).ready(function() {
+							$('.downLine').css({"height": "220px"});
+						});
+						var node_location = 200;
+					} else {//tidak?
+						var node_location = 100;
+					}
+					
 					if(isEven(i) == true){ //cek jika nilai i odd atau even, gunanya buat nodenya bisa tampil terpisah jika lebih dari satu assistant
 						var node_position  = 140;
 						var node_connector = -65;
@@ -175,9 +182,7 @@
 						var node_connector = 130;
 					}
 
-					
-
-					var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+					var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
 					$node.append(assistantNode);
 				}
 			});
