@@ -162,7 +162,10 @@
 		nodeTitle: 'position_name',
 		createNode: function($node, data) {
 			$.each(datasource_assistant, function(i, item) {
-				console.log(item.atasan_assistant);
+				// console.log(item.atasan_assistant);
+
+				console.log(i);
+
 				if (data.position_name === item.atasan_assistant){
 					if(isEven(i) == true){ //cek jika nilai i odd atau even, gunanya buat nodenya bisa tampil terpisah jika lebih dari satu assistant
 						var node_position  = 140;
@@ -171,6 +174,9 @@
 						var node_position  = -123;
 						var node_connector = 130;
 					}
+
+					
+
 					var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
 					$node.append(assistantNode);
 				}

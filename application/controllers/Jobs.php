@@ -48,177 +48,183 @@ class Jobs extends CI_Controller {
         // Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 [assistant] => 0 ) 
         
         $x = 0; $y = 0; //untuk penanda 
-        $my_atasan[$x]['id_atasan1'] = $my_pos_detail['id_atasan1'];
-        $id_atasan1 = $my_pos_detail['id_atasan1'];
 
-        while($x<2){ //hanya ambil data sampai 2 tingkat ke atas
-            //cari posisi yang bukan assistant
-            $whois_sama[$x] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
-            $my_atasan[$x] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
+        if(!empty($my_pos_detail)){//if data exist
 
-            //cari posisi yang assistant
-            if(!empty($whois_sama_assistant[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan1))){ //biar kalo nilainya null jangan biarkan bikin array kosong
-                $y++;
-            } else {
-                //nothing
-            } //200 dan 201 ambil data yang sama sama saya yang assistant)
-            // $my_atasan_assistant[$x] = $this->Jobpro_model->getPositionDetailAssistant($id_atasan1); //ambil informasi daftar atasan saya yang assistant
-            $id_atasan1 = $my_atasan[$x]['id_atasan1'];
-            $x++;
-        }
+            $my_atasan[$x]['id_atasan1'] = $my_pos_detail['id_atasan1'];
+            $id_atasan1 = $my_pos_detail['id_atasan1'];
 
-        // exit;
-        
+            while($x<2){ //hanya ambil data sampai 2 tingkat ke atas
+                //cari posisi yang bukan assistant
+                $whois_sama[$x] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                $my_atasan[$x] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
 
-        //cari id yang sama dengan $my_pos_detail di $whois_sama, lalu tambahin 'className': 'my-position'
-        foreach($whois_sama as $k => $v){
-            foreach ($v as $key => $value){
-                if($my_pos_detail['id'] == $value['id']){
-                    $whois_sama[$k][$key]['className'] = 'my-position';
-                }
-            }
-        }
-
-        //assistant dicari atasannya
-
-        //initialize Assistant
-        // $x = 0;
-        // $org_assistant = array();
-        // //cari apa ada assistant
-        // foreach($whois_sama as $k => $v){
-        //     foreach($v as $key => $value){
-        //         if($value['assistant_of'] != 0){
-        //             $org_assistant['assistant'][$x] = $whois_sama[$k][$key];
-        //             unset($whois_sama[$k][$key]);
-        //             $x++;
-        //         }
-        //     }
-        // }
-        // //cari informasi atasan si assistant jika ga kosong
-        // if(!empty($org_assistant)){
-        //     $org_assistant['assistant_leader'] = $this->Jobpro_model->getPositionDetail($org_assistant['assistant'][0]['assistant_of']); //ambil informasi daftar atasan saya
-        // }else{
-        //     $org_assistant['assistant_leader'] = "";
-        // }
-        // $data['org_assistant'] = json_encode($org_assistant); //data assistant dibawa ke view
-
-        // print_r(json_encode($whois_sama));
-        // print('<br>');
-        // print('<br>');
-        // print_r($my_atasan);
-        // print('<br>');
-        // print('<br>');
-        // print_r($whois_sama_assistant);
-        // print('<br>');
-        // print('<br>');
-        // // var_dump($my_atasan_assistant);
-        // exit;
-
-        //output dari array $whois_sama_assistant
-        // Array ( [0] => Array ( [0] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 )
-        //                        [1] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 ) 
-        //                     ) 
-        //         ) 
-
-        //output $whois_sama
-        // Array ( [0] => Array ( [0] => Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 ) 
-        //                        [1] => Array ( [id] => 201 [position_name] => Talent & Performance Management Specialist [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 ) 
-        //                     ) 
-        //         [1] => Array ( [0] => Array ( [id] => 182 [position_name] => Compensation & Benefit Dept. Head [dept_id] => 27 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                        [1] => Array ( [id] => 190 [position_name] => General Affairs & GovRel Dept. Head [dept_id] => 28 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                        [2] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                        [3] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                        [4] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                     ) 
-        //     )
-        //output $my_atasan
-        // Array ( [0] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //         [1] => Array ( [id] => 196 [position_name] => Human Capital Division Head [dept_id] => 26 [div_id] => 6 [id_atasan1] => 1 [id_atasan2] => 0 )
-        //     )
-
-        //reverse arraynya dulu
-        $whois_sama = array_reverse($whois_sama);
-        $my_atasan = array_reverse($my_atasan);
-
-        // print_r($whois_sama);
-        // print('<br>');
-        // print('<br>');
-        // print_r($my_atasan);
-        //output $whois_sama
-        // Array ( [0] => Array ( [0] => Array ( [id] => 182 [position_name] => Compensation & Benefit Dept. Head [dept_id] => 27 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                        [1] => Array ( [id] => 190 [position_name] => General Affairs & GovRel Dept. Head [dept_id] => 28 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                        [2] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                        [3] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                        [4] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 )
-        //                     ) 
-        //         [1] => Array ( [0] => Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 )
-        //                        [1] => Array ( [id] => 201 [position_name] => Talent & Performance Management Specialist [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 ) 
-        //                     )
-        //     )
-        //output $my_atasan
-        // Array ( [0] => Array ( [id] => 196 [position_name] => Human Capital Division Head [dept_id] => 26 [div_id] => 6 [id_atasan1] => 1 [id_atasan2] => 0 )
-        //         [1] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //     ) 
-
-        //gabungkan array $whois_sama dengan $my_atasan
-        $org_struktur = $my_atasan;
-        foreach($my_atasan as $k => $v){
-            $org_struktur[$k]['children'] = $whois_sama[$k];
-        }
-
-        // print_r($org_struktur);
-        //output $org_struktur
-        // Array ( [0] => Array ( [id] => 196 [position_name] => Human Capital Division Head [dept_id] => 26 [div_id] => 6 [id_atasan1] => 1 [id_atasan2] => 0 
-        //         [children] => Array ( [0] => Array ( [id] => 182 [position_name] => Compensation & Benefit Dept. Head [dept_id] => 27 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 )
-        //                               [1] => Array ( [id] => 190 [position_name] => General Affairs & GovRel Dept. Head [dept_id] => 28 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 )
-        //                               [2] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                               [3] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
-        //                               [4] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 )
-        //                             ) 
-        //                     ) 
-        //         [1] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 
-        //         [children] => Array ( [0] => Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 )
-        //                               [1] => Array ( [id] => 201 [position_name] => Talent & Performance Management Specialist [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 ) 
-        //                             )
-        //                     )
-        //     ) 
-
-        //gabungkan array[1] dengan [0];
-        $i = 0;
-        foreach($org_struktur[1]['children'] as $key => $value){
-            foreach($org_struktur[0]['children'] as $k => $v){
-                if($org_struktur[1]['id'] == $org_struktur[0]['children'][$k]['id']){
-                    $org_struktur[0]['children'][$k]['children'][$i] = $value;
-                    $i++;
-                }
-            }
-        }
-
-        $data['orgchart_data'] = json_encode($org_struktur[0]); //masukkan orgchart yang sudah diolah ke JSON
-
-        //ASSISTANT DATA
-        //keluarkan semua assistant jadi di level teratas
-        $org_assistant = array(); $x = 0; //initialize assistant
-        foreach($whois_sama_assistant as $k => $v){
-            foreach($v as $key => $value){
-                $org_assistant[$x] = $value; //tambah value ke org_struktur
-                foreach($this->Jobpro_model->getAtasanAssistant($value['id_atasan1']) as $kunci => $nilai){ //cari atasannya 
-                    // array_push($org_assistant[$x], $nilai); //tambah nama posisi atasannya
-                    $org_assistant[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
-                }
-
+                //cari posisi yang assistant
+                if(!empty($whois_sama_assistant[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan1))){ //biar kalo nilainya null jangan biarkan bikin array kosong
+                    $y++;
+                } else {
+                    //nothing
+                } //200 dan 201 ambil data yang sama sama saya yang assistant)
+                // $my_atasan_assistant[$x] = $this->Jobpro_model->getPositionDetailAssistant($id_atasan1); //ambil informasi daftar atasan saya yang assistant
+                $id_atasan1 = $my_atasan[$x]['id_atasan1'];
                 $x++;
             }
+
+            // exit;
+            
+
+            //cari id yang sama dengan $my_pos_detail di $whois_sama, lalu tambahin 'className': 'my-position'
+            foreach($whois_sama as $k => $v){
+                foreach ($v as $key => $value){
+                    if($my_pos_detail['id'] == $value['id']){
+                        $whois_sama[$k][$key]['className'] = 'my-position';
+                    }
+                }
+            }
+
+            //assistant dicari atasannya
+
+            //initialize Assistant
+            // $x = 0;
+            // $org_assistant = array();
+            // //cari apa ada assistant
+            // foreach($whois_sama as $k => $v){
+            //     foreach($v as $key => $value){
+            //         if($value['assistant_of'] != 0){
+            //             $org_assistant['assistant'][$x] = $whois_sama[$k][$key];
+            //             unset($whois_sama[$k][$key]);
+            //             $x++;
+            //         }
+            //     }
+            // }
+            // //cari informasi atasan si assistant jika ga kosong
+            // if(!empty($org_assistant)){
+            //     $org_assistant['assistant_leader'] = $this->Jobpro_model->getPositionDetail($org_assistant['assistant'][0]['assistant_of']); //ambil informasi daftar atasan saya
+            // }else{
+            //     $org_assistant['assistant_leader'] = "";
+            // }
+            // $data['org_assistant'] = json_encode($org_assistant); //data assistant dibawa ke view
+
+            // print_r(json_encode($whois_sama));
+            // print('<br>');
+            // print('<br>');
+            // print_r($my_atasan);
+            // print('<br>');
+            // print('<br>');
+            // print_r($whois_sama_assistant);
+            // print('<br>');
+            // print('<br>');
+            // // var_dump($my_atasan_assistant);
+            // exit;
+
+            //output dari array $whois_sama_assistant
+            // Array ( [0] => Array ( [0] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 )
+            //                        [1] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 ) 
+            //                     ) 
+            //         ) 
+
+            //output $whois_sama
+            // Array ( [0] => Array ( [0] => Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 ) 
+            //                        [1] => Array ( [id] => 201 [position_name] => Talent & Performance Management Specialist [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 ) 
+            //                     ) 
+            //         [1] => Array ( [0] => Array ( [id] => 182 [position_name] => Compensation & Benefit Dept. Head [dept_id] => 27 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                        [1] => Array ( [id] => 190 [position_name] => General Affairs & GovRel Dept. Head [dept_id] => 28 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                        [2] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                        [3] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                        [4] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                     ) 
+            //     )
+            //output $my_atasan
+            // Array ( [0] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //         [1] => Array ( [id] => 196 [position_name] => Human Capital Division Head [dept_id] => 26 [div_id] => 6 [id_atasan1] => 1 [id_atasan2] => 0 )
+            //     )
+
+            //reverse arraynya dulu
+            $whois_sama = array_reverse($whois_sama);
+            $my_atasan = array_reverse($my_atasan);
+
+            // print_r($whois_sama);
+            // print('<br>');
+            // print('<br>');
+            // print_r($my_atasan);
+            //output $whois_sama
+            // Array ( [0] => Array ( [0] => Array ( [id] => 182 [position_name] => Compensation & Benefit Dept. Head [dept_id] => 27 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                        [1] => Array ( [id] => 190 [position_name] => General Affairs & GovRel Dept. Head [dept_id] => 28 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                        [2] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                        [3] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                        [4] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 )
+            //                     ) 
+            //         [1] => Array ( [0] => Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 )
+            //                        [1] => Array ( [id] => 201 [position_name] => Talent & Performance Management Specialist [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 ) 
+            //                     )
+            //     )
+            //output $my_atasan
+            // Array ( [0] => Array ( [id] => 196 [position_name] => Human Capital Division Head [dept_id] => 26 [div_id] => 6 [id_atasan1] => 1 [id_atasan2] => 0 )
+            //         [1] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //     ) 
+
+            //gabungkan array $whois_sama dengan $my_atasan
+            $org_struktur = $my_atasan;
+            foreach($my_atasan as $k => $v){
+                $org_struktur[$k]['children'] = $whois_sama[$k];
+            }
+
+            // print_r($org_struktur);
+            //output $org_struktur
+            // Array ( [0] => Array ( [id] => 196 [position_name] => Human Capital Division Head [dept_id] => 26 [div_id] => 6 [id_atasan1] => 1 [id_atasan2] => 0 
+            //         [children] => Array ( [0] => Array ( [id] => 182 [position_name] => Compensation & Benefit Dept. Head [dept_id] => 27 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 )
+            //                               [1] => Array ( [id] => 190 [position_name] => General Affairs & GovRel Dept. Head [dept_id] => 28 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 )
+            //                               [2] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                               [3] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
+            //                               [4] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 )
+            //                             ) 
+            //                     ) 
+            //         [1] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 
+            //         [children] => Array ( [0] => Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 )
+            //                               [1] => Array ( [id] => 201 [position_name] => Talent & Performance Management Specialist [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 ) 
+            //                             )
+            //                     )
+            //     ) 
+
+            //gabungkan array[1] dengan [0];
+            $i = 0;
+            foreach($org_struktur[1]['children'] as $key => $value){
+                foreach($org_struktur[0]['children'] as $k => $v){
+                    if($org_struktur[1]['id'] == $org_struktur[0]['children'][$k]['id']){
+                        $org_struktur[0]['children'][$k]['children'][$i] = $value;
+                        $i++;
+                    }
+                }
+            }
+
+            $data['orgchart_data'] = json_encode($org_struktur[0]); //masukkan orgchart yang sudah diolah ke JSON
+
+            //ASSISTANT DATA
+            //keluarkan semua assistant jadi di level teratas
+            $org_assistant = array(); $x = 0; //initialize assistant
+            foreach($whois_sama_assistant as $k => $v){
+                foreach($v as $key => $value){
+                    $org_assistant[$x] = $value; //tambah value ke org_struktur
+                    foreach($this->Jobpro_model->getAtasanAssistant($value['id_atasan1']) as $kunci => $nilai){ //cari atasannya 
+                        // array_push($org_assistant[$x], $nilai); //tambah nama posisi atasannya
+                        $org_assistant[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
+                    }
+
+                    $x++;
+                }
+            }
+
+            // print_r($org_assistant);
+            // Array ( [0] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 [0] => Human Capital Division Head )
+            //         [1] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 [0] => Human Capital Division Head )
+            //     ) 
+            
+            //simpan data dalam bentuk JSON
+            $data['orgchart_data_assistant'] = json_encode($org_assistant);
+        } else { //if data doesn't exist
+            $data['orgchart_data_assistant'] = json_encode("");
+            $data['orgchart_data'] = json_encode(""); //masukkan orgchart yang sudah diolah ke JSON
         }
-
-        // print_r($org_assistant);
-        // Array ( [0] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 [0] => Human Capital Division Head )
-        //         [1] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 [0] => Human Capital Division Head )
-        //     ) 
-        
-        //simpan data dalam bentuk JSON
-        $data['orgchart_data_assistant'] = json_encode($org_assistant);
-
         // End of Pengolahan data orgchart
 
 
