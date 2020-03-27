@@ -109,5 +109,20 @@ display: none;
 /* my position style */
 .orgchart .my-position .title {
     background-color: #e14141 !important;
-  }
-/* /This is Ryu Development Area */
+}
+
+/* card status */
+.status-logo {
+    /* background-color: #e14141;  */
+}
+.status-text {
+    /* background-color: aqua; */
+}
+.status-action {
+    /* background-color: brown; */
+    display: table-cell;
+}
+
+#myTask_wrapper {
+    width: 100% !important;
+}
