@@ -5,6 +5,7 @@ display: none;
 
 /* This is Ryu Development Area */
 
+/* chart styles */
 #chart-container {
     font-family: Arial;
     /* height: 420px; */
@@ -13,14 +14,12 @@ display: none;
     overflow: auto;
     text-align: center;
 }
-
 #chart-container { background-color: #eee; height: 100%; }
 .orgchart { background: #fff; }
 .orgchart.edit-state .edge { display: none; }
 .orgchart .node { width: 150px; }
 .orgchart .node .title { height: 30px; line-height: 30px; }
 .orgchart .node .title .symbol { margin-top: 1px; }
-
 #edit-panel {
     position: relative;
     left: 10px;
@@ -32,13 +31,12 @@ display: none;
     color: #fff;
     background-color: #449d44;
 }
-
+/* edit panel */
 #edit-panel .btn-inputs { font-size: 24px; }
 #edit-panel.edit-state>:not(#chart-state-panel) { display: none; }
 #edit-panel label { font-weight: bold; }
 #edit-panel.edit-parent-node .selected-node-group { display: none; }
 #chart-state-panel, #selected-node, #btn-remove-input { margin-right: 20px; }
-
 #edit-panel button{
     color: #333;
     background-color: #fff;
@@ -60,13 +58,11 @@ display: none;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
 #edit-panel.edit-parent-node button:not(#btn-add-nodes) { display: none; }
 #edit-panel button:hover,.edit-panel button:focus,.edit-panel button:active {
     border-color: #eea236;
     box-shadow: 0 0 10px #eea236;
 }
-
 #new-nodelist{
     display: inline-block;
     list-style: none;
@@ -74,7 +70,6 @@ display: none;
     padding: 0;
     vertical-align: text-top;
 }
-
 #new-nodelist>* { padding-bottom: 4px; }
 .btn-inputs { vertical-align: sub; }
 #edit-panel.edit-parent-node .btn-inputs { display: none; }
@@ -123,6 +118,7 @@ display: none;
     display: table-cell;
 }
 
-#myTask_wrapper {
+/* my task table view */
+#myTask_wrapper { 
     width: 100% !important;
 }

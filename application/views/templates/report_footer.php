@@ -5,6 +5,8 @@
             <span>Copyright &copy; CentratamaGroup <?= date('Y'); ?> </span>
         </div>
     </div>
+
+    <div id="my_div" class="row"></div>
 </footer>
 <!-- End of Footer -->
 
@@ -31,189 +33,81 @@
 <script src="<?= base_url('assets/'); ?>vendor/swall/sweetalert2.all.min.js"></script>
 
 <script src="<?= base_url('assets/'); ?>vendor/datatables/jquery.dataTables.min.js"></script>
-        <script src="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-        <!-- Page level custom scripts -->
-        <script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
+<!-- Page level custom scripts -->
+<script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
+
+<!-- custom javascript -->
+<script src="<?= base_url('assets/'); ?>js/ryu.js"></script>
 
 <script>
-$(document).ready(function() {
-    $(document).on('change', '#divisi', function() {
-        let div_id = $(this).val();
-            $.ajax({
-                url: '<?= base_url('master/getDeptAjax') ?>',
-                type: 'POST',
-                async: false,
-                dataType: 'json',
-                data: {
-                    div_id: div_id
-                },
-                success: function(data) {
-                    if (data != '') {
-                        let option = "";
-                        let i;
-                        let div_id = $('#divisi').val();
-                        for (i = 0; i < data.length; i++) {
-                            option += '<option value=' + data[i].nama_departemen + '>' + data[i].nama_departemen + '</option>';
-                        }
-                        $('#departemen').html("<option selected value=''>All</option>" +option);
-                    }
-
-                }
-            });
-    });
-});
-
-var mTable;
-
-$(document).ready(function(){
-    mTable = $('#myTable').DataTable({
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax":{
-            "url": "<?= base_url('reportjobs/getreport') ?>",
-            "type": 'post',
-            "data": function(data){
-                data.divisi = $('#divisi').val();
-                data.departemen = $('#departemen').val();
-                }
-                },
-        "columnDefs": [
-            { 
-                "targets": [ 0 ], //first column / numbering column
-                "orderable": true //set not orderable
-            }
-        ]
+//activate dataTable
+$(document).ready(function () {
+    var mTable = $('#myTask').DataTable({
+        "select": true,
     });
 
-    $('#divisi').change(function() {
-        mTable.ajax.reload();
-    });
-    $('#departemen').change(function() {
-        mTable.ajax.reload();
-    })
-});
-
-$(document).ready(function() {
-    nTable = $('#table-nomor').DataTable({
-        "autoWidth" : true,
-        "processing" : true,
-		"language" : { processing: '<div class="spinner-grow text-primary" role="status"><span class="sr-only">Loading...</span></div>'},
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-            "url": "<?= base_url('surat/ajax_no') ?>",
-            "type": "post",
-            "data": function(data){
-                data.jenis_surat = $('#jenis-surat').val();
-            }
-        },
-        "columnDefs": [
-            { "width": "185px", "targets": [0], "orderable": true },
-            { "width": "185px", "targets": [1], "orderable": true },
-            { "width": "100px", "targets": [2], "orderable": true },
-            { "width": "120px", "targets": [3], "orderable": true },
-            { "width": "185px", "targets": [4], "orderable": true },
-            { "width": "150px", "targets": [5], "orderable": true }
-        ]
+    $('#divisi').change(function(){
+        mTable.column(0).search(this.value).order([0, 'asc']).draw();
     });
 
-    $('#jenis-surat').change(function(){
-        nTable.ajax.reload();
+    $('#departement').change(function(){
+        mTable.column(1).search(this.value).order([1, 'asc']).draw();
+    });
+
+    $('#status').change(function(){
+        mTable.column(4).search(this.value).order([4, 'asc']).draw();
     });
 });
 
 
-$('.custom-file-input').on('change', function() {
-    let filename = $(this).val().split('\\').pop();
-    $(this).next('.custom-file-label').addClass("selected").html(filename);
-});
 
-$('.form-check-input').on('click', function() {
-    const menuId = $(this).data('menu');
-    const roleId = $(this).data('role');
+//if using ajax
+// $(document).ready(function() {
+//     var mTabel = $('#history').DataTable({
+//         "processing": true,
+//         "serverSide": true,
+//         "searchable": true,
+//         "orderable": true,
+//         "select": true,
+//         "ajax": {
+//             "url"  : "<?= base_url('history/getHistoryApproval'); ?>",
+//             "type" : "post",
+//             "data" : function(data){ //parameter buat dibawa ke url ajax 
+//                     data.divisi = $('#divisi').val();
+//                     data.departement = $('#departement').val();
+//                     data.status = $('#status').val();
+//                 }
+//         },
+//         // "columnDefs": [
+//         //     {
+//         //         "targets": [0],
+//         //         "orderable": true
+//         //     }
+//         // ]
+//     });
 
-    $.ajax({
-        url: "<?= base_url('admin/changeaccess'); ?>",
-        type: 'post',
-        data: {
-            menuId: menuId,
-            roleId: roleId
-        },
-        success: function() {
-            document.location.href = "<?= base_url('admin/roleaccess/'); ?>" + roleId;
-        }
-    });
-});
+//     // $('divisi').change(function(){
+//     //     mTabel.ajax.reload();
+//     // });
 
-$(document).ready(function() {
-	$("#jenis").change(function() {
-		var id = $(this).val();
+//     // $('divisi').change(function(){
+//     //     mTabel.ajax.reload();
+//     // });
+// });
 
-		$.ajax({
-			url: "<?= base_url('surat/getSub') ?>",
-			method: "POST",
-			data: {
-				jenis: id
-			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				var html = "";
-				var i;
-				for (i = 0; i < data.length; i++) {
-					html +=
-						"<option value=" +
-						data[i].tipe_surat +
-						">" +
-						data[i].tipe_surat +
-						"</option>";
-				}
-				$("#tipe").html(html);
-			}
-		});
-		return false;
-	});
-});
+// create function Jquery
+// (function( $ ){
+//    $.fn.myfunction = function() {
+//       alert('hello world');
+//       return this;
+//    }; 
+// })( jQuery );
 
+// $('#my_div').myfunction();
 
-
-$(document).ready(function() {
-	$("#entity").change(function() {
-		var entity = $("#entity").val();
-		var jenis = $("#jenis").val();
-		var sub = $("#tipe").val();
-		var isi = "";
-
-		$.ajax({
-			url: "<?= base_url('surat/lihatnomor') ?>",
-			method: "POST",
-			data: {
-				jenis : jenis,
-				entity: entity,
-				sub: sub
-			},
-			async: true,
-			dataType: "json",
-			success: function(data) {
-				isi =
-					data.no +
-					"/" +
-					data.entity +
-					"-HC/" +
-					data.sub +
-					"/" +
-					data.bulan +
-					"/" +
-					data.tahun;
-				$(".hasil").val(isi);
-			}
-		});
-	});
-});
 </script>
 
 </body>
-
 </html>

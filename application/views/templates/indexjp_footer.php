@@ -36,8 +36,8 @@
 <script src="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
 <!-- Page level custom scripts -->
 <script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
-<script src="<?= base_url('assets/'); ?>js/myscript.js"></script>
 <script src="<?= base_url('assets/'); ?>js/scriptmodal.js"></script>
+<script src="<?= base_url('assets/'); ?>js/ryu.js"></script>
 
 
 <script>
@@ -80,9 +80,15 @@ $('.surat-access').on('click', function() {
     });
 });
 
+//activate dataTable
 $(document).ready(function () {
     $('#myTask').DataTable();
-}); 
+});
+
+//to activate Bootstrap Tooltip
+$(function () {
+  	$('[data-toggle="popover"]').popover()
+});
 </script>
 
 </body>

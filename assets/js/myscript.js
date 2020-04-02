@@ -42,3 +42,5 @@ $(".hapus").on("click", function(e) {
 		}
 	});
 });
+
+

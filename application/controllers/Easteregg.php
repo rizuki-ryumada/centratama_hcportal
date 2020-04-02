@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Reportjobs extends CI_Controller {
+class Easteregg extends CI_Controller {
 
     public function __construct()
     {
@@ -18,11 +18,11 @@ class Reportjobs extends CI_Controller {
         $data['divisi'] = $this->Divisi_model->getDivisi();
         $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
 
-        $this->load->view('templates/report_header', $data);
+        $this->load->view('templates/easteregg_header', $data);
         $this->load->view('templates/user_sidebar', $data);
         $this->load->view('templates/user_topbar', $data);
         $this->load->view('reportjobs/index', $data);
-        $this->load->view('templates/report_footer');
+        $this->load->view('templates/easteregg_footer');
     }
 
     public function databyDiv()

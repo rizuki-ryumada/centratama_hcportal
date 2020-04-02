@@ -15,7 +15,7 @@
 			<h5 class="card-title">Status job profile</h5>
 			<?php if ($approval['status_approval'] == 'Dikirim') : ?>
 			<span class="badge badge-warning mb-2">Dikirim</span>
-			<br class="mb-1"> Pada tanggal <?= date('d F Y', $approval['tanggal_pengajuan']); ?>
+			<br class="mb-1"> Pada tanggal <?= date('d F Y', $approval['diperbarui']); ?>
 			<?php elseif ($approval['status_approval'] == 'Disetujui1') : ?>
 			<span class="badge badge-success mb-2">Disetujui atasan 1</span>
 			<?php elseif ($approval['status_approval'] == 'Ditolak') : ?>

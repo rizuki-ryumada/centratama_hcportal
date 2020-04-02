@@ -517,7 +517,11 @@
 				},
 				success: function(data) {
 					console.log(data);
-					location.reload();
+					// location.reload();
+					document.location.href = "<?= base_url('jobs'); ?>";
+				},
+				fail: function() {
+					console.log('fail');
 				}
 			});
 		});
@@ -566,6 +570,8 @@
 		$('#departemen-table').DataTable();
 
 	});
+
+	
 </script>
 
 </body>

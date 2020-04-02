@@ -108,11 +108,53 @@ class Jobpro_model extends CI_Model {
 		return $this->db->get_where('jumlah_staff', ['id_posisi' => $id])->row_array();
     }
     
-    //Ryu code starts here
+    
+//Ryu codes start here ====================================================================================================
+    public function getAll($table)
+    {
+        return $this->db->get($table)->result_array();
+    }
+    public function getAllAndOrder($order, $table)
+    {
+        $this->db->order_by($order, "asc");
+        return $this->db->get($table)->result_array();
+    }
+
+    public function getAtasanAssistant($id_atasan1){
+        $this->db->select('position_name');
+        $this->db->from('position');
+        $this->db->where(array('id' => $id_atasan1));
+        return $this->db->get()->row_array();
+    }
+
+    public function getDetail($select, $table, $where){
+        $this->db->select($select);
+        $this->db->from($table);
+        $this->db->where($where);
+        return $this->db->get()->row_array();
+    }
+    public function getDetails($select, $table, $where){
+        $this->db->select($select);
+        $this->db->from($table);
+        $this->db->where($where);
+        return $this->db->get()->result_array();
+    }
+
+    public function getMyTask($id_position, $atasan, $status_approval){
+        return $this->db->get_where('job_approval', [$atasan => $id_position, 'status_approval' => $status_approval])->result_array();
+    }
+
     public function getPositionDetail($id_posisi){
         $this->db->select('*');
         $this->db->from('position');
         $this->db->where(array('id' => $id_posisi, 'assistant' => 0));
+        return $this->db->get()->row_array();
+    }
+
+    public function getPositionDetailAssistant($id_posisi){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id' => $id_posisi, 'assistant' => 1));
         return $this->db->get()->row_array();
     }
 
@@ -123,13 +165,6 @@ class Jobpro_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function getPositionDetailAssistant($id_posisi){
-        $this->db->select('*');
-        $this->db->from('position');
-        $this->db->where(array('id' => $id_posisi, 'assistant' => 1));
-        return $this->db->get()->row_array();
-    }
-
     public function getWhoisSamaAssistant($id_atasan1){
         $this->db->select('*');
         $this->db->from('position');
@@ -137,11 +172,9 @@ class Jobpro_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function getAtasanAssistant($id_atasan1){
-        $this->db->select('position_name');
-        $this->db->from('position');
-        $this->db->where(array('id' => $id_atasan1));
-        return $this->db->get()->row_array();
+    public function updateApproval($data, $nik){
+        $this->db->where('nik', $nik);
+        $this->db->update('job_approval', $data);
     }
 }
 
