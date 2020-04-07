@@ -151,49 +151,195 @@
 
 	//    console.log(datasource_assistant[0].position_name);
 	
-	  var oc = $('#chart-container').orgchart({
-		data : datasource,
-		// chartClass: 'edit-state',
-		// 'exportButton': true,
-		// 'exportFilename': 'OrgChart',
-		verticalLevel: 3, // this method cannot compatible with the edit-state
-		// draggable: true,
-		parentNodeSymbol: 'fa-th-large',
-		nodeTitle: 'position_name',
-		createNode: function($node, data) {
-			$.each(datasource_assistant, function(i, item) {
-				// console.log(item.atasan_assistant);
 
-				if (data.position_name === item.atasan_assistant){//cek apa posistion name
-					if (i>1){//assistant lebih dari 2
-						$(document).ready(function() {
-							$('.downLine').css({"height": "220px"});
-						});
-						var node_location = 200;
-					} else {//tidak?
-						var node_location = 100;
-					}
-					
-					if(isEven(i) == true){ //cek jika nilai i odd atau even, gunanya buat nodenya bisa tampil terpisah jika lebih dari satu assistant
-						var node_position  = 140;
-						var node_connector = -65;
-					} else {
-						var node_position  = -123;
-						var node_connector = 130;
-					}
-
-					var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
-					$node.append(assistantNode);
+	if(atasan == 2){ //buat yang punya 2 atasan
+		if(assistant_atasan1 == 1){ //jika punya atasan 1 tampilkan horizontal
+			var oc = $('#chart-container').orgchart({
+				data : datasource,
+				// chartClass: 'edit-state',
+				// 'exportButton': true,
+				// 'exportFilename': 'OrgChart',
+				// verticalLevel: 3, // this method cannot compatible with the edit-state
+				// draggable: true,
+				parentNodeSymbol: 'fa-th-large',
+				nodeTitle: 'position_name',
+				createNode: function($node, data) {
+					$.each(datasource_assistant1, function(i, item) {
+						// console.log(item.atasan_assistant);
+		
+						if (data.position_name === item.atasan_assistant){//cek apa posistion name
+							if (i>1){//assistant lebih dari 2
+								$(document).ready(function() {
+									$('.downLine').css({"height": "220px"});
+								});
+								var node_location = 200;
+							} else {//tidak?
+								var node_location = 100;
+							}
+							
+							if(isEven(i) == true){ //cek jika nilai i odd atau even, gunanya buat nodenya bisa tampil terpisah jika lebih dari satu assistant
+								var node_position  = 140;
+								var node_connector = -65;
+							} else {
+								var node_position  = -123;
+								var node_connector = 130;
+							}
+		
+							if("className" in item){ //jika ada array key classname di position // posisi dia assistant
+								var assistantNode = '<div class="assistant-node my-position" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+							}else{
+								var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+							}
+		
+		
+							$node.append(assistantNode);
+						}
+						
+					});
+					$.each(datasource_assistant2, function(i, item) {
+						// console.log(item.atasan_assistant);
+		
+						if (data.position_name === item.atasan_assistant){//cek apa posistion name
+							if (i>1){//assistant lebih dari 2
+								$(document).ready(function() {
+									$('.downLine').css({"height": "220px"});
+								});
+								var node_location = 200;
+							} else {//tidak?
+								var node_location = 100;
+							}
+							
+							if(isEven(i) == true){ //cek jika nilai i odd atau even, gunanya buat nodenya bisa tampil terpisah jika lebih dari satu assistant
+								var node_position  = 140;
+								var node_connector = -65;
+							} else {
+								var node_position  = -123;
+								var node_connector = 130;
+							}
+		
+							if("className" in item){ //jika ada array key classname di position // posisi dia assistant
+								var assistantNode = '<div class="assistant-node my-position" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+							}else{
+								var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+							}
+		
+		
+							$node.append(assistantNode);
+						}
+						
+					});
+				//  if (data.title === "general manager") {
+				// 		var assistantNode =
+				// 		  '<div class="assistant-node"><div class="connector"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>Dan Dan</div><div class="content">general office</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+				// 		$node.append(assistantNode);
+				// 	  }
+				  $node[0].id = getId();
 				}
 			});
-		//  if (data.title === "general manager") {
-		// 		var assistantNode =
-		// 		  '<div class="assistant-node"><div class="connector"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>Dan Dan</div><div class="content">general office</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
-		// 		$node.append(assistantNode);
-		// 	  }
-		  $node[0].id = getId();
+		} else { //ika ga punya atasan 1 level 3nya tampilkan vertikal
+			var oc = $('#chart-container').orgchart({
+				data : datasource,
+				// chartClass: 'edit-state',
+				// 'exportButton': true,
+				// 'exportFilename': 'OrgChart',
+				verticalLevel: 3, // this method cannot compatible with the edit-state
+				// draggable: true,
+				parentNodeSymbol: 'fa-th-large',
+				nodeTitle: 'position_name',
+				createNode: function($node, data) {
+					$.each(datasource_assistant1, function(i, item) {
+						// console.log(item.atasan_assistant);
+		
+						if (data.position_name === item.atasan_assistant){//cek apa posistion name
+							if (i>1){//assistant lebih dari 2
+								$(document).ready(function() {
+									$('.downLine').css({"height": "220px"});
+								});
+								var node_location = 200;
+							} else {//tidak?
+								var node_location = 100;
+							}
+							
+							if(isEven(i) == true){ //cek jika nilai i odd atau even, gunanya buat nodenya bisa tampil terpisah jika lebih dari satu assistant
+								var node_position  = 140;
+								var node_connector = -65;
+							} else {
+								var node_position  = -123;
+								var node_connector = 130;
+							}
+		
+							if("className" in item){ //jika ada array key classname di position // posisi dia assistant
+								var assistantNode = '<div class="assistant-node my-position" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+							}else{
+								var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+							}
+		
+		
+							$node.append(assistantNode);
+						}
+					});
+				//  if (data.title === "general manager") {
+				// 		var assistantNode =
+				// 		  '<div class="assistant-node"><div class="connector"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>Dan Dan</div><div class="content">general office</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+				// 		$node.append(assistantNode);
+				// 	  }
+				  $node[0].id = getId();
+				}
+			});
 		}
-	  });
+	} else if(atasan == 1) { //buat yang punya 1 atasan
+		var oc = $('#chart-container').orgchart({
+			data : datasource,
+			// chartClass: 'edit-state',
+			// 'exportButton': true,
+			// 'exportFilename': 'OrgChart',
+			// verticalLevel: 3, // this method cannot compatible with the edit-state
+			// draggable: true,
+			parentNodeSymbol: 'fa-th-large',
+			nodeTitle: 'position_name',
+			createNode: function($node, data) {
+				$.each(datasource_assistant1, function(i, item) {
+					// console.log(item.atasan_assistant);
+	
+					if (data.position_name === item.atasan_assistant){//cek apa posistion name
+						if (i>1){//assistant lebih dari 2
+							$(document).ready(function() {
+								$('.downLine').css({"height": "220px"});
+							});
+							var node_location = 200;
+						} else {//tidak?
+							var node_location = 100;
+						}
+						
+						if(isEven(i) == true){ //cek jika nilai i odd atau even, gunanya buat nodenya bisa tampil terpisah jika lebih dari satu assistant
+							var node_position  = 140;
+							var node_connector = -65;
+						} else {
+							var node_position  = -123;
+							var node_connector = 130;
+						}
+	
+						if("className" in item){ //jika ada array key classname di position // posisi dia assistant
+							var assistantNode = '<div class="assistant-node my-position" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+						}else{
+							var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+						}
+	
+	
+						$node.append(assistantNode);
+					}
+				});
+			//  if (data.title === "general manager") {
+			// 		var assistantNode =
+			// 		  '<div class="assistant-node"><div class="connector"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>Dan Dan</div><div class="content">general office</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
+			// 		$node.append(assistantNode);
+			// 	  }
+			  $node[0].id = getId();
+			}
+		});
+	} else { //buat yang ga punya atasan
+		//do something
+	}
   
 	  oc.$chartContainer.on('click', '.node', function() {
 		var $this = $(this);

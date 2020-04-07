@@ -94,10 +94,28 @@ class Jobs extends CI_Controller {
         
         $statusApproval = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array(); //get status approval
         
-        // Olah data orgchart
-        $org_data = $this->olahDataChart($data['my']['position_id']);
+        
+
+        //cek jika atasan 1 bukan CEO dan 0
+        if($data['my']['posnameatasan1'] != 1 && $data['my']['posnameatasan1'] != 0){
+            // Olah data orgchart
+            $org_data = $this->olahDataChart($data['my']['position_id']);
+        } elseif($data['my']['posnameatasan1'] != 0 && $data['my']['id_div'] == 1){
+            $org_data = $this->olahDataChart($data['my']['position_id']);
+        } else {
+            //siapkan data null
+            $org_data[0] = json_encode(null);
+            $org_data[1] = json_encode(null);
+            $org_data[2] = json_encode(null);
+            $org_data[3] = 0;
+            $org_data[4] = 0;
+        }
+
         $data['orgchart_data'] = $org_data[0]; //masukkan data orgchart yang sudah diolah ke JSON
-        $data['orgchart_data_assistant'] = $org_data[1];
+        $data['orgchart_data_assistant1'] = $org_data[1];
+        $data['orgchart_data_assistant2'] = $org_data[2];
+        $data['assistant_atasan1'] = $org_data[3];
+        $data['atasan'] = $org_data[4];
         
         $approval = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array(); //get status approval
         
@@ -133,10 +151,26 @@ class Jobs extends CI_Controller {
         $data['emp_name'] = $this->Jobpro_model->getDetail("emp_name", "employe", array('nik' => $nik));
         $statusApproval = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array(); //get status approval
         
-        // Olah data orgchart
-        $org_data = $this->olahDataChart($data['my']['position_id']);
+        //cek jika atasan 1 bukan CEO dan 0
+        if($data['my']['posnameatasan1'] != 1 && $data['my']['posnameatasan1'] != 0){
+            // Olah data orgchart
+            $org_data = $this->olahDataChart($data['my']['position_id']);
+        } elseif($data['my']['posnameatasan1'] != 0 && $data['my']['id_div'] == 1){
+            $org_data = $this->olahDataChart($data['my']['position_id']);
+        } else {
+            //siapkan data null
+            $org_data[0] = json_encode(null);
+            $org_data[1] = json_encode(null);
+            $org_data[2] = json_encode(null);
+            $org_data[3] = 0;
+            $org_data[4] = 0;
+        }
+
         $data['orgchart_data'] = $org_data[0]; //masukkan data orgchart yang sudah diolah ke JSON
-        $data['orgchart_data_assistant'] = $org_data[1];
+        $data['orgchart_data_assistant1'] = $org_data[1];
+        $data['orgchart_data_assistant2'] = $org_data[2];
+        $data['assistant_atasan1'] = $org_data[3];
+        $data['atasan'] = $org_data[4];
 
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
@@ -170,10 +204,26 @@ class Jobs extends CI_Controller {
         $data['emp_name'] = $this->Jobpro_model->getDetail("emp_name", "employe", array('nik' => $nik));
         $statusApproval = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array(); //get status approval
         
-        // Olah data orgchart
-        $org_data = $this->olahDataChart($data['my']['position_id']);
+        //cek jika atasan 1 bukan CEO dan 0
+        if($data['my']['posnameatasan1'] != 1 && $data['my']['posnameatasan1'] != 0){
+            // Olah data orgchart
+            $org_data = $this->olahDataChart($data['my']['position_id']);
+        } elseif($data['my']['posnameatasan1'] != 0 && $data['my']['id_div'] == 1){
+            $org_data = $this->olahDataChart($data['my']['position_id']);
+        } else {
+            //siapkan data null
+            $org_data[0] = json_encode(null);
+            $org_data[1] = json_encode(null);
+            $org_data[2] = json_encode(null);
+            $org_data[3] = 0;
+            $org_data[4] = 0;
+        }
+
         $data['orgchart_data'] = $org_data[0]; //masukkan data orgchart yang sudah diolah ke JSON
-        $data['orgchart_data_assistant'] = $org_data[1];
+        $data['orgchart_data_assistant1'] = $org_data[1];
+        $data['orgchart_data_assistant2'] = $org_data[2];
+        $data['assistant_atasan1'] = $org_data[3];
+        $data['atasan'] = $org_data[4];
 
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
@@ -637,30 +687,122 @@ class Jobs extends CI_Controller {
         // 1. posisi Asistant dan bukan assistant berbeda perlakuannya juga berbeda
         // 2. kode ini digunakan untuk mengolah data dari database menjadi JSON
 
-        $my_pos_detail = $this->Jobpro_model->getPositionDetail($my_positionId); //ambil informasi detail posisi saya //200
+        $my_pos_detail = $this->Jobpro_model->getPositionDetail($my_positionId); //ambil informasi detail posisi saya //200 //bukan assistant
+        if(empty($my_pos_detail)){
+            $my_pos_detail = $this->Jobpro_model->getPositionDetailAssistant($my_positionId);
+        }
         // print_r($my_pos_detail);
         //output $my_pos_detail
         // Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 [assistant] => 0 ) 
 
-        $x = 0; $y = 0; //untuk penanda looping
+
+        $x = 0; $y = 0; $atasan = 0; //untuk penanda looping
         if(!empty($my_pos_detail)){//if data exist
             $my_atasan[$x]['id_atasan1'] = $my_pos_detail['id_atasan1'];
             $id_atasan1 = $my_pos_detail['id_atasan1'];
-            while($x<2){ //hanya ambil data sampai 2 tingkat ke atas
+            $id_atasan2 = $my_pos_detail['id_atasan2'];
+            
+            if($my_pos_detail['id_atasan2'] != 1 && $my_pos_detail['id_atasan2'] != 0 && $my_pos_detail['div_id'] != 1){//apakah atasan 2 nya bukan CEO atau dan dia punya atasan 2
                 //cari posisi yang bukan assistant
-                $whois_sama[$x] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
-                $my_atasan[$x] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
+                print('aku');
+
+                $whois_sama[0] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                $whois_sama[1] = $this->Jobpro_model->getWhoisSama($id_atasan2); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                $my_atasan[0] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
+                $my_atasan[1] = $this->Jobpro_model->getPositionDetail($id_atasan2); //ambil informasi daftar atasan saya yang bukan assistant
                 //cari posisi yang assistant
-                if(!empty($whois_sama_assistant[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan1))){ //biar kalo nilainya null jangan biarkan bikin array kosong
+                if(!empty($whois_sama_assistant1[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan1))){ //cari assistant atasan 1
+                    $y++;
+                    $assistant_atasan1 = 1; //tandai buat nanti nampilin orgchartnya horizontal di level ke 3
+                } else {
+                    $assistant_atasan1 = 0; //tandai buat nanti nampilin orgchartnya horizontal di level ke 3
+                }
+                if(!empty($whois_sama_assistant2[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan2))){ //cari assistant atasan 2
                     $y++;
                 } else {
                     //nothing
-                } //200 dan 201 ambil data yang sama sama saya yang assistant)
+                }
+
+                $atasan = 2; //penanda atasan
+    
+                //200 dan 201 ambil data yang sama sama saya yang assistant)
                 // $my_atasan_assistant[$x] = $this->Jobpro_model->getPositionDetailAssistant($id_atasan1); //ambil informasi daftar atasan saya yang assistant ##NOT USED on ASSISTANT
-                $id_atasan1 = $my_atasan[$x]['id_atasan1'];
-                $x++;
+                // $id_atasan1 = $my_atasan[$x]['id_atasan1'];
+                // $x++;
+            } elseif ($my_pos_detail['id_atasan2'] != 0 && $my_pos_detail['div_id'] == 1){
+
+                //cari posisi yang bukan assistant
+                // print('aku');
+                
+                $whois_sama[0] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                $whois_sama[1] = $this->Jobpro_model->getWhoisSama($id_atasan2); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                $my_atasan[0] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
+                $my_atasan[1] = $this->Jobpro_model->getPositionDetail($id_atasan2); //ambil informasi daftar atasan saya yang bukan assistant
+                //cari posisi yang assistant
+                if(!empty($whois_sama_assistant1[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan1))){ //cari assistant atasan 1
+                    $y++;
+                    $assistant_atasan1 = 1; //tandai buat nanti nampilin orgchartnya horizontal di level ke 3
+                } else {
+                    $assistant_atasan1 = 0; //tandai buat nanti nampilin orgchartnya horizontal di level ke 3
+                }
+                if(!empty($whois_sama_assistant2[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan2))){ //cari assistant atasan 2
+                    $y++;
+                } else {
+                    //nothing
+                }
+
+                $atasan = 2; //penanda atasan
+    
+                //200 dan 201 ambil data yang sama sama saya yang assistant)
+                // $my_atasan_assistant[$x] = $this->Jobpro_model->getPositionDetailAssistant($id_atasan1); //ambil informasi daftar atasan saya yang assistant ##NOT USED on ASSISTANT
+                // $id_atasan1 = $my_atasan[$x]['id_atasan1'];
+                // $x++;
+            } else {
+                if($my_pos_detail['id_atasan1'] != 1 && $my_pos_detail['id_atasan1'] != 0 && $my_pos_detail['div_id'] != 1){ //apakah atasan 1nya bukan CEO atau dia punya atasan
+
+                    //cari posisi yang bukan assistant
+                    $whois_sama[0] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                    $my_atasan[0] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
+                    //cari posisi yang assistant
+                    if(!empty($whois_sama_assistant1[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan1))){ //cari assistant atasan 1
+                        $y++;
+                    } else {
+                        //nothing
+                    }
+
+                    $assistant_atasan1 = 0; //tandai buat nanti nampilin orgchartnya horizontal di level ke 3
+                    $atasan = 1;//penanda atasan
+
+                    //200 dan 201 ambil data yang sama sama saya yang assistant)
+                    // $my_atasan_assistant[$x] = $this->Jobpro_model->getPositionDetailAssistant($id_atasan1); //ambil informasi daftar atasan saya yang assistant ##NOT USED on ASSISTANT
+                    // $id_atasan1 = $my_atasan[$x]['id_atasan1'];
+                    // $x++;
+                } elseif($my_pos_detail['id_atasan1'] == 1 && $my_pos_detail['div_id'] == 1){
+
+                    //cari posisi yang bukan assistant
+                    $whois_sama[0] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                    $my_atasan[0] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
+                    //cari posisi yang assistant
+                    if(!empty($whois_sama_assistant1[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan1))){ //cari assistant atasan 1
+                        $y++;
+                    } else {
+                        //nothing
+                    }
+
+                    $assistant_atasan1 = 0; //tandai buat nanti nampilin orgchartnya horizontal di level ke 3
+                    $atasan = 1;//penanda atasan
+
+                    //200 dan 201 ambil data yang sama sama saya yang assistant)
+                    // $my_atasan_assistant[$x] = $this->Jobpro_model->getPositionDetailAssistant($id_atasan1); //ambil informasi daftar atasan saya yang assistant ##NOT USED on ASSISTANT
+                    // $id_atasan1 = $my_atasan[$x]['id_atasan1'];
+                    // $x++;
+                } else {
+                    //nothing
+                    $assistant_atasan1 = 0; //tandai buat nanti nampilin orgchartnya horizontal di level ke 3
+                    $atasan = 0;//penanada atasan
+                }
             }
-            //cari id yang sama dengan $my_pos_detail di $whois_sama, lalu tambahin 'className': 'my-position'
+            //cari id yang sama dengan $my_pos_detail di $whois_sama, lalu tambahin 'className': 'my-position' //jika my position bukan assistant
             foreach($whois_sama as $k => $v){
                 foreach ($v as $key => $value){
                     if($my_pos_detail['id'] == $value['id']){
@@ -677,6 +819,8 @@ class Jobs extends CI_Controller {
             // print('<br>');
             // print('<br>');
             // print_r($my_atasan);
+
+            // exit;
             //output $whois_sama
             // Array ( [0] => Array ( [0] => Array ( [id] => 182 [position_name] => Compensation & Benefit Dept. Head [dept_id] => 27 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
             //                        [1] => Array ( [id] => 190 [position_name] => General Affairs & GovRel Dept. Head [dept_id] => 28 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 ) 
@@ -716,47 +860,405 @@ class Jobs extends CI_Controller {
             //                     )
             //     ) 
 
-            //gabungkan array[1] dengan [0];
-            $i = 0;
-            foreach($org_struktur[1]['children'] as $key => $value){
-                foreach($org_struktur[0]['children'] as $k => $v){
-                    if($org_struktur[1]['id'] == $org_struktur[0]['children'][$k]['id']){
-                        $org_struktur[0]['children'][$k]['children'][$i] = $value;
-                        $i++;
+            if($atasan == 2){ //gabungkan array[0] dengan [1]; kalo dia punya atasan 1 dan 2
+                $i = 0;
+                foreach($org_struktur[1]['children'] as $key => $value){
+                    foreach($org_struktur[0]['children'] as $k => $v){
+                        if($org_struktur[1]['id'] == $org_struktur[0]['children'][$k]['id']){
+                            $org_struktur[0]['children'][$k]['children'][$i] = $value;
+                            $i++;
+                        }
                     }
                 }
+            } else {
+                //nothing
             }
+
+            // print_r($org_struktur);
+            // exit;
+            // Array ( [0] => Array ( [id] => 196 [position_name] => Human Capital Division Head [dept_id] => 26 [div_id] => 6 [id_atasan1] => 1 [id_atasan2] => 0 [assistant] => 0 [children] => Array ( [0] => Array ( [id] => 182 [position_name] => Compensation & Benefit Dept. Head [dept_id] => 27 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 0 ) 
+            //                                                                                                                                                                                            [1] => Array ( [id] => 190 [position_name] => General Affairs & Government Relation Dept. Head [dept_id] => 28 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 0 ) 
+            //                                                                                                                                                                                            [2] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 0 [children] => Array ( [0] => Array ( [id] => 198 [position_name] => Learning & Development Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 [assistant] => 0 )
+            //                                                                                                                                                                                                                                                                                                                                                                                         [1] => Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 [assistant] => 0 [className] => my-position ) 
+            //                                                                                                                                                                                                                                                                                                                                                                                         [2] => Array ( [id] => 201 [position_name] => Talent & Performance Management Specialist [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 [assistant] => 0 ) 
+            //                                                                                                                                                                                                                                                                                                                                                                                     )
+            //                                                                                                                                                                                                         )
+            //                                                                                                                                                                                         ) 
+            //                         ) 
+            //         [1] => Array ( [id] => 199 [position_name] => Organization Development Dept. Head [dept_id] => 29 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 0 [children] => Array ( [0] => Array ( [id] => 198 [position_name] => Learning & Development Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 [assistant] => 0 ) 
+            //                                                                                                                                                                                                      [1] => Array ( [id] => 200 [position_name] => Recruitment Officer [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 [assistant] => 0 [className] => my-position ) 
+            //                                                                                                                                                                                                      [2] => Array ( [id] => 201 [position_name] => Talent & Performance Management Specialist [dept_id] => 29 [div_id] => 6 [id_atasan1] => 199 [id_atasan2] => 196 [assistant] => 0 )
+            //                                                                                                                                                                                                    ) 
+            //                      )
+            //     ) 
 
             //ASSISTANT DATA
             //keluarkan semua assistant jadi di level teratas
-            $org_assistant = array(); $x = 0; //initialize assistant
-            foreach($whois_sama_assistant as $k => $v){
+            $org_assistant1 = array(); $x = 0; //initialize assistant atasan 1
+            foreach($whois_sama_assistant1 as $k => $v){
                 foreach($v as $key => $value){
-                    $org_assistant[$x] = $value; //tambah value ke org_struktur
+                    $org_assistant1[$x] = $value; //tambah value ke org_struktur
                     foreach($this->Jobpro_model->getAtasanAssistant($value['id_atasan1']) as $kunci => $nilai){ //cari atasannya 
                         // array_push($org_assistant[$x], $nilai); //tambah nama posisi atasannya
-                        $org_assistant[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
+                        $org_assistant1[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
                     }
 
                     $x++;
                 }
             }
-            // print_r($org_assistant);
-            // Array ( [0] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 [0] => Human Capital Division Head )
-            //         [1] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 [0] => Human Capital Division Head )
+            if(!empty($whois_sama_assistant2)){
+                $org_assistant2 = array(); $x = 0; //initialize assistant atasan 2
+                foreach($whois_sama_assistant2 as $k => $v){
+                    foreach($v as $key => $value){
+                        $org_assistant2[$x] = $value; //tambah value ke org_struktur
+                        foreach($this->Jobpro_model->getAtasanAssistant($value['id_atasan1']) as $kunci => $nilai){ //cari atasannya 
+                            // array_push($org_assistant[$x], $nilai); //tambah nama posisi atasannya
+                            $org_assistant2[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
+                        }
+
+                        $x++;
+                    }
+                }
+            }else{
+                $org_assistant2 = array();
+            }
+
+            //jika assistant adalah my-position tambahkan className my-position
+            foreach($org_assistant1 as $k => $v){ //cek di assistan atasan 1
+                if($my_pos_detail['id'] == $v['id']){
+                    $org_assistant1[$k]['className'] = 'my-position';
+                }
+            }
+            foreach($org_assistant2 as $k => $v){ //cek di assistan atasan 2
+                if($my_pos_detail['id'] == $v['id']){
+                    $org_assistant2[$k]['className'] = 'my-position';
+                }
+            }
+            // Array ( [0] => Array ( [id] => 194 [position_name] => Employee Relation & Safety Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 [atasan_assistant] => Human Capital Division Head ) 
+            //         [1] => Array ( [id] => 195 [position_name] => HCIS Officer [dept_id] => 26 [div_id] => 6 [id_atasan1] => 196 [id_atasan2] => 1 [assistant] => 1 [atasan_assistant] => Human Capital Division Head ) 
             //     ) 
             
             //simpan data assistant dalam bentuk JSON
             // $data['orgchart_data'] = json_encode($org_struktur[0]); //masukkan data orgchart yang sudah diolah ke JSON
             // $data['orgchart_data_assistant'] = json_encode($org_assistant);
-            return array(json_encode($org_struktur[0]), json_encode($org_assistant));
+            return array(json_encode($org_struktur[0]), json_encode($org_assistant1), json_encode($org_assistant2), $assistant_atasan1, $atasan);
 
         } else { //if orgchart data doesn't exist
             // $data['orgchart_data_assistant'] = json_encode("");
             // $data['orgchart_data'] = json_encode("");
-            return array(json_encode($org_struktur[0]), json_encode($org_assistant));
+            print_r('gaada bro');
+            exit;
         }
         // End of Pengolahan data orgchart ==============================================================================
+    }
+
+    public function printJp(){
+        //load the main library TCPDF (.application/library/tcpdf)
+        //I have created a Library loader in that folder, just load using this code below
+        $this->load->library('Pdf');
+
+        // buat PDF baru
+        $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+
+        //atur informasi dokumen
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle('Job Profile');
+        $pdf->SetAuthor('Centratama Group');
+        $pdf->SetSubject('Document');
+        $pdf->SetKeywords('Printed Document, Digital Document');
+
+        //atur default header data
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE. '001', PDF_HEADER_STRING, array(0, 64, 255), array(0, 64, 128));
+        $pdf->setFooterData(array(0,64,0), array(0,64,128));
+
+        //atur font header dan footer
+        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        //atur default font monospaced
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        //atur margin
+        // $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(15, 30, 15, true);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        // $pdf->SetHeaderMargin(30);
+        // $pdf->SetTopMargin(20);
+        // $pdf->setFooterMargin(20);
+
+        //atur auto page break
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+
+        //atur image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // --------------------------------------------------------------
+
+        //atur default font subsetting mode
+        $pdf->setFontSubsetting(true);
+
+        //atur Font
+        //dejavusans is a UTF-8 Unicode font if you only need to
+        //print standard ASCII chars, you can use core fonts like
+        //helvetica or times to reduce file size
+        $pdf->setFont('dejavusans', '', 14, '', true);
+
+        //Add a page
+        //This method has several options, check the source code documentation for more information.
+        $pdf->AddPage();
+
+        //set text shadow effect
+        $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196,196,196), 'opacity' => 1, 'blend_mode' => 'Normal'));
+
+        //atur content untuk diprint
+        $date = date('d F Y', time());
+        $html = '
+        <style>
+            table{
+                border-collapse: collapse;
+                width: 100%;
+            }
+            table, th, td{
+                border: 1px solid black;
+            }
+        </style>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="text:">PROFIL JABATAN</th>
+                    <th>Tanggal: ' . $date . '</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Divisi</td>
+                    <td></td>
+                </tr>
+                
+            </tbody>
+        </table>';
+
+        //print text using writeHTMLCell()
+        $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+        // $pdf->Write(5, 'Tes 123 tes tes'); //write some text
+
+        // --------------------------------------------------------------
+
+        // tutup dan tampilkan dokumen PDF
+        // This method has several options, check the source code documentation for more information.
+        
+        $pdf->SetDisplayMode('real', 'default');
+        // $pdf->Output('Centratama-JP.pdf', 'I');
+
+        $this->load->view('templates/print_preview.php');
+        print('hello');
+        
     }
 
     public function blocked()

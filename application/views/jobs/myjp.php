@@ -565,13 +565,15 @@
 					</div>
 				<?php endif; ?>
 				<hr>
-				<!-- start Struktur Organisasi -->
-				<div class="row mt-3">
-					<div class="col-11">
-						<h5 class="font-weight-bold mb-3">Struktur Organisasi</h5>
+				<?php if($atasan != 0): ?>
+					<!-- start Struktur Organisasi -->
+					<div class="row mt-3">
+						<div class="col-11">
+							<h5 class="font-weight-bold mb-3">Struktur Organisasi</h5>
+						</div>
+						<div class="w-100" id="chart-container"></div> 
 					</div>
-					<div class="w-100" id="chart-container"></div> 
-				</div>
+				<?php endif; ?>
 
 			</div>
 			<div class="card-footer">
@@ -742,99 +744,3 @@
     </div>
   </div>
 </div>
-
-<script>
-//masukkin data ke variabel javascript dari php
-
-//bikin 2 template buat print sama buat view
-//simpan data 
-
-var datasource = <?php echo $orgchart_data; ?>; 
-var datasource_assistant = <?php echo($orgchart_data_assistant); ?>;
-// var datasource_assistant = [
-//     {
-//         "id": "194",
-//         "position_name": "Employee Relation & Safety Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     },
-//     {
-//         "id": "195",
-//         "position_name": "HCIS Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     },
-//     {
-//         "id": "195",
-//         "position_name": "HCIS Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     },
-//     {
-//         "id": "195",
-//         "position_name": "HCIS Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     }
-// ];
-
-
-//pid 1
-//masukin data nodes ke form input juga
-//
-
-
-//id tampilkan id atasan 1 2 yang punya jabatan lebih tinggi
-//tampilkan id atasan 1 yang sama semua
-
-
-
-// var nodes = [
-// 	{
-// 		id: "1",
-// 		title: "Masukkan Jabatan Atasan Anda",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "2",
-// 		pid: "1",
-// 		title: "Masukkan Jabatan",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "3",
-// 		pid: "1",
-// 		title: "Masukkan Jabatan",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "4",
-// 		pid: "1",
-// 		title: "Masukkan Jabatan",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "5",
-// 		pid: "2",
-// 		title: "Masukkan Jabatan",
-// 		me: "Posisi Saya Ini Paling Tinggi Lo"
-// 	}
-// ];
-//
-</script>
