@@ -172,6 +172,13 @@ class Jobpro_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
+    public function getWhoisSamaCEOffice($id_atasan1, $div_id){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id_atasan1' => $id_atasan1, 'assistant' => 0, 'div_id' => $div_id));
+        return $this->db->get()->result_array();
+    }
+
     public function updateApproval($data, $nik){
         $this->db->where('nik', $nik);
         $this->db->update('job_approval', $data);

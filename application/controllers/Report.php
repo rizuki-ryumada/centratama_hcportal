@@ -12,6 +12,18 @@ class Report extends CI_Controller { // need to be separated because the user ac
     }
 
     public function index(){
+        $nik = $this->session->userdata('nik'); //get nik
+        foreach($this->Jobpro_model->getDetail('role_id', 'employe', array('nik' => $nik)) as $v){ //ambil role_id
+            $role_id = $v;
+        }
+
+        print_r($role_id);
+        // exit;
+        if($role_id != 1){ // cek role_id apakah punya hak akses
+            redirect('auth/blocked','refresh'); //jika tidak punya hak akses tampilkan pesan error
+            exit;
+        }
+
         $data['title'] = 'Report';
         $data['divisi'] = $this->Jobpro_model->getAllAndOrder('division', 'divisi');
         $data['dept'] = $this->Jobpro_model->getAllAndOrder('nama_departemen', 'departemen');

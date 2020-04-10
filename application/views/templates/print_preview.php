@@ -1,133 +1,84 @@
 <style>
-    table{
+    /* table{
         border-collapse: collapse;
         width: 100%;
     }
     table, th, td{
         border: 1px solid black;
+    } */
+
+    .outer-wrapper{
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+        border: 1px solid black;
+    }
+    .row > div{
+        border: 1px solid black;
+        /* margin-right: -.75rem;
+        margin-left: -.75rem; */
+    }
+    .judul{
+        width: 100%
+    }
+    .row{
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        /* margin-right: -.75rem;
+        margin-left: -.75rem; */
+    }
+    .col-1{
+        width: 25%;
+    }
+    .col-2{
+        width: 50%;
+    }
+    .col-3{
+        width: 75%;
     }
 </style>
-
         <?php $date = time() ?>
         <table>
             <thead>
                 <tr>
-                    <th style="text:">PROFIL JABATAN</th>
-                    <th><?= 'Tanggal: ' . date('d F Y', $date); ?></th>
+                    <th colspan="2">PROFIL JABATAN</th>
+                    <th colspan="1"><?= 'Tanggal: ' . date('d F Y', $date); ?></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Divisi</td>
-                    <td></td>
+                    <td colspan="3" >Divisi</td>
                 </tr>
                 <tr>
                     <td>Divisi</td>
                     <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
                     <td></td>
                 </tr>
                 
             </tbody>
         </table>
+
+        <div class="outer-wrapper">
+            <div class="row">
+                <div class="col-3">
+                    gogogo
+                </div>
+                <div class="col-1">
+                    gogogo
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    gogogo
+                </div>
+                <div>
+                    gogogo
+                </div>
+            </div>
+        </div>
 
 
         <!-- EXAMPLE OF CSS STYLE -->

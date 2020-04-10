@@ -12,7 +12,7 @@ function is_logged_in(){
 
         $queryMenu = $CI->db->get_where('user_menu', ['menu' => $menu])->row_array();
 
-        if(empty($queryMenu)){ // jika level menu utama tidak ada, cari di sub menu, access submenu level berbeda
+        if(empty($queryMenu)){ // jika level menu utama tidak ada, cari di sub menu, access submenu level berbeda, ada menu yg gaada di list menu
             $queryMenu = $CI->db->get_where('user_sub_menu', ['title' => $menu])->row_array();
         }else{
             //do nothing

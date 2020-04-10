@@ -166,8 +166,11 @@
 				createNode: function($node, data) {
 					$.each(datasource_assistant1, function(i, item) {
 						// console.log(item.atasan_assistant);
-		
+
 						if (data.position_name === item.atasan_assistant){//cek apa posistion name
+							$(document).ready(function() {
+								$('.downLine').css({"height": "110px"});
+							});
 							if (i>1){//assistant lebih dari 2
 								$(document).ready(function() {
 									$('.downLine').css({"height": "220px"});
@@ -190,14 +193,12 @@
 							}else{
 								var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
 							}
-		
 		
 							$node.append(assistantNode);
 						}
-						
 					});
 					$.each(datasource_assistant2, function(i, item) {
-						// console.log(item.atasan_assistant);
+						console.log(item.atasan_assistant2);
 		
 						if (data.position_name === item.atasan_assistant){//cek apa posistion name
 							if (i>1){//assistant lebih dari 2
@@ -222,7 +223,6 @@
 							}else{
 								var assistantNode = '<div class="assistant-node" style="left: ' + node_position + 'px; top: ' + node_location + 'px;"><div class="connector" style="left: ' + node_connector + 'px;"/><div class="title"><i class="fa fa-user-circle-o symbol"></i>' + item.position_name + '</div><i class="edge verticalEdge bottomEdge fa"></i></div>';
 							}
-		
 		
 							$node.append(assistantNode);
 						}
@@ -247,10 +247,13 @@
 				parentNodeSymbol: 'fa-th-large',
 				nodeTitle: 'position_name',
 				createNode: function($node, data) {
-					$.each(datasource_assistant1, function(i, item) {
+					$.each(datasource_assistant2, function(i, item) {
 						// console.log(item.atasan_assistant);
 		
 						if (data.position_name === item.atasan_assistant){//cek apa posistion name
+							$(document).ready(function() {
+								$('.downLine').css({"height": "110px"});
+							});
 							if (i>1){//assistant lebih dari 2
 								$(document).ready(function() {
 									$('.downLine').css({"height": "220px"});
@@ -302,6 +305,9 @@
 					// console.log(item.atasan_assistant);
 	
 					if (data.position_name === item.atasan_assistant){//cek apa posistion name
+						$(document).ready(function() {
+							$('.downLine').css({"height": "110px"});
+						});
 						if (i>1){//assistant lebih dari 2
 							$(document).ready(function() {
 								$('.downLine').css({"height": "220px"});

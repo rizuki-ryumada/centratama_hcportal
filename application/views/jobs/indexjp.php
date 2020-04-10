@@ -17,7 +17,7 @@
 			<h6 class="m-0 font-weight-bold text-black-50"><?= $posisi['position_name']?></h6>
 		</a>
 		<!-- Card Content - Collapse -->
-		<div class="collapse show" id="collapseCardExample">
+		<div class="collapse show">
 			<div class="card-body">
                 <div class="row">
                     <div class="col-1 status-logo"> <!-- status logo -->
@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-10 status-text"> <!-- status text -->
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-7">
                                 <div class="row">
                                     <?php if(!empty($atasan[0]['position_name'])): //cek jika tidak punya atasan1?>
                                         <div class="col-3">Atasan 1</div><div class="col-1">:</div><div class="col-8"><?= $atasan[0]['position_name']; ?></div>
@@ -55,7 +55,7 @@
                                     <div class="col-12"></div>
                                 </div> -->
                             </div>
-                            <div class="col-6">
+                            <div class="col-5">
                                     <!-- Status Approval Infomation
                                     0 = Belum diisi
                                     1 = Direview Atasan 1

@@ -95,7 +95,6 @@ class Jobs extends CI_Controller {
         $statusApproval = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array(); //get status approval
         
         
-
         //cek jika atasan 1 bukan CEO dan 0
         if($data['my']['posnameatasan1'] != 1 && $data['my']['posnameatasan1'] != 0){
             // Olah data orgchart
@@ -188,6 +187,8 @@ class Jobs extends CI_Controller {
             redirect('auth/blocked','refresh'); //jika tidak punya hak akses tampilkan pesan error
             exit;
         }
+
+        //cek kalau dia punya akses sama approval ini
 
         // prepare the data
         $nik = $this->input->get('task');
@@ -704,8 +705,6 @@ class Jobs extends CI_Controller {
             
             if($my_pos_detail['id_atasan2'] != 1 && $my_pos_detail['id_atasan2'] != 0 && $my_pos_detail['div_id'] != 1){//apakah atasan 2 nya bukan CEO atau dan dia punya atasan 2
                 //cari posisi yang bukan assistant
-                print('aku');
-
                 $whois_sama[0] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
                 $whois_sama[1] = $this->Jobpro_model->getWhoisSama($id_atasan2); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
                 $my_atasan[0] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
@@ -734,8 +733,8 @@ class Jobs extends CI_Controller {
                 //cari posisi yang bukan assistant
                 // print('aku');
                 
-                $whois_sama[0] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
-                $whois_sama[1] = $this->Jobpro_model->getWhoisSama($id_atasan2); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                $whois_sama[0] = $this->Jobpro_model->getWhoisSamaCEOffice($id_atasan1, '1'); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                $whois_sama[1] = $this->Jobpro_model->getWhoisSamaCEOffice($id_atasan2, '1'); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
                 $my_atasan[0] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
                 $my_atasan[1] = $this->Jobpro_model->getPositionDetail($id_atasan2); //ambil informasi daftar atasan saya yang bukan assistant
                 //cari posisi yang assistant
@@ -780,7 +779,7 @@ class Jobs extends CI_Controller {
                 } elseif($my_pos_detail['id_atasan1'] == 1 && $my_pos_detail['div_id'] == 1){
 
                     //cari posisi yang bukan assistant
-                    $whois_sama[0] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
+                    $whois_sama[0] = $this->Jobpro_model->getWhoisSamaCEOffice($id_atasan1, '1'); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
                     $my_atasan[0] = $this->Jobpro_model->getPositionDetail($id_atasan1); //ambil informasi daftar atasan saya yang bukan assistant
                     //cari posisi yang assistant
                     if(!empty($whois_sama_assistant1[$y] = $this->Jobpro_model->getWhoisSamaAssistant($id_atasan1))){ //cari assistant atasan 1
@@ -899,6 +898,7 @@ class Jobs extends CI_Controller {
                 foreach($v as $key => $value){
                     $org_assistant1[$x] = $value; //tambah value ke org_struktur
                     foreach($this->Jobpro_model->getAtasanAssistant($value['id_atasan1']) as $kunci => $nilai){ //cari atasannya 
+
                         // array_push($org_assistant[$x], $nilai); //tambah nama posisi atasannya
                         $org_assistant1[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
                     }
@@ -1014,235 +1014,236 @@ class Jobs extends CI_Controller {
         //atur content untuk diprint
         $date = date('d F Y', time());
         $html = '
-        <style>
-            table{
-                border-collapse: collapse;
-                width: 100%;
-            }
-            table, th, td{
-                border: 1px solid black;
-            }
-        </style>
+            <style>
+                table{
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+                table, th, td{
+                    border: 1px solid black;
+                }
+            </style>
 
-        <table>
-            <thead>
-                <tr>
-                    <th style="text:">PROFIL JABATAN</th>
-                    <th>Tanggal: ' . $date . '</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Divisi</td>
-                    <td></td>
-                </tr>
-                
-            </tbody>
-        </table>';
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text:">PROFIL JABATAN</th>
+                        <th>Tanggal: ' . $date . '</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Divisi</td>
+                        <td></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        ';
 
         //print text using writeHTMLCell()
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
@@ -1257,7 +1258,7 @@ class Jobs extends CI_Controller {
         // $pdf->Output('Centratama-JP.pdf', 'I');
 
         $this->load->view('templates/print_preview.php');
-        print('hello');
+        // print('hello');
         
     }
 
