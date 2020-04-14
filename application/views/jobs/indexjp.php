@@ -41,13 +41,13 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="row">
-                                    <?php if(!empty($atasan[0]['position_name'])): //cek jika tidak punya atasan1?>
-                                        <div class="col-3">Atasan 1</div><div class="col-1">:</div><div class="col-8"><?= $atasan[0]['position_name']; ?></div>
+                                    <?php if(!empty($approver[0]['position_name'])): //cek jika tidak punya atasan1?>
+                                        <div class="col-3">Atasan 1</div><div class="col-1">:</div><div class="col-8"><?= $approver[0]['position_name']; ?></div>
                                     <?php endif; ?>
                                 </div>
                                 <div class="row">
-                                    <?php if(!empty($atasan[1]['position_name'])): //cek jika tidak punya atasan2?> 
-                                        <div class="col-3">Atasan 2</div><div class="col-1">:</div><div class="col-8"><?= $atasan[1]['position_name']; ?></div>
+                                    <?php if(!empty($approver[1]['position_name'])): //cek jika tidak punya atasan2?> 
+                                        <div class="col-3">Atasan 2</div><div class="col-1">:</div><div class="col-8"><?= $approver[1]['position_name']; ?></div>
                                     <?php endif; ?>
                                 </div>
 

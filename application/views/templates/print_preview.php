@@ -7,19 +7,19 @@
         border: 1px solid black;
     } */
 
+    .judul{
+        width: 100%
+    }
     .outer-wrapper{
         width: 100%;
         margin: 0px;
         padding: 0px;
-        border: 1px solid black;
+        /* border: 1px solid black; */
     }
     .row > div{
-        border: 1px solid black;
+        /* border: 1px solid black; */
         /* margin-right: -.75rem;
-        margin-left: -.75rem; */
-    }
-    .judul{
-        width: 100%
+        margin-left: -.75rem; */ 
     }
     .row{
         display: -webkit-box;
@@ -31,14 +31,37 @@
         margin-left: -.75rem; */
     }
     .col-1{
-        width: 25%;
+        width: 24.6%;
+        border: 1px solid #999999;
     }
     .col-2{
-        width: 50%;
+        width: 49.6%;
+        border: 1px solid #999999;
     }
     .col-3{
-        width: 75%;
+        width: 74.6%;
+        border: 1px solid #999999;
     }
+    /* .rTable { 
+        display: table;
+        width: 99.6%;
+    }
+    .rTableRow { display: table-row; }
+    .rTableHeading { display: table-header-group; }
+    .rTableBody { display: table-row-group; }
+    .rTableFoot { display: table-footer-group; }
+    .rTableCell, .rTableHead { 
+        display: table-cell;
+        border: 1px solid #999999;
+        overflow: hidden;
+        width: 25%;
+    }
+    .rTableCell1 { 
+        display: table-cell;
+        border: 1px solid #999999;
+        overflow: hidden;
+        width: 75%;
+    } */
 </style>
         <?php $date = time() ?>
         <table>
@@ -71,14 +94,33 @@
                 </div>
             </div>
             <div class="row">
-                <div>
+                <div class="col-2">
                     gogogo
                 </div>
-                <div>
+                <div class="col-2">
                     gogogo
                 </div>
             </div>
         </div>
+
+        <!-- <div class="rTable">
+            <div class="rTableRow">
+                <div class="rTableCell1">
+                    gogogo
+                </div>
+                <div class="rTableCell">
+                    gogogo
+                </div>
+            </div>
+            <div class="rTableRow">
+                <div class="rTableCell">
+                    gogogo
+                </div>
+                <div class="rTableCell1">
+                    gogogo
+                </div>
+            </div>
+        </div> -->
 
 
         <!-- EXAMPLE OF CSS STYLE -->

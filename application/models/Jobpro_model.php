@@ -6,15 +6,19 @@ class Jobpro_model extends CI_Model {
 
     public function getMyprofile($nik)
     {
+        foreach($this->getDetail('position_id', 'employe', array('nik' => $nik)) as $v){
+            $id_position = $v;
+        }
+            
         $this->db->select('employe.*, divisi.division, departemen.nama_departemen, position.position_name, position.id_atasan1 as posnameatasan1,
                             position.id_atasan2, profile_jabatan.tujuan_jabatan, profile_jabatan.id_posisi');
-        $this->db->from('employe');
-		$this->db->join('divisi', 'divisi.id = employe.id_div', 'left');
-		$this->db->join('departemen', 'departemen.id = employe.id_dep', 'left');
-		$this->db->join('position', 'position.id = employe.position_id', 'left');
+        $this->db->from('position');
+		$this->db->join('divisi', 'divisi.id = position.div_id', 'left');
+		$this->db->join('employe', 'employe.position_id = position.id', 'left');
+		$this->db->join('departemen', 'departemen.id = position.dept_id', 'left');
 		$this->db->join('profile_jabatan', 'profile_jabatan.id_posisi = position.id', 'left');
         
-        $this->db->where('employe.nik', $nik);
+        $this->db->where('position.id', $id_position);
         return $this->db->get()->row_array();
     }
 
@@ -22,7 +26,8 @@ class Jobpro_model extends CI_Model {
     {
         $this->db->select('*');
         $this->db->from('divisi');
-        $this->db->join('employe', 'employe.id_div = divisi.id');
+        $this->db->join('position', 'position.div_id = divisi.id');
+        $this->db->join('employe', 'employe.position_id = position.id');
         $this->db->where('employe.nik', $nik);
         return $this->db->get()->row_array();        
     }
@@ -31,7 +36,8 @@ class Jobpro_model extends CI_Model {
     {
         $this->db->select('*');
         $this->db->from('departemen');
-        $this->db->join('employe', 'employe.id_dep = departemen.id');
+        $this->db->join('position', 'position.dept_id = departemen.id');
+        $this->db->join('employe', 'employe.position_id = position.id');
         $this->db->where('employe.nik', $nik);
         return $this->db->get()->row_array();        
     }
@@ -138,6 +144,13 @@ class Jobpro_model extends CI_Model {
         $this->db->from($table);
         $this->db->where($where);
         return $this->db->get()->result_array();
+    }
+    public function getEmployeDetail($select, $table, $where){
+        $this->db->select($select);
+        $this->db->from($table);
+        $this->db->join('position', 'position.id = employe.position_id', 'left');
+        $this->db->where($where);
+        return $this->db->get()->row_array();
     }
 
     public function getMyTask($id_position, $atasan, $status_approval){

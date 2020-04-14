@@ -2,43 +2,103 @@
     <h1 class="h3 mb-3 text-gray-800"><?= $title; ?></h1>
     <div class="card shadow mb-4">
         <div class="card-body">
-            <div class="row">
-                <div class="col-4">
-                    <div class="form-group">
-                        <label for="divisi">Divisi :</label>
-                        <select id="divisi" class="form-control form-control-sm">
-                            <option value="">All</option>
-                            <?php foreach($divisi as $v): ?>
-                                <option value="<?= $v['division'] ?>"><?= $v['division'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
+            <?php if($user['role_id']==1 || $user['position_id']==1): ?>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="divisi">Divisi :</label>
+                            <select id="divisi" class="form-control form-control-sm">
+                                <option value="">All</option>
+                                <?php foreach($divisi as $v): ?>
+                                    <option value="<?= $v['division'] ?>"><?= $v['division'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="departement">Departement :</label>
+                            <select id="departement" class="form-control form-control-sm">
+                                <option value="">All</option>
+                                <?php foreach($dept as $v): ?>
+                                    <option value="<?= $v['nama_departemen'] ?>"><?= $v['nama_departemen'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="status">Status :</label>
+                            <select id="status" class="form-control form-control-sm">
+                                <option value="">All</option>
+                                <option value="1">Belum disubmit</option>
+                                <option value="2">Direview Atasan 1</option>
+                                <option value="3">Direview Atasan 2</option>
+                                <option value="4">Revisi</option>
+                                <option value="5">Selesai</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="form-group">
-                        <label for="departement">Departement :</label>
-                        <select id="departement" class="form-control form-control-sm">
-                            <option value="">All</option>
-                            <?php foreach($dept as $v): ?>
-                                <option value="<?= $v['nama_departemen'] ?>"><?= $v['nama_departemen'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
+            <?php elseif($hirarki_org=="N"): ?>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <!-- nothing -->
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="departement">Departement :</label>
+                            <select id="departement" class="form-control form-control-sm">
+                                <option value="">All</option>
+                                <?php foreach($dept as $v): ?>
+                                    <option value="<?= $v['nama_departemen'] ?>"><?= $v['nama_departemen'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="status">Status :</label>
+                            <select id="status" class="form-control form-control-sm">
+                                <option value="">All</option>
+                                <option value="1">Belum disubmit</option>
+                                <option value="2">Direview Atasan 1</option>
+                                <option value="3">Direview Atasan 2</option>
+                                <option value="4">Revisi</option>
+                                <option value="5">Selesai</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="form-group">
-                        <label for="status">Status :</label>
-                        <select id="status" class="form-control form-control-sm">
-                            <option value="">All</option>
-                            <option value="1">Belum disubmit</option>
-                            <option value="2">Direview Atasan 1</option>
-                            <option value="3">Direview Atasan 2</option>
-                            <option value="4">Revisi</option>
-                            <option value="5">Selesai</option>
-                        </select>
+            <?php else: ?>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <!-- nothing -->
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <!-- nothing -->
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="status">Status :</label>
+                            <select id="status" class="form-control form-control-sm">
+                                <option value="">All</option>
+                                <option value="1">Belum disubmit</option>
+                                <option value="2">Direview Atasan 1</option>
+                                <option value="3">Direview Atasan 2</option>
+                                <option value="4">Revisi</option>
+                                <option value="5">Selesai</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
 
             <div class="table-responsive">
                 <table class="table table-striped table-hover" id="myTask" width="100%">

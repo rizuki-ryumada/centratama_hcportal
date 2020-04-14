@@ -166,11 +166,11 @@ class Employe_model extends CI_Model {
 
     public function getAllEmp()
     {
-        $this->db->select('employe.id as id_emp, employe.emp_name,nik,level_org,position_id,id_div,id_dep, position.id, position_name, divisi.id, division, departemen.id, nama_departemen');
-        $this->db->from('employe');
-        $this->db->join('divisi', 'divisi.id = employe.id_div');
-        $this->db->join('departemen', 'departemen.id = employe.id_dep');
-        $this->db->join('position', 'position.id = employe.position_id');
+        $this->db->select('employe.id as id_emp, employe.emp_name,nik, position.hirarki_org, position_id, position.div_id , position.dept_id, position.id, position_name, divisi.id, division, departemen.id, nama_departemen');
+        $this->db->from('position');
+        $this->db->join('divisi', 'divisi.id = position.div_id');
+        $this->db->join('departemen', 'departemen.id = position.dept_id');
+        $this->db->join('employe', 'employe.position_id = position.id');
         $this->db->order_by('id_emp', 'asc');
         
         return $this->db->get()->result_array();

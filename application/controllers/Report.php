@@ -13,26 +13,30 @@ class Report extends CI_Controller { // need to be separated because the user ac
 
     public function index(){
         $nik = $this->session->userdata('nik'); //get nik
-        foreach($this->Jobpro_model->getDetail('role_id', 'employe', array('nik' => $nik)) as $v){ //ambil role_id
-            $role_id = $v;
-        }
+        $my_position = $this->Jobpro_model->getDetail('position_id', 'employe', array('nik' => $nik))['position_id']; //ambil my_position
+        
+        $role_id = $this->Jobpro_model->getDetail('role_id', 'employe', array('nik' => $nik))['role_id']; //ambil role_id
 
-        print_r($role_id);
-        // exit;
-        if($role_id != 1){ // cek role_id apakah punya hak akses
-            redirect('auth/blocked','refresh'); //jika tidak punya hak akses tampilkan pesan error
-            exit;
+        if($role_id == 1){ // cek role_id apakah punya hak akses admin
+            $task = $this->Jobpro_model->getAllAndOrder('nik', 'job_approval');
+            $data['dept'] = $this->Jobpro_model->getAllAndOrder('nama_departemen', 'departemen');
+            $data['divisi'] = $this->Jobpro_model->getAllAndOrder('division', 'divisi');
+        } else {
+            $task1 = $this->Jobpro_model->getDetails('*', 'job_approval', "(approver1=".$my_position." AND status_approval=0) OR (approver1=".$my_position." AND status_approval=2) OR (approver1=".$my_position." AND status_approval=3) OR (approver1=".$my_position." AND status_approval=4)"); //cari approval di my position
+            $task2 = $this->Jobpro_model->getDetails('*', 'job_approval', "(approver2=".$my_position." AND status_approval=0) OR (approver2=".$my_position." AND status_approval=1) OR (approver2=".$my_position." AND status_approval=3) OR (approver2=".$my_position." AND status_approval=4)");
+            $task = array_merge($task1, $task2);
+
+            $my_div = $this->Jobpro_model->getDetail('div_id', 'position', array('id' => $my_position)); //ambil my_position
+            $data['dept'] = $this->Jobpro_model->getDetails('nama_departemen', 'departemen', $my_div); //ambil departemen sesuai divisinya
         }
 
         $data['title'] = 'Report';
-        $data['divisi'] = $this->Jobpro_model->getAllAndOrder('division', 'divisi');
-        $data['dept'] = $this->Jobpro_model->getAllAndOrder('nama_departemen', 'departemen');
         $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
-
-        $task = $this->Jobpro_model->getAllAndOrder('nik', 'job_approval');
+        $data['hirarki_org'] = $this->Jobpro_model->getDetail('hirarki_org', 'position', array('id' => $data['user']['position_id']))['hirarki_org'];
         $data['approval_data'] = $this->getApprovalDetails($task);
+        
 
-        // print_r($data['dept']);
+        // print_r($data);
         
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
@@ -44,15 +48,15 @@ class Report extends CI_Controller { // need to be separated because the user ac
     public function getApprovalDetails($my_task){ // Copied from Jobs Controller
         //lengkapi division, departement, nama position, nama employee nya
         foreach($my_task as $key => $value){
-            $temp_employe = $this->Jobpro_model->getDetail("emp_name, id_div, id_dep, position_id", "employe", array('nik' => $value['nik']));
+            $temp_employe = $this->Jobpro_model->getEmployeDetail("emp_name, position.div_id, position.dept_id, position_id", "employe", array('nik' => $value['nik']));
             $my_task[$key]['name'] = $temp_employe['emp_name'];
             foreach ($this->Jobpro_model->getDetail("position_name", "position", array('id' => $temp_employe['position_id'])) as $v){
                 $my_task[$key]['posisi'] = $v;
             }
-            foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_employe['id_dep'])) as $v){
+            foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_employe['dept_id'])) as $v){
                 $my_task[$key]['departement'] = $v;
             }
-            foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_employe['id_div'])) as $v){
+            foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_employe['div_id'])) as $v){
                 $my_task[$key]['divisi'] = $v;
             }
         }

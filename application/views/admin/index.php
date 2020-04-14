@@ -25,7 +25,7 @@
                 </div>
 
                 <?php
-				$data = $this->db->get_where('job_approval', ['atasan1' => $my['position_id']])->result_array();
+				$data = $this->db->get_where('job_approval', ['approver1' => $my['position_id']])->result_array();
 				if ($data) {
 					echo '<div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
