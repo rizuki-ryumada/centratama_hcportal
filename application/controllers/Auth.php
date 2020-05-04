@@ -45,7 +45,7 @@ class Auth extends CI_Controller
                     ];
                     $this->session->set_userdata($data);
 					// target page if success
-					redirect('welcome', 'refresh');
+					redirect('jobs', 'refresh');
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                     Wrong Password! </div>');

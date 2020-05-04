@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100 m-0">
 
 <head>
 
@@ -23,7 +23,14 @@
     <link href="<?= base_url('assets/'); ?>css/sb-admin-2.min.css" rel="stylesheet">
 	<link rel="shortcut icon" href="<?= base_url('assets/'); ?>img/logo2.ico">
     
+    <link rel="stylesheet" href="<?= base_url('assets/'); ?>css/style.css">
 
+    <style>
+        html, body{
+            min-height: 500px;
+            min-width: 920px;
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-white h-100 m-0">

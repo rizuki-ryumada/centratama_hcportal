@@ -1,14 +1,5 @@
 <!-- Footer -->
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; CentratamaGroup <?= date('Y'); ?> </span>
-        </div>
-    </div>
-
-    <div id="my_div" class="row"></div>
-</footer>
-<!-- End of Footer -->
+<?php $this->load->view('templates/footer_copyright'); ?>
 
 </div>
 <!-- End of Content Wrapper -->
@@ -48,20 +39,43 @@ $(document).ready(function () {
         "select": true,
     });
 
+    //filter table dengan DOM
     $('#divisi').change(function(){
         mTable.column(0).search(this.value).order([0, 'asc']).draw();
     });
-
     $('#departement').change(function(){
         mTable.column(1).search(this.value).order([1, 'asc']).draw();
     });
-
     $('#status').change(function(){
         mTable.column(4).search(this.value).order([4, 'asc']).draw();
     });
+
+    //mapping untuk pilihan departemen, supaya dapat tampil sesuai dengan divisi yang dipilih
+    $('#divisi').change(function(){
+        var dipilih = $(this).val(); //ambil value dari yang terpilih
+
+        if(dipilih == ""){
+            mTable.column(1).search(dipilih).order([1, 'asc']).draw(); //kosongkan filter dom
+        }
+
+        $.ajax({
+            url: "<?php echo base_url('report/getdepartement'); ?>",
+            data: {
+                divisi: dipilih //kirim ke server php
+            },
+            method: "POST",
+            success: function(data) { //jadi nanti dia balikin datanya dengan variable data
+                $('#departement').empty().append('<option value="">All</option>'); //kosongkan selection value dan tambahkan satu selection option
+
+                $.each(JSON.parse(data), function(i, v) {
+                    $('#departement').append('<option value="' + v + '">' + v + '</option>'); //tambahkan 1 per 1 option yang didapatkan
+                });
+                }
+            })
+        
+        
+    });
 });
-
-
 
 //if using ajax
 // $(document).ready(function() {
@@ -107,6 +121,13 @@ $(document).ready(function () {
 
 // $('#my_div').myfunction();
 
+$(document).ready(function() { //buat buka menu report, grgr ini aslinya report page bukan submenu.
+    // $('a[data-target="#collapseUser"]').addClass('d-none');
+    if('report' == '<?php print_r($this->uri->segment(1)); ?>'){
+        $('a.nav-link').removeClass('collapsed');
+        $('div#collapseJobs').addClass('show');
+    }
+});
 </script>
 
 </body>

@@ -116,6 +116,11 @@ class Jobpro_model extends CI_Model {
     
     
 //Ryu codes start here ====================================================================================================
+    public function delete($table, $where){
+        $this->db->where($where['index'], $where['data']);
+        $this->db->delete($table);
+    }
+
     public function getAll($table)
     {
         return $this->db->get($table)->result_array();
@@ -195,6 +200,15 @@ class Jobpro_model extends CI_Model {
     public function updateApproval($data, $nik){
         $this->db->where('nik', $nik);
         $this->db->update('job_approval', $data);
+    }
+
+    public function insert($table, $data){
+        $this->db->insert($table, $data);
+    }
+
+    public function update($table, $where, $data){
+        $this->db->where($where['db'], $where['server']);
+        $this->db->update($table, $data);
     }
 }
 

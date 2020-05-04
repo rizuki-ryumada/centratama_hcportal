@@ -3,8 +3,6 @@
 display: none;
 }
 
-/* This is Ryu Development Area */
-
 /* chart styles */
 #chart-container {
     font-family: Arial;
@@ -100,13 +98,12 @@ display: none;
     height: 12.5px;
     top: 21px;
 }
-
 /* my position style */
 .orgchart .my-position .title {
     background-color: #e14141 !important;
 }
 
-/* card status */
+/* indexjp page - card status */
 .status-logo {
     /* background-color: #e14141;  */
 }
@@ -121,4 +118,51 @@ display: none;
 /* my task table view */
 #myTask_wrapper { 
     width: 100% !important;
+}
+
+/* portal page css */
+.portal-header{
+    /* background-color: yellow !important; */
+    height: 15%;
+}
+.portal-body{
+    height: 15%;
+}
+.portal-application{
+    height: 67%;
+}
+.portal-footer{
+    height: 3%;
+}
+.portal-footer-text{
+    font-size: 0.80em;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin-right: 1em;
+}
+/* banner tema */
+div.banner-wrapper{
+    /* position: relative; */
+    height: 100%;
+    float: left;
+}
+div.banner-wrapper .banner-tema{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 110vh;
+    height: auto;
+}
+div.banner-wrapper .banner-pengumuman{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80vh;
+    height: auto;
+}
+
+/* sidebar */
+.sidebar-size-menu{
+    font-size: 1.25rem !important;
+}.sidebar-size-submenu{
+    font-size: 1rem !important;
 }

@@ -1,12 +1,5 @@
 <!-- Footer -->
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; CentratamaGroup <?= date('Y'); ?> </span>
-        </div>
-    </div>
-</footer>
-<!-- End of Footer -->
+<?php $this->load->view('templates/footer_copyright'); ?>
 
 </div>
 <!-- End of Content Wrapper -->
@@ -217,7 +210,6 @@ $(document).ready(function() {
 $(document).ready(function () {
     $('#myTask').DataTable();
 }); 
-
 </script>
 
 </body>

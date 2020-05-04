@@ -120,4 +120,23 @@ class Report extends CI_Controller { // need to be separated because the user ac
         // print_r($output);
     }
 
+    public function getDepartement(){
+        if(!empty($this->input->post('divisi'))){
+            //get id divisi
+            $divisi_id = $this->Jobpro_model->getDetail("id", "divisi", array('division' => $this->input->post('divisi')))['id'];
+            //ambil data departemen dengan divisi itu
+            foreach($this->Jobpro_model->getDetails('nama_departemen', 'departemen', array('div_id' => $divisi_id)) as $k => $v){
+                $data[$k]=$v['nama_departemen'];
+            }
+        } else {
+            foreach($this->Jobpro_model->getDetails('nama_departemen', 'departemen', array()) as $k => $v){
+                $data[$k]=$v['nama_departemen'];
+            }
+        }
+        
+        print_r(json_encode($data));
+
+        //bawa balik ke ajax
+    }
+
 }

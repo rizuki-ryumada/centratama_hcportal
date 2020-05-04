@@ -103,13 +103,14 @@
             <div class="table-responsive">
                 <table class="table table-striped table-hover" id="myTask" width="100%">
                     <thead>
-                        <tr>
-                            <th>Division</th>
-                            <th>Department</th>
-                            <th>Position</th>
-                            <th>Employee Name</th>
-                            <th>Status</th>
-                            <th style="min-width: 45px;" ></th>
+                        <tr class="text-center">
+                            <th class="align-middle" >Division</th>
+                            <th class="align-middle" >Department</th>
+                            <th class="align-middle" >Position</th>
+                            <th class="align-middle" >Employee Name</th>
+                            <th class="align-middle" >Status</th>
+                            <!-- <th class="align-middle"  style="min-width: 45px;" ></th> -->
+                            <th class="align-middle" >View Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -143,7 +144,7 @@
                             <td>
                                 <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
                                     <div class="row justify-content-center align-self-center w-100 m-0">
-                                        <a id="myTask-button" style="display: none;" href="<?= base_url('jobs/reportjp'); ?>?task=<?= $v['nik']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
+                                        <a id="myTask-button" href="<?= base_url('jobs/reportjp'); ?>?task=<?= $v['nik']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
                                     </div>
                                 </div>
                             </td>

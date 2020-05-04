@@ -31,9 +31,24 @@ class Jobs extends CI_Controller {
         $nik = $this->session->userdata('nik');
         $data['posisi'] = $this->Jobpro_model->getPosisi($nik);
 
+        // if(empty($this->Jobpro_model->getProfileJabatan($data['posisi']['position_id']))){
+        //     $profile_jabatan = array(
+        //         'id_posisi'      => $data['posisi']['position_id'],
+        //         'tujuan_jabatan' => "<i>tujuan jabatan anda belum diisi</i>"
+        //     );
+
+        //     $this->db->insert('profile_jabatan', $profile_jabatan);
+        // }
+
+        // if(empty($this->Jobpro_model->getDetail('*', 'ruang_lingkup', array('id_posisi' => $data['posisi']['position_id'])))){
+        //     $this->db->insert('ruang_lingkup', array(
+        //         'id_posisi' => $data['posisi']['position_id'],
+        //         'r_lingkup' => "<i>Ruang Lingkup Jabatan belum diisi</i>"
+        //     ));
+        // }
+
         $job_approval = $this->db->query("SELECT * FROM job_approval WHERE nik = '$nik'");//cek apa sudah ada job_approvalnya
         if(empty($job_approval->result())){
-            $data['title'] = 'Job Profile';
             $data = [
                 'nik' => $this->session->userdata('nik'),
                 'id_posisi' => $data['posisi']['position_id'],
@@ -48,17 +63,26 @@ class Jobs extends CI_Controller {
         }else{
             //do nothing
         }
+
+        if(empty($this->Jobpro_model->getDetail('*', 'jumlah_staff', array('id_posisi' => $data['posisi']['position_id'])))){ //cek apa jumlah staff sudah ada
+            $this->Jobpro_model->insert('jumlah_staff', array(
+                'id_posisi' => $data['posisi']['position_id'],
+                'manager' => 0,
+                'supervisor' => 0,
+                'staff' => 0
+            ));
+        }
+
         //get back this variable, it is gone after I using the if.. else.. above
         $nik = $this->session->userdata('nik');
         $data['posisi'] = $this->Jobpro_model->getPosisi($nik);
-
+        $data['title'] = 'My Task';
         $data['my'] = $this->Jobpro_model->getMyProfile($nik);
         $data['mydiv'] = $this->Jobpro_model->getMyDivisi($nik);
         $data['mydept'] = $this->Jobpro_model->getMyDept($nik);
         $data['staff'] = $this->Jobpro_model->getStaff($data['posisi']['position_id']);
         $data['tujuanjabatan'] = $this->Jobpro_model->getProfileJabatan($data['posisi']['position_id']);
         $data['pos'] = $this->Jobpro_model->getAllPosition();
-        $data['title'] = 'Job Profile';
         $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
         //ambil informasi approver 1 dan 2
         $data['approver'][0] =  $this->Jobpro_model->getPositionDetail($data['posisi']['id_approver1']);
@@ -86,20 +110,18 @@ class Jobs extends CI_Controller {
         $data['mydiv'] = $this->Jobpro_model->getMyDivisi($nik);
         $data['mydept'] = $this->Jobpro_model->getMyDept($nik);
         $data['posisi'] = $this->Jobpro_model->getPosisi($nik);
-		$data['staff'] = $this->Jobpro_model->getStaff($data['posisi']['position_id']);
-        $data['tujuanjabatan'] = $this->Jobpro_model->getProfileJabatan($data['posisi']['position_id']);
+        $data['staff'] = $this->Jobpro_model->getStaff($data['posisi']['position_id']);
         $data['pos'] = $this->Jobpro_model->getAllPosition();
-        $data['title'] = 'Job Profile';
+        $data['title'] = 'My Task';
         $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
         
         $statusApproval = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array(); //get status approval
-        
         
         //cek jika atasan 1 bukan CEO dan 0
         if($data['my']['posnameatasan1'] != 1 && $data['my']['posnameatasan1'] != 0){
             // Olah data orgchart
             $org_data = $this->olahDataChart($data['my']['position_id']);
-        } elseif($data['my']['posnameatasan1'] != 0 && $data['my']['id_div'] == 1){
+        } elseif($data['my']['posnameatasan1'] != 0 && $data['posisi']['div_id'] == 1){
             $org_data = $this->olahDataChart($data['my']['position_id']);
         } else {
             //siapkan data null
@@ -124,13 +146,13 @@ class Jobs extends CI_Controller {
             $this->load->view('templates/user_sidebar', $data);
             $this->load->view('templates/user_topbar', $data);
             $this->load->view('jobs/myjp_view', $data);
-            $this->load->view('templates/jobs_footer');
+            $this->load->view('templates/jobs_footer_view');
         } else {
             $this->load->view('templates/user_header', $data);
             $this->load->view('templates/user_sidebar', $data);
             $this->load->view('templates/user_topbar', $data);
             $this->load->view('jobs/myjp', $data);
-            $this->load->view('templates/jobs_footer');
+            $this->load->view('templates/jobs_footer_editor');
         }
     }
 
@@ -145,72 +167,7 @@ class Jobs extends CI_Controller {
 		$data['staff'] = $this->Jobpro_model->getStaff($data['posisi']['position_id']);
         $data['tujuanjabatan'] = $this->Jobpro_model->getProfileJabatan($data['posisi']['position_id']);
         $data['pos'] = $this->Jobpro_model->getAllPosition();
-        $data['title'] = 'Job Profile';
-        $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['emp_name'] = $this->Jobpro_model->getDetail("emp_name", "employe", array('nik' => $nik));
-        $statusApproval = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array(); //get status approval
-        
-        //cek jika atasan 1 bukan CEO dan 0
-        if($data['my']['posnameatasan1'] != 1 && $data['my']['posnameatasan1'] != 0){
-            // Olah data orgchart
-            $org_data = $this->olahDataChart($data['my']['position_id']);
-        } elseif($data['my']['posnameatasan1'] != 0 && $data['my']['id_div'] == 1){
-            $org_data = $this->olahDataChart($data['my']['position_id']);
-        } else {
-            //siapkan data null
-            $org_data[0] = json_encode(null);
-            $org_data[1] = json_encode(null);
-            $org_data[2] = json_encode(null);
-            $org_data[3] = 0;
-            $org_data[4] = 0;
-        }
-
-        $data['orgchart_data'] = $org_data[0]; //masukkan data orgchart yang sudah diolah ke JSON
-        $data['orgchart_data_assistant1'] = $org_data[1];
-        $data['orgchart_data_assistant2'] = $org_data[2];
-        $data['assistant_atasan1'] = $org_data[3];
-        $data['atasan'] = $org_data[4];
-
-        $this->load->view('templates/user_header', $data);
-        $this->load->view('templates/user_sidebar', $data);
-        $this->load->view('templates/user_topbar', $data);
-        $this->load->view('jobs/taskjp', $data);
-        $this->load->view('templates/jobs_footer');
-    }
-
-    public function reportJp(){
-        $my_nik = $this->session->userdata('nik'); //get my nik
-        $nik = $this->input->get('task');// get another nik
-
-        foreach($this->Jobpro_model->getDetail('position_id', 'employe', array('nik' => $my_nik)) as $v){ //ambil role_id
-            $my_position_id = $v;
-        }
-        // if($role_id != 1){ // cek role_id apakah punya hak akses
-        //     redirect('auth/blocked','refresh'); //jika tidak punya hak akses tampilkan pesan error
-        //     exit;
-        // }
-        //ambil position id
-        $position_id = $this->Jobpro_model->getDetail('position_id', 'employe', array('nik' => $nik))['position_id'];
-
-        if(!$this->db->query("SELECT * FROM job_approval WHERE (nik='".$nik."' AND approver1=".$my_position_id.") OR (nik='".$nik."' AND approver2=".$my_position_id.")")){ //cek kalo dia punya akses terhadap karyawan tersebut
-            redirect('auth/blocked','refresh'); //jika tidak punya hak akses tampilkan pesan error
-            exit;
-        };
-        //samakan approver1 dan approver 2
-        //kalo gaada yang sama tampilkan pesan error
-
-        //cek kalau dia punya akses sama approval ini
-
-        // prepare the data
-        $data['status'] = $this->input->get('status');
-        $data['my'] = $this->Jobpro_model->getMyProfile($nik);
-        $data['mydiv'] = $this->Jobpro_model->getMyDivisi($nik);
-        $data['mydept'] = $this->Jobpro_model->getMyDept($nik);
-        $data['posisi'] = $this->Jobpro_model->getPosisi($nik);
-		$data['staff'] = $this->Jobpro_model->getStaff($data['posisi']['position_id']);
-        $data['tujuanjabatan'] = $this->Jobpro_model->getProfileJabatan($data['posisi']['position_id']);
-        $data['pos'] = $this->Jobpro_model->getAllPosition();
-        $data['title'] = 'Report Job Profile';
+        $data['title'] = 'My Task';
         $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
         $data['emp_name'] = $this->Jobpro_model->getDetail("emp_name", "employe", array('nik' => $nik));
         $statusApproval = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array(); //get status approval
@@ -239,8 +196,75 @@ class Jobs extends CI_Controller {
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
         $this->load->view('templates/user_topbar', $data);
+        $this->load->view('jobs/taskjp', $data);
+        $this->load->view('templates/jobs_footer_editor');
+    }
+
+    public function reportJp(){
+        $my_nik = $this->session->userdata('nik'); //get my nik
+        $nik = $this->input->get('task');// get another nik
+
+        $my_position_id = $this->Jobpro_model->getDetail('position_id', 'employe', array('nik' => $my_nik))['position_id']; //ambil position_id
+        $role_id = $this->Jobpro_model->getDetail('role_id', 'employe', array('nik' => $my_nik))['role_id']; //ambil role_id
+        
+        // if($role_id != 1){ // cek role_id apakah punya hak akses
+        //     redirect('auth/blocked','refresh'); //jika tidak punya hak akses tampilkan pesan error
+        //     exit;
+        // }
+        //ambil position id
+        $position_id = $this->Jobpro_model->getDetail('position_id', 'employe', array('nik' => $nik))['position_id']; //ambil position id
+        // error_reporting(0); //sembunyiin pesan error
+        
+        if($role_id != 1){
+            if(empty($this->db->query("SELECT * FROM job_approval WHERE (nik='".$nik."' AND approver1='".$my_position_id."') OR (nik='".$nik."' AND approver2='".$my_position_id."')")->result())){ //cek kalo dia punya akses terhadap karyawan tersebut
+                redirect('auth/blocked','refresh'); //jika tidak punya hak akses tampilkan pesan error
+                exit;
+            } else {
+                //nothing
+            };      
+        } else {
+            //nothing
+        }
+            
+        // prepare the data
+        $data['status'] = $this->input->get('status');
+        $data['my'] = $this->Jobpro_model->getMyProfile($nik);
+        $data['mydiv'] = $this->Jobpro_model->getMyDivisi($nik);
+        $data['mydept'] = $this->Jobpro_model->getMyDept($nik);
+        $data['posisi'] = $this->Jobpro_model->getPosisi($nik);
+		$data['staff'] = $this->Jobpro_model->getStaff($data['posisi']['position_id']);
+        $data['tujuanjabatan'] = $this->Jobpro_model->getProfileJabatan($data['posisi']['position_id']);
+        $data['pos'] = $this->Jobpro_model->getAllPosition();
+        $data['title'] = 'Report';
+        $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
+        $data['emp_name'] = $this->Jobpro_model->getDetail("emp_name", "employe", array('nik' => $nik));
+        $data['statusApproval'] = $this->db->get_where('job_approval', ['nik' => $nik, 'id_posisi' => $data['posisi']['position_id']])->row_array(); //get status approval
+                //cek jika atasan 1 bukan CEO dan 0
+        if($data['my']['posnameatasan1'] != 1 && $data['my']['posnameatasan1'] != 0){
+            // Olah data orgchart
+            $org_data = $this->olahDataChart($data['my']['position_id']);
+        } elseif($data['my']['posnameatasan1'] != 0 && $data['posisi']['div_id'] == 1){
+            $org_data = $this->olahDataChart($data['my']['position_id']);
+        } else {
+            //siapkan data null
+            $org_data[0] = json_encode(null);
+            $org_data[1] = json_encode(null);
+            $org_data[2] = json_encode(null);
+            $org_data[3] = 0;
+            $org_data[4] = 0;
+        }
+
+        $data['orgchart_data'] = $org_data[0]; //masukkan data orgchart yang sudah diolah ke JSON
+        $data['orgchart_data_assistant1'] = $org_data[1];
+        $data['orgchart_data_assistant2'] = $org_data[2];
+        $data['assistant_atasan1'] = $org_data[3];
+        $data['atasan'] = $org_data[4];
+
+        $this->load->view('templates/user_header', $data);
+        $this->load->view('templates/user_sidebar', $data);
+        $this->load->view('templates/user_topbar', $data);
         $this->load->view('jobs/reportjp_v', $data);
-        $this->load->view('templates/jobs_footer');
+        $this->load->view('templates/jobs_footer_editor');
     }
 
     public function taskAction(){
@@ -354,7 +378,7 @@ class Jobs extends CI_Controller {
             $this->load->view('templates/user_sidebar', $data);
             $this->load->view('templates/user_topbar', $data);
             $this->load->view('jobs/edittujab', $data);
-            $this->load->view('templates/jobs_footer');
+            $this->load->view('templates/jobs_footer_editor');
         } else {
             $this->Jobpro_model->updateTuJab();
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
@@ -365,10 +389,11 @@ class Jobs extends CI_Controller {
 
     public function uptuj()
     {
-        $id = $this->input->post('id_posisi');
-        $tujuan = $this->input->post('tujuan_jabatan');
-        $this->Jobpro_model->UpTuj($id,$tujuan);
-        redirect('jobs','refresh');
+        $id = $this->input->post('id');
+        $tujuan = $this->input->post('tujuan');
+
+        $this->Jobpro_model->insert('profile_jabatan', array('id_posisi' => $id, 'tujuan_jabatan' => $tujuan));
+        // redirect('jobs','refresh');
     }
 
     public function edittujuan()
@@ -382,22 +407,15 @@ class Jobs extends CI_Controller {
 
     public function addTanggungJawab()
     {
-        $nik = $this->session->userdata('nik');
-        $this->db->select('position_id');
-        $this->db->from('employe');
-        $this->db->where('nik', $nik);
-        $pos = $this->db->get()->row_array();
-        
         $data = [
             'keterangan' => $this->input->post('tanggung_jawab'),
             'list_aktivitas' => $this->input->post('aktivitas'),
             'list_pengukuran' => $this->input->post('pengukuran'),
-            'id_posisi' => $pos['position_id']
+            'id_posisi' => $this->input->post('id_posisi')
         ];
-
-        $this->db->insert('tanggung_jawab', $data);
-        $this->session->set_flashdata('flash', 'Added');
-        redirect('jobs');
+        $this->Jobpro_model->insert('tanggung_jawab', $data);
+        // $this->session->set_flashdata('flash', 'Added');
+        // redirect('jobs');
     }
 
     public function editTanggungJawab()
@@ -407,11 +425,13 @@ class Jobs extends CI_Controller {
             'list_aktivitas' => $this->input->post('aktivitas'),
             'list_pengukuran' => $this->input->post('pengukuran')
         ];
-
-        $this->db->where('id_tgjwb', $this->input->post('idtgjwb'));
-        $this->db->update('tanggung_jawab', $data);
-        $this->session->set_flashdata('flash', 'Update');
-        redirect('jobs');
+        $where = array(
+            'db' => 'id_tgjwb',
+            'server' => $this->input->post('idtgjwb')
+        );
+        $this->Jobpro_model->update('tanggung_jawab', $where, $data);
+        // $this->session->set_flashdata('flash', 'Update');
+        // redirect('jobs');
     }
     
     public function getTjByID()
@@ -421,34 +441,20 @@ class Jobs extends CI_Controller {
 
     public function hapusTanggungJawab($id)
     {
-        $this->db->where('id_tgjwb', $id);
-        $this->db->delete('tanggung_jawab');
-        $this->session->set_flashdata('flash', 'Deleted');
-        redirect('jobs', 'refresh');
+        // $this->db->where('id_tgjwb', $id);
+        // $this->db->delete('tanggung_jawab');
+        $this->Jobpro_model->delete('tanggung_jawab', array('index' => 'id_tgjwb', 'data' => $id));
+        // $this->session->set_flashdata('flash', 'Deleted');
+        // redirect('jobs', 'refresh');
     }
 
     // -----ruang lingkup
     public function addruanglingkup()
     {
         $id = $this->input->post('id');
-        $ruling = $this->input->post('ruangl');
-        if (!$ruling) {
-            $array = [
-                'r_lingkup' => '<b>-</b>',
-                'id_posisi' => $id
-            ];
-            $this->db->insert('ruang_lingkup', $array);
-            $this->session->set_flashdata('flash', 'Inserted');
-            redirect('jobs/#hal6');
-        }else {
-            $array = [
-                'r_lingkup' => $this->input->post('ruangl'),
-                'id_posisi' => $id
-            ];
-            $this->db->insert('ruang_lingkup', $array);
-            $this->session->set_flashdata('flash', 'Inserted');
-            redirect('jobs/#hal6');
-        }
+        $ruang1 = $this->input->post('ruangl');
+
+        $this->Jobpro_model->insert('ruang_lingkup', array('id_posisi' => $id, 'r_lingkup' => $ruang1));
     }
     public function editruanglingkup()
     {
@@ -470,17 +476,14 @@ class Jobs extends CI_Controller {
     //wewenang
     public function addwen()
     {
-        $pos = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
         $data = [
             'kewenangan' => $this->input->post('wewenang'),
             'wen_sendiri' => $this->input->post('wen_sendiri'),
             'wen_atasan1' => $this->input->post('wen_atasan1'),
             'wen_atasan2' => $this->input->post('wen_atasan2'),
-            'id_posisi' => $pos['position_id']
+            'id_posisi' => $this->input->post('id')
         ];
-        $this->db->insert('wewenang', $data);
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"> Data Berhasil Ditambah! </div>');
-        redirect('jobs', 'refresh');
+        $this->Jobpro_model->insert('wewenang', $data);
     }
 
     public function aksiwewenang()
@@ -522,34 +525,34 @@ class Jobs extends CI_Controller {
         $internal = $this->input->post('internal');
         $eksternal = $this->input->post('eksternal');
 
-        
         if (!$internal && !$eksternal) {
             $array = [
                 'hubungan_int' => '<b>-</b>',
                 'hubungan_eks' => '<b>-</b>',
                 'id_posisi' => $id
             ];
-            $this->db->insert('hub_kerja', $array);
-            $this->session->set_flashdata('flash', 'Update');
-            redirect('jobs/#hal5');
-        }elseif ($internal && !$eksternal) {
+            $this->Jobpro_model->insert('hub_kerja', $array);
+        } elseif ($internal && $eksternal){
+            $array = [
+                'hubungan_int' => $internal,
+                'hubungan_eks' => $eksternal,
+                'id_posisi' => $id
+            ];
+            $this->Jobpro_model->insert('hub_kerja', $array);
+        } elseif($internal && !$eksternal) {
             $array = [
                 'hubungan_int' => $internal,
                 'hubungan_eks' => '<b>-</b>',
                 'id_posisi' => $id
             ];
-            $this->db->insert('hub_kerja', $array);
-            $this->session->set_flashdata('flash', 'Update');
-            redirect('jobs/#hal5');
+            $this->Jobpro_model->insert('hub_kerja', $array);
         }elseif (!$internal && $eksternal) {
             $array = [
                 'hubungan_int' => '<b>-</b>',
                 'hubungan_eks' => $eksternal,
                 'id_posisi' => $id
             ];
-            $this->db->insert('hub_kerja', $array);
-            $this->session->set_flashdata('flash', 'Update');
-            redirect('jobs/#hal5');
+            $this->Jobpro_model->insert('hub_kerja', $array);
         }
     }
 
@@ -583,8 +586,8 @@ class Jobs extends CI_Controller {
             'text' => $this->input->post('tantangan'),
             'id_posisi' => $this->input->post('id')
         ];
-        $this->db->insert('tantangan', $data);
-        redirect('jobs','refresh');
+        $this->Jobpro_model->insert('tantangan', $data);
+        // redirect('jobs','refresh');
     }
 
     public function edittantangan()
@@ -600,14 +603,14 @@ class Jobs extends CI_Controller {
     public function addkualifikasi()
     {
         $data = [
-            'id_posisi' => $this->input->post('id'),
-            'pendidikan' => $this->input->post('pend'),
-            'pengalaman' => $this->input->post('pengalmn'),
-            'pengetahuan' => $this->input->post('pengtahu'),
-            'kompetensi' => $this->input->post('kptnsi')
-        ];
-        $this->db->insert('kualifikasi', $data);
-        redirect('jobs','refresh');
+            'id_posisi' => $this->input->post('id_posisi'),
+            'pendidikan' => $this->input->post('pendidikan'),
+            'pengalaman' => $this->input->post('pengalaman'),
+            'pengetahuan' => $this->input->post('pengetahuan'),
+            'kompetensi' => $this->input->post('kompetensi')
+        ];  
+        $this->Jobpro_model->insert('kualifikasi', $data);
+        // redirect('jobs','refresh');
     }
 
     public function getKualifikasiById()
@@ -639,8 +642,7 @@ class Jobs extends CI_Controller {
             'id_posisi' => $this->input->post('id'),
             'text' => $this->input->post('jenkar')
         ];
-        $this->db->insert('jenjang_kar', $data);
-        redirect('jobs','refresh');
+        $this->Jobpro_model->insert('jenjang_kar', $data);
     }
     public function editjenjang()
     {
@@ -690,6 +692,34 @@ class Jobs extends CI_Controller {
 
         return $my_task;
     }
+
+    //this function to generate job_approval starter data
+    // public function startTheJobApprovalSystem(){
+    //     foreach($this->Jobpro_model->getDetails('nik', 'employe', array()) as $k => $v){ //ambil semua nik
+    //         $nik=$v['nik'];// pindahkan ke variabel
+    //         // print_r($nik);
+
+    //         $data['posisi'] = $this->Jobpro_model->getPosisi($nik); //cari data posisi
+
+    //         $job_approval = $this->db->query("SELECT * FROM job_approval WHERE nik = '$nik'");//cek apa sudah ada job_approvalnya
+    //         if(empty($job_approval->result())){
+    //             $data['title'] = 'Job Profile';
+    //             $data = [
+    //                 'nik' => $nik,
+    //                 'id_posisi' => $data['posisi']['position_id'],
+    //                 'approver1' => $data['posisi']['id_approver1'],
+    //                 'approver2' => $data['posisi']['id_approver2'],
+    //                 'diperbarui' => time(),
+    //                 'status_approval' => 0,
+    //                 'is_edit' => 1,
+    //                 'pesan_revisi' => "null"
+    //             ];
+    //             $this->db->insert('job_approval', $data);
+    //         }else{
+    //             //do nothing
+    //         }
+    //     }        
+    // }
 
     //function buat mengolah data chart olahDataChart(id_position)
     public function olahDataChart($my_positionId) {

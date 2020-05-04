@@ -1,4 +1,10 @@
 <!-- Begin Page Content -->
+<style>
+    html, body{
+        min-width: 1100px;
+        min-height: 600px;
+    }
+</style>
 <div class="container-fluid">
 
 	<!-- Page Heading -->
@@ -13,9 +19,9 @@
 
 	<div class="card shadow mb-2" id="print"> <!-- Profil Jabatan anda -->
 		<!-- Card Header - Accordion -->
-		<a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button">
-			<h6 class="m-0 font-weight-bold text-black-50"><?= $posisi['position_name']?></h6>
-		</a>
+		<div class="d-block card-header py-3">
+			<h5 class="m-0 font-weight-bold text-black-50"><?= $posisi['position_name']?></h5>
+		</div>
 		<!-- Card Content - Collapse -->
 		<div class="collapse show">
 			<div class="card-body">
@@ -42,12 +48,12 @@
                             <div class="col-7">
                                 <div class="row">
                                     <?php if(!empty($approver[0]['position_name'])): //cek jika tidak punya atasan1?>
-                                        <div class="col-3">Atasan 1</div><div class="col-1">:</div><div class="col-8"><?= $approver[0]['position_name']; ?></div>
+                                        <div class="col-3">Approver 1</div><div class="col-1">:</div><div class="col-8"><?= $approver[0]['position_name']; ?></div>
                                     <?php endif; ?>
                                 </div>
                                 <div class="row">
                                     <?php if(!empty($approver[1]['position_name'])): //cek jika tidak punya atasan2?> 
-                                        <div class="col-3">Atasan 2</div><div class="col-1">:</div><div class="col-8"><?= $approver[1]['position_name']; ?></div>
+                                        <div class="col-3">Approver 2</div><div class="col-1">:</div><div class="col-8"><?= $approver[1]['position_name']; ?></div>
                                     <?php endif; ?>
                                 </div>
 
@@ -84,7 +90,7 @@
                                     <?php endif; ?>
                                 </div>
                                 <div class="row">
-                                    <?php if($approval['pesan_revisi'] !== "null"): ?>
+                                    <?php if($approval['pesan_revisi'] !== "null" && $approval['status_approval'] == 3): ?>
                                         <div class="col-4">Pesan</div><div class="col-1">:</div>
                                         <div class="col-7">
                                             <a tabindex="0" class="btn badge" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Pesan" data-content="<?= $approval['pesan_revisi']; ?>"><i class="fas fa-comment-dots text-info"></i></a>
@@ -134,23 +140,19 @@
 	</div> <!-- /Profil Jabatan anda -->
     
     <div class="card shadow mb-2" id=""> <!-- My Task -->
-		<!-- Card Header - Accordion -->
-		<div class="card-header py-3">
-			<h6 class="m-0 font-weight-bold text-black-50">My Task</h6>
-		</div>
 		<!-- Card Content - Collapse -->
-		<div class="collapse show">
-        
+		<div>
 			<div class="card-body">
 				<div class="row mb-2">
 					<table id="myTask" class="table table-striped table-hover"  style="display: table;width:100%">
-                        <thead>
-                            <th>Division</th>
-                            <th>Departement</th>
-                            <th>Position</th>
-                            <th>Employee Name</th>
-                            <th>Date</th>
-                            <th style="min-width: 60px;"></th>
+                        <thead class="text-center">
+                            <th class="align-middle" >Division</th>
+                            <th class="align-middle" >Departement</th>
+                            <th class="align-middle" >Position</th>
+                            <th class="align-middle" >Employee Name</th>
+                            <th class="align-middle" >Date</th>
+                            <!-- <th class="align-middle"  style="min-width: 60px;">View Details</th> -->
+                            <th class="align-middle" >View Details</th>
                         </thead>
                         <tbody>
                             <?php foreach($my_task as $v): ?>
@@ -163,7 +165,7 @@
                                     <td>
                                         <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
                                             <div class="row justify-content-center align-self-center w-100 m-0">
-                                                <a id="myTask-button" style="display: none;" href="<?= base_url('jobs/taskJp'); ?>?task=<?= $v['nik']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
+                                                <a id="myTask-button" href="<?= base_url('jobs/taskJp'); ?>?task=<?= $v['nik']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
                                             </div>
                                         </div>
                                     </td>
