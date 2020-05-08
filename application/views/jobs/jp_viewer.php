@@ -3,15 +3,15 @@
 <?php //this is for preparation data
 	$this->load->model('Jobpro_model');
 
-	$tujuanjabatan = $this->Jobpro_model->getProfileJabatan($posisi['position_id']); //data tujuan jabatan
-	$ruangl = $this->Jobpro_model->getDetail('*', 'ruang_lingkup', array('id_posisi' => $posisi['position_id'])); //data ruang lingkup
-	$tu_mu = $this->Jobpro_model->getDetail('*', 'tantangan', array('id_posisi' => $posisi['position_id'])); // data tanggung jawab dan masalah utama
-	$kualifikasi = $this->Jobpro_model->getDetail('*', 'kualifikasi', array('id_posisi' => $posisi['position_id']));
-	$jenk = $this->Jobpro_model->getDetail('*', 'jenjang_kar', array('id_posisi' => $posisi['position_id']));
-	$hub = $this->Jobpro_model->getDetail('*', 'hub_kerja', array('id_posisi' => $posisi['position_id']));
-	$tgjwb = $this->Jobpro_model->getDetails('*', 'tanggung_jawab', array('id_posisi' => $posisi['position_id']));
-	$wen = $this->Jobpro_model->getDetails('*', 'wewenang', array('id_posisi' => $posisi['position_id']));
-	$atasan = $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $my['posnameatasan1']));
+	$tujuanjabatan = $this->Jobpro_model->getProfileJabatan($posisi['id']); //data tujuan jabatan
+	$ruangl = $this->Jobpro_model->getDetail('*', 'ruang_lingkup', array('id_posisi' => $posisi['id'])); //data ruang lingkup
+	$tu_mu = $this->Jobpro_model->getDetail('*', 'tantangan', array('id_posisi' => $posisi['id'])); // data tanggung jawab dan masalah utama
+	$kualifikasi = $this->Jobpro_model->getDetail('*', 'kualifikasi', array('id_posisi' => $posisi['id']));
+	$jenk = $this->Jobpro_model->getDetail('*', 'jenjang_kar', array('id_posisi' => $posisi['id']));
+	$hub = $this->Jobpro_model->getDetail('*', 'hub_kerja', array('id_posisi' => $posisi['id']));
+	$tgjwb = $this->Jobpro_model->getDetails('*', 'tanggung_jawab', array('id_posisi' => $posisi['id']));
+	$wen = $this->Jobpro_model->getDetails('*', 'wewenang', array('id_posisi' => $posisi['id']));
+	$atasan = $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $posisi['id_atasan1']));
 ?>
 
                 <div class="card-body">
@@ -42,7 +42,7 @@
                 	</div>
                 	<div class="row mb-2">
                 		<div class="col-lg-3 font-weight-bold">Bertanggung Jawab Kepada</div>
-                		<?php if (empty($my['posnameatasan1'])) : ?>
+                		<?php if (empty($posisi['id_atasan1'])) : ?>
                 		<form action="<?= base_url('jobs/insatasan'); ?>" method="post">
                 			<input type="hidden" value="<?= $posisi['position_id'] ?>" name="id">
                 			<div class="col mb-1">

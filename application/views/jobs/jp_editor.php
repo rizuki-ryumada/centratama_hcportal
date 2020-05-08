@@ -3,15 +3,15 @@
 <?php //this is for preparation data
 	$this->load->model('Jobpro_model');
 
-	$tujuanjabatan = $this->Jobpro_model->getProfileJabatan($posisi['position_id']); //data tujuan jabatan
-	$ruangl = $this->Jobpro_model->getDetail('*', 'ruang_lingkup', array('id_posisi' => $posisi['position_id'])); //data ruang lingkup
-	$tu_mu = $this->Jobpro_model->getDetail('*', 'tantangan', array('id_posisi' => $posisi['position_id'])); // data tanggung jawab dan masalah utama
-	$kualifikasi = $this->Jobpro_model->getDetail('*', 'kualifikasi', array('id_posisi' => $posisi['position_id']));
-	$jenk = $this->Jobpro_model->getDetail('*', 'jenjang_kar', array('id_posisi' => $posisi['position_id']));
-	$hub = $this->Jobpro_model->getDetail('*', 'hub_kerja', array('id_posisi' => $posisi['position_id']));
-	$tgjwb = $this->Jobpro_model->getDetails('*', 'tanggung_jawab', array('id_posisi' => $posisi['position_id']));
-	$wen = $this->Jobpro_model->getDetails('*', 'wewenang', array('id_posisi' => $posisi['position_id']));
-	$atasan = $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $my['posnameatasan1']));
+	$tujuanjabatan = $this->Jobpro_model->getProfileJabatan($posisi['id']); //data tujuan jabatan
+	$ruangl = $this->Jobpro_model->getDetail('*', 'ruang_lingkup', array('id_posisi' => $posisi['id'])); //data ruang lingkup
+	$tu_mu = $this->Jobpro_model->getDetail('*', 'tantangan', array('id_posisi' => $posisi['id'])); // data tanggung jawab dan masalah utama
+	$kualifikasi = $this->Jobpro_model->getDetail('*', 'kualifikasi', array('id_posisi' => $posisi['id']));
+	$jenk = $this->Jobpro_model->getDetail('*', 'jenjang_kar', array('id_posisi' => $posisi['id']));
+	$hub = $this->Jobpro_model->getDetail('*', 'hub_kerja', array('id_posisi' => $posisi['id']));
+	$tgjwb = $this->Jobpro_model->getDetails('*', 'tanggung_jawab', array('id_posisi' => $posisi['id']));
+	$wen = $this->Jobpro_model->getDetails('*', 'wewenang', array('id_posisi' => $posisi['id']));
+	$atasan = $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $posisi['id_atasan1']));
 ?>
 
                 <div class="card-body">
@@ -43,9 +43,9 @@
                 	</div>
                 	<div class="row mb-2">
                 		<?php //if (empty($my['posnameatasan1'])) : ?>
-                		<?php if ($my['posnameatasan1'] < 1) : ?>
+                		<?php if ($posisi['id_atasan1'] < 1) : ?>
                 		<!-- <form action="<?= base_url('jobs/insatasan'); ?>" method="post">
-                			<input type="hidden" value="<?= $posisi['position_id'] ?>" name="id">
+                			<input type="hidden" value="<?= $posisi['id'] ?>" name="id">
                 			<div class="col mb-1">
                 				<select name="position" class="form-control form-control-sm  border border-danger">
                 					<?php foreach ($pos as $p) : ?>
@@ -83,7 +83,7 @@
                 				<textarea class="form-control" name="tujuanbaru" id="tujuanbaru"></textarea>
                 			</div>
                 			<button id="simpan-tujuan-baru" type="submit" class="btn btn-primary btn-sm"
-                				data-id="<?= $posisi['position_id']; ?>">Save</button>
+                				data-id="<?= $posisi['id']; ?>">Save</button>
                 		</div>
                 		<div class="col justify-content-center edit-tujuan d-none">
                 			<button type="button" class="btn btn-circle btn-sm btn-success" data-toggle="tooltip"
@@ -194,7 +194,7 @@
                 			<textarea class="form-control" name="add-ruangl" id="add-ruangl" rows="2"></textarea>
                 		</div>
                 		<button id="simpan-ruangl-baru" type="submit" class="btn btn-primary btn-sm"
-                			data-id="<?= $posisi['position_id']; ?>">Save</button>
+                			data-id="<?= $posisi['id']; ?>">Save</button>
                 		<!-- </form> -->
                 	</div>
                 	<?php else : ?>
@@ -283,7 +283,7 @@
                 						</select>
                 					</td>
                 					<td><button id="add-wewenang-baru"
-                							class="btn btn-primary btn-sm mr-n3" data-id="<?= $posisi['position_id']; ?>">Save</button>
+                							class="btn btn-primary btn-sm mr-n3" data-id="<?= $posisi['id']; ?>">Save</button>
                 					</td>
                 					<!-- </form> -->
                 				</tr>
@@ -329,7 +329,7 @@
                 				<textarea class="form-control" name="eksternal" id="eksternal"></textarea>
                 			</div>
                 			<button id="simpan-hubungan-baru" class="btn btn-primary btn-sm"
-                				data-id="<?= $posisi['position_id'] ?>">Save</button>
+                				data-id="<?= $posisi['id'] ?>">Save</button>
                 			<!-- </form> -->
                 		</div>
                 	</div>
@@ -365,61 +365,80 @@
 
                 	<?php endif; ?>
 
-                	<!-- start jumlah staff -->
-                	<?php
-					$dataStaff = [$staff['manager'], $staff['supervisor'], $staff['staff']];
+					<!-- start jumlah staff -->
+					<?php if(!empty($staff)): ?>
+						<?php
+						$dataStaff = [$staff['manager'], $staff['supervisor'], $staff['staff']];
+						?>
+						<hr>
+						<div class="row align-items-end mt-2">
+							<div class="col">
+								<h5 class="font-weight-bold">Jumlah Dan Level Staf Yang Dibawahi</h5>
+								<h6 class="font-weight-light mt-2"><em>Jumlah dan level staf yang memiliki garis
+										pertanggungjawaban ke jabatan :</em></h6>
+							</div>
+						</div>
+						<dl class="row mt-2">
+							<dt class="col-2">Jumlah Staff</dt>
+							<dd class="col-1">
+								<p class="jumTotStaff"><?= array_sum($dataStaff); ?></p>
+							</dd>
+							<dd class="col-9">Orang</dd>
+
+							<dt class="col-2">Manager</dt>
+							<dd class="col-2">
+								<div class="input-group input-group-sm mb-3">
+									<input type="text" id="totMgr" class="form-control form-control-sm"
+										value="<?= $staff['manager']; ?>">
+									<div class="input-group-append">
+										<span class="input-group-text" id="basic-addon2">Orang</span>
+									</div>
+								</div>
+							</dd>
+							<dd class="col-8"></dd>
+
+							<dt class="col-2">Supervisor</dt>
+							<dd class="col-2">
+								<div class="input-group input-group-sm mb-3">
+									<input type="text" id="totSpvr" class="form-control form-control-sm"
+										value="<?= $staff['supervisor']; ?>">
+									<div class="input-group-append">
+										<span class="input-group-text" id="basic-addon2">Orang</span>
+									</div>
+								</div>
+							</dd>
+							<dd class="col-8"></dd>
+
+
+							<dt class="col-2">Staff</dt>
+							<dd class="col-2">
+								<div class="input-group input-group-sm mb-3">
+									<input type="text" id="totStaf" class="form-control form-control-sm"
+										value="<?= $staff['staff']; ?>">
+									<div class="input-group-append">
+										<span class="input-group-text" id="basic-addon2">Orang</span>
+									</div>
+								</div>
+							</dd>
+						</dl>
+					<?php else: ?>
+					<?php 
+						if(empty($this->Jobpro_model->getDetail('*', 'jumlah_staff', array('id_posisi' => $posisi['id'])))){ //cek apa jumlah staff sudah ada
+							$this->Jobpro_model->insert('jumlah_staff', array(
+								'id_posisi' => $posisi['id'],
+								'manager' => 0,
+								'supervisor' => 0,
+								'staff' => 0
+							));
+						}
 					?>
-                	<hr>
-                	<div class="row align-items-end mt-2">
-                		<div class="col">
-                			<h5 class="font-weight-bold">Jumlah Dan Level Staf Yang Dibawahi</h5>
-                			<h6 class="font-weight-light mt-2"><em>Jumlah dan level staf yang memiliki garis
-                					pertanggungjawaban ke jabatan :</em></h6>
-                		</div>
-                	</div>
-                	<dl class="row mt-2">
-                		<dt class="col-2">Jumlah Staff</dt>
-                		<dd class="col-1">
-                			<p class="jumTotStaff"><?= array_sum($dataStaff); ?></p>
-                		</dd>
-                		<dd class="col-9">Orang</dd>
-
-                		<dt class="col-2">Manager</dt>
-                		<dd class="col-2">
-                			<div class="input-group input-group-sm mb-3">
-                				<input type="text" id="totMgr" class="form-control form-control-sm"
-                					value="<?= $staff['manager']; ?>">
-                				<div class="input-group-append">
-                					<span class="input-group-text" id="basic-addon2">Orang</span>
-                				</div>
-                			</div>
-                		</dd>
-                		<dd class="col-8"></dd>
-
-                		<dt class="col-2">Supervisor</dt>
-                		<dd class="col-2">
-                			<div class="input-group input-group-sm mb-3">
-                				<input type="text" id="totSpvr" class="form-control form-control-sm"
-                					value="<?= $staff['supervisor']; ?>">
-                				<div class="input-group-append">
-                					<span class="input-group-text" id="basic-addon2">Orang</span>
-                				</div>
-                			</div>
-                		</dd>
-                		<dd class="col-8"></dd>
-
-
-                		<dt class="col-2">Staff</dt>
-                		<dd class="col-2">
-                			<div class="input-group input-group-sm mb-3">
-                				<input type="text" id="totStaf" class="form-control form-control-sm"
-                					value="<?= $staff['staff']; ?>">
-                				<div class="input-group-append">
-                					<span class="input-group-text" id="basic-addon2">Orang</span>
-                				</div>
-                			</div>
-                		</dd>
-                	</dl>
+					
+					<div class="row align-items-end mt-5">
+						<div class="col">
+							<div class="alert alert-danger text-center" role="alert">Harap refresh Halaman ini, tekan <span class="badge badge-dark">F5</span> di keyboard anda.</div>
+						</div>
+					</div>
+					<?php endif; ?>
 
                 	<!-- start tantangan dan maslah utama -->
                 	<hr>
@@ -446,7 +465,7 @@
                 				<textarea name="tantangan-baru" id="tantangan-baru"></textarea>
                 			</div>
                 			<button id="simpan-tantangan_baru" class="btn btn-primary btn-sm"
-                				data-id="<?= $posisi['position_id']; ?>">Save</button>
+                				data-id="<?= $posisi['id']; ?>">Save</button>
                 			<!-- </form> -->
                 		</div>
                 	</div>
@@ -478,7 +497,7 @@
                 		<div class="col-sm-1 d-flex justify-content-center">
                 			<?php if(!empty($kualifikasi)): ?>
                 			<button type="button" class="btn btn-circle btn-sm btn-success edit-kualifikasi"
-                				data-id="<?= $posisi['position_id']; ?>" data-toggle="modal"
+                				data-id="<?= $posisi['id']; ?>" data-toggle="modal"
                 				data-target="#modalKualifikasi" data-placement="top" title="Edit">
                 				<i class="fas fa-1x fa-pencil-alt"></i>
                 			</button>
@@ -489,7 +508,7 @@
                 	<div class="row">
                 		<div class="col-6 ml-2 mt-2">
                 			<!-- <form action="<?= base_url('jobs/addkualifikasi'); ?>" method="post"> -->
-                			<input type="hidden" name="id" value="<?= $posisi['position_id']; ?>">
+                			<input type="hidden" name="id" value="<?= $posisi['id']; ?>">
                 			<div class="form-group">
                 				<label for="pend">Pendidikan Formal</label>
                 				<textarea class="form-control" name="pend" id="pend" rows="2"></textarea>
@@ -561,7 +580,7 @@
                 				<textarea class="form-control" name="jenkar" id="jenkar" rows="2"></textarea>
                 			</div>
                 			<button id="simpan-jenk-baru" class="btn btn-primary btn-sm"
-                				data-id="<?= $posisi['position_id']; ?>">Save</button>
+                				data-id="<?= $posisi['id']; ?>">Save</button>
                 			<!-- </form> -->
                 		</div>
                 	</div>
@@ -582,7 +601,7 @@
                 	<?php endif; ?>
 
                 	<!-- start Struktur Organisasi -->
-                	<?php if($atasan != 0): ?>
+                	<?php if($atasan != 0 && $posisi['id_atasan1'] != 1): ?>
                 	<hr />
                 	<div class="row mt-3">
                 		<div class="col-12">
@@ -625,7 +644,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button id="submit-tgjwb" class="btn btn-primary" data-id_posisi="<?= $posisi['position_id']; ?>">Save</button>
+				<button id="submit-tgjwb" class="btn btn-primary" data-id_posisi="<?= $posisi['id']; ?>">Save</button>
 			</div>
 		</div>
 	</div>
@@ -643,7 +662,7 @@
 			</div>
 			<div class="modal-body">
 				<!-- <form action="<?= base_url('jobs/updateKualifikasi'); ?>" method="post"> -->
-				<input type="hidden" name="id" id="id" value="<?= $posisi['position_id']; ?>">
+				<input type="hidden" name="id" id="id" value="<?= $posisi['id']; ?>">
 				<div class="form-group">
 					<label for="pend">Pendidikan Formal</label>
 					<textarea class="form-control" name="pend" id="pend" rows="2"></textarea>

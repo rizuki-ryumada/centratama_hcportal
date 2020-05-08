@@ -144,6 +144,7 @@ div.banner-wrapper{
     /* position: relative; */
     height: 100%;
     float: left;
+    z-index:-9999;
 }
 div.banner-wrapper .banner-tema{
     position: absolute;

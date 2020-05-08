@@ -14,16 +14,15 @@ class Report extends CI_Controller { // need to be separated because the user ac
     public function index(){
         $nik = $this->session->userdata('nik'); //get nik
         $my_position = $this->Jobpro_model->getDetail('position_id', 'employe', array('nik' => $nik))['position_id']; //ambil my_position
-        
         $role_id = $this->Jobpro_model->getDetail('role_id', 'employe', array('nik' => $nik))['role_id']; //ambil role_id
 
         if($role_id == 1){ // cek role_id apakah punya hak akses admin
-            $task = $this->Jobpro_model->getAllAndOrder('nik', 'job_approval');
+            $task = $this->Jobpro_model->getAllAndOrder('id_posisi', 'job_approval');
             $data['dept'] = $this->Jobpro_model->getAllAndOrder('nama_departemen', 'departemen');
             $data['divisi'] = $this->Jobpro_model->getAllAndOrder('division', 'divisi');
         } else {
-            $task1 = $this->Jobpro_model->getDetails('*', 'job_approval', "(approver1=".$my_position." AND status_approval=0) OR (approver1=".$my_position." AND status_approval=2) OR (approver1=".$my_position." AND status_approval=3) OR (approver1=".$my_position." AND status_approval=4)"); //cari approval di my position
-            $task2 = $this->Jobpro_model->getDetails('*', 'job_approval', "(approver2=".$my_position." AND status_approval=0) OR (approver2=".$my_position." AND status_approval=1) OR (approver2=".$my_position." AND status_approval=3) OR (approver2=".$my_position." AND status_approval=4)");
+            $task1 = $this->Jobpro_model->getJoin2tables('*', 'job_approval', array('table' => 'position', 'index' => 'position.id = job_approval.id_posisi', 'position' => 'left'), "(id_approver1=".$my_position." AND status_approval=0) OR (id_approver1=".$my_position." AND status_approval=2) OR (id_approver1=".$my_position." AND status_approval=3) OR (id_approver1=".$my_position." AND status_approval=4)"); //cari approval di my position
+            $task2 = $this->Jobpro_model->getJoin2tables('*', 'job_approval', array('table' => 'position', 'index' => 'position.id = job_approval.id_posisi', 'position' => 'left'), "(id_approver2=".$my_position." AND status_approval=0) OR (id_approver2=".$my_position." AND status_approval=1) OR (id_approver2=".$my_position." AND status_approval=3) OR (id_approver2=".$my_position." AND status_approval=4)");
             $task = array_merge($task1, $task2);
 
             $my_div = $this->Jobpro_model->getDetail('div_id', 'position', array('id' => $my_position)); //ambil my_position
@@ -46,22 +45,57 @@ class Report extends CI_Controller { // need to be separated because the user ac
     }
 
     public function getApprovalDetails($my_task){ // Copied from Jobs Controller
-        //lengkapi division, departement, nama position, nama employee nya
+        // print_r($my_task);
+        //lengkapi data my_task
+        $tugas = array(); $x = 0;
         foreach($my_task as $key => $value){
-            $temp_employe = $this->Jobpro_model->getEmployeDetail("emp_name, position.div_id, position.dept_id, position_id", "employe", array('nik' => $value['nik']));
-            $my_task[$key]['name'] = $temp_employe['emp_name'];
-            foreach ($this->Jobpro_model->getDetail("position_name", "position", array('id' => $temp_employe['position_id'])) as $v){
-                $my_task[$key]['posisi'] = $v;
-            }
-            foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_employe['dept_id'])) as $v){
-                $my_task[$key]['departement'] = $v;
-            }
-            foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_employe['div_id'])) as $v){
-                $my_task[$key]['divisi'] = $v;
+            //cari employe dengan id posisi
+            $temp_employe = $this->Jobpro_model->getDetails("nik, emp_name", "employe", array('position_id' => $value['id_posisi']));
+            if(!empty($temp_employe)){
+                foreach($temp_employe as $v){
+                    $temp_tugas = array_merge($v, $value);
+                    $tugas[$x] = array_merge($temp_tugas, $this->getPositionDetails($value['id_posisi']));
+                    $x++;
+                }
+            }else{
+                $tugas[$x] = array_merge($value, $this->getPositionDetails($value['id_posisi']));
+                $tugas[$x]['emp_name'] = " ";
+                $tugas[$x]['nik'] = " ";
+                $x++; //increment the identifier
             }
         }
+        
+        //lengkapi division, departement, nama position, nama employee nya
+        // foreach($my_task as $key => $value){
+            // $temp_employe = $this->Jobpro_model->getEmployeDetail("emp_name, position.div_id, position.dept_id, position_id", "employe", array('nik' => $value['nik']));
+        //     $my_task[$key]['name'] = $temp_employe['emp_name'];
+        //     foreach ($this->Jobpro_model->getDetail("position_name", "position", array('id' => $temp_employe['position_id'])) as $v){
+        //         $my_task[$key]['posisi'] = $v;
+        //     }
+        //     foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_employe['dept_id'])) as $v){
+        //         $my_task[$key]['departement'] = $v;
+        //     }
+        //     foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_employe['div_id'])) as $v){
+        //         $my_task[$key]['divisi'] = $v;
+        //     }
+        // }
 
-        return $my_task;
+        return $tugas;
+    }
+
+    function getPositionDetails($id_posisi){
+        $temp_posisi = $this->Jobpro_model->getDetail("div_id, dept_id, id", "position", array('id' => $id_posisi));
+        // print_r($temp_posisi);
+        foreach ($this->Jobpro_model->getDetail("position_name", "position", array('id' => $temp_posisi['id'])) as $v){
+            $detail_posisi['posisi'] = $v;
+        }
+        foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_posisi['dept_id'])) as $v){
+            $detail_posisi['departement'] = $v;
+        }
+        foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_posisi['div_id'])) as $v){
+            $detail_posisi['divisi'] = $v;
+        }
+        return $detail_posisi;
     }
 
     public function getHistoryApproval(){ //archived, need to change the job_approval database structure

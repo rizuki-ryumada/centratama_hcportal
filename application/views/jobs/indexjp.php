@@ -29,15 +29,15 @@
                     <div class="col-1 status-logo"> <!-- status logo -->
                         <div class="container d-flex h-100 m-0 p-0">
                             <div class="row justify-content-center align-self-center p-0 m-0">
-                                <?php if($approval['status_approval'] == 0): ?>
+                                <?php if($statusApproval['status_approval'] == 0): ?>
                                     <i class="fa fa-exclamation-circle fa-3x" style="color: red"></i>
-                                <?php elseif($approval['status_approval'] == 1): ?>
+                                <?php elseif($statusApproval['status_approval'] == 1): ?>
                                     <i class="fa fa-ellipsis-h fa-3x" style="color: gold"></i>
-                                <?php elseif($approval['status_approval'] == 2): ?>
+                                <?php elseif($statusApproval['status_approval'] == 2): ?>
                                     <i class="fa fa-ellipsis-h fa-3x" style="color: gold"></i>
-                                <?php elseif($approval['status_approval'] == 3): ?>
+                                <?php elseif($statusApproval['status_approval'] == 3): ?>
                                     <i class="fa fa-exclamation-triangle fa-3x" style="color: red"></i>
-                                <?php elseif($approval['status_approval'] == 4): ?>
+                                <?php elseif($statusApproval['status_approval'] == 4): ?>
                                     <i class="fa fa-check-circle fa-3x" style="color: green"></i>
                                 <?php endif; ?>
                             </div>
@@ -71,29 +71,29 @@
                                 <div class="row">
                                 <!-- card status -->
                                     <div class="col-4">Status</div><div class="col-1">:</div><div class="col-7">
-                                        <?php if($approval['status_approval'] == 0): ?>
-                                            <span class="badge badge-danger">Belum disubmit</span>
-                                        <?php elseif($approval['status_approval'] == 1): ?>
-                                            <span class="badge badge-warning">Direview Atasan 1</span>
-                                        <?php elseif($approval['status_approval'] == 2): ?>
-                                            <span class="badge badge-warning">Direview Atasan 2</span>
-                                        <?php elseif($approval['status_approval'] == 3): ?>
-                                            <span class="badge badge-danger">Revisi</span>
-                                        <?php elseif($approval['status_approval'] == 4): ?>
-                                            <span class="badge badge-success">Selesai</span>
+                                        <?php if($statusApproval['status_approval'] == 0): ?>
+                                            <span class="badge badge-danger">Not Yet Submitted</span>
+                                        <?php elseif($statusApproval['status_approval'] == 1): ?>
+                                            <span class="badge badge-warning">Submitted</span>
+                                        <?php elseif($statusApproval['status_approval'] == 2): ?>
+                                            <span class="badge badge-warning">First Approval</span>
+                                        <?php elseif($statusApproval['status_approval'] == 3): ?>
+                                            <span class="badge badge-danger">Need Revised</span>
+                                        <?php elseif($statusApproval['status_approval'] == 4): ?>
+                                            <span class="badge badge-success">Final Approval</span>
                                         <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <?php if(!$approval['status_approval'] == 0): ?>
-                                        <div class="col-4">Diperbarui</div><div class="col-1">:</div><div class="col-7"><?= date('d F Y, H:i', $approval['diperbarui']); ?></div>
+                                    <?php if(!$statusApproval['status_approval'] == 0): ?>
+                                        <div class="col-4">Updated</div><div class="col-1">:</div><div class="col-7"><?= date('d F Y, H:i', $statusApproval['diperbarui']); ?></div>
                                     <?php endif; ?>
                                 </div>
                                 <div class="row">
-                                    <?php if($approval['pesan_revisi'] !== "null" && $approval['status_approval'] == 3): ?>
-                                        <div class="col-4">Pesan</div><div class="col-1">:</div>
+                                    <?php if($statusApproval['pesan_revisi'] !== "null" && $statusApproval['status_approval'] == 3): ?>
+                                        <div class="col-4">Notes</div><div class="col-1">:</div>
                                         <div class="col-7">
-                                            <a tabindex="0" class="btn badge" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Pesan" data-content="<?= $approval['pesan_revisi']; ?>"><i class="fas fa-comment-dots text-info"></i></a>
+                                            <a tabindex="0" class="btn badge" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Pesan" data-content="<?= $statusApproval['pesan_revisi']; ?>"><i class="fas fa-comment-dots text-info"></i></a>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -103,7 +103,7 @@
                     <div class="col-1 status-action"> <!-- status action -->
                         <div class="container d-flex h-100 m-0 p-2"> <!-- this container make the element to vertically and horizontally centered -->
                             <div class="row justify-content-center align-self-center p-0 m-0">
-                                <?php if($approval['is_edit'] == 1): ?>
+                                <?php if($statusApproval['is_edit'] == 1): ?>
                                     <a href="<?= base_url('jobs/myjp')?>"><i class="fa fa-pencil-alt fa-2x"></i></a>
                                 <?php else: ?>
                                     <a href="<?= base_url('jobs/myjp')?>"><i class="fa fa-search fa-2x"></i></a>
@@ -115,23 +115,23 @@
 			</div>
             
             <!-- footer message -->
-            <?php if($approval['status_approval'] == 0): ?>
+            <?php if($statusApproval['status_approval'] == 0): ?>
                 <div class="card-footer badge-danger">
 	                Silakan isi, lengkapi, dan submit Job Profile Anda.
                 </div>
-            <?php elseif($approval['status_approval'] == 1): ?>
+            <?php elseif($statusApproval['status_approval'] == 1): ?>
                 <div class="card-footer badge-warning">
                     Job Profile sudah dikirim ke Atasan 1 anda, silakan tunggu hingga proses berikutnya.
                 </div>
-            <?php elseif($approval['status_approval'] == 2): ?>
+            <?php elseif($statusApproval['status_approval'] == 2): ?>
                 <div class="card-footer badge-warning">
                     Job Profile sudah dikirim ke Atasan 2 anda, silakan tunggu hingga proses berikutnya.
                 </div>
-            <?php elseif($approval['status_approval'] == 3): ?>
+            <?php elseif($statusApproval['status_approval'] == 3): ?>
                 <div class="card-footer badge-danger">
                     Anda diminta untuk merevisi job profle anda, klik tombol pesan untuk melihat revisi anda.
                 </div>
-            <?php elseif($approval['status_approval'] == 4): ?>
+            <?php elseif($statusApproval['status_approval'] == 4): ?>
                 <div class="card-footer badge-success">
                     Job Profile Anda sudah siap, selamat bekerja.
                 </div>
@@ -160,12 +160,12 @@
                                     <td><?= $v['divisi'] ?></td>
                                     <td><?= $v['departement'] ?></td>
                                     <td><?= $v['posisi'] ?></td>
-                                    <td><?= $v['name'] ?></td>
+                                    <td><?= $v['emp_name'] ?></td>
                                     <td><?= date('d F Y, H:i', $v['diperbarui']); ?></td>
                                     <td>
                                         <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
                                             <div class="row justify-content-center align-self-center w-100 m-0">
-                                                <a id="myTask-button" href="<?= base_url('jobs/taskJp'); ?>?task=<?= $v['nik']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
+                                                <a id="myTask-button" href="<?= base_url('jobs/taskJp'); ?>?task=<?= $v['nik']; ?>&id=<?= $v['id_posisi']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
                                             </div>
                                         </div>
                                     </td>

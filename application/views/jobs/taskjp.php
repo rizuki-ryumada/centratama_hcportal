@@ -8,7 +8,11 @@
     <div class="card shadow mb-2" id="print">
         <!-- Card Header - Accordion -->
         <div  class="d-block card-header py-3" >
-            <h5 class="m-0 font-weight-bold text-black-50"><?= $emp_name['emp_name']; ?></h5>
+            <?php if(!empty($emp_name['emp_name'])): ?>
+			    <h5 class="m-0 font-weight-bold text-black-50"><?= $emp_name['emp_name']; ?></h5>
+			<?php else: ?>
+				<h5 class="m-0 font-weight-bold text-black-50">No Employe</h5>
+			<?php endif; ?>
         </div>
         <!-- Card Content - Collapse -->
         <div class="collapse show" id="collapseCardExample">
@@ -51,7 +55,7 @@
 				</p>
 				<form id="revisi-form" action="<?= base_url('/jobs/taskAction'); ?>" method="post">
 					<input type="hidden" name="pesan_revisi" value="null">
-					<input type="hidden" name="nik" value="<?= $this->input->get('task'); ?>">
+					<input type="hidden" name="id_posisi" value="<?= $this->input->get('id'); ?>">
 					<input type="hidden" name="status_approval" value="true">
 					<input type="hidden" name="status_sebelum" value="<?= $status; ?>" />
 				</form>
@@ -81,7 +85,7 @@
 				<p>Silakan masukkan pesan untuk karyawan, agar mempermudah dalam melakukan revisi.</p>
 				<form id="setuju_form" action="<?= base_url('jobs/'); ?>taskAction" method="post">
 					<textarea rows="4" cols="45" name="pesan_revisi"></textarea>
-					<input type="hidden" name="nik" value="<?= $this->input->get('task'); ?>">
+					<input type="hidden" name="id_posisi" value="<?= $this->input->get('id'); ?>">
 					<input type="hidden" name="status_approval" value="false" />
 					<input type="hidden" name="status_sebelum" value="<?= $status; ?>" />
 				</form>

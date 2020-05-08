@@ -50,7 +50,7 @@
 	  </p>
       </div>
       <div class="modal-footer">
-		<button type="button" class="btn btn-light btnApprove" data-mynik="<?= $user['nik']; ?>" data-position="<?= $my['position_id']; ?>" data-atasan1="<?= $my['posnameatasan1']; ?>" data-atasan2="<?= $my['id_atasan2']; ?>">Submit</button>
+		<button type="button" class="btn btn-light btnApprove" data-mynik="<?= $user['nik']; ?>" data-position="<?= $posisi['id']; ?>" data-atasan1="<?= $posisi['id_approver1']; ?>" data-atasan2="<?= $posisi['id_approver2']; ?>">Submit</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Periksa lagi</button>
       </div>
     </div>

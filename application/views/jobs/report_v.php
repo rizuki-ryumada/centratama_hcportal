@@ -31,11 +31,11 @@
                             <label for="status">Status :</label>
                             <select id="status" class="form-control form-control-sm">
                                 <option value="">All</option>
-                                <option value="1">Belum disubmit</option>
-                                <option value="2">Direview Atasan 1</option>
-                                <option value="3">Direview Atasan 2</option>
-                                <option value="4">Revisi</option>
-                                <option value="5">Selesai</option>
+                                <option value="1">Not Yet Submitted</option>
+                                <option value="2">Submitted</option>
+                                <option value="3">First Approval</option>
+                                <option value="4">Need Revised</option>
+                                <option value="5">Final Approval</option>
                             </select>
                         </div>
                     </div>
@@ -63,11 +63,11 @@
                             <label for="status">Status :</label>
                             <select id="status" class="form-control form-control-sm">
                                 <option value="">All</option>
-                                <option value="1">Belum disubmit</option>
-                                <option value="2">Direview Atasan 1</option>
-                                <option value="3">Direview Atasan 2</option>
-                                <option value="4">Revisi</option>
-                                <option value="5">Selesai</option>
+                                <option value="1">Not Yet Submitted</option>
+                                <option value="2">Submitted</option>
+                                <option value="3">First Approval</option>
+                                <option value="4">Need Revised</option>
+                                <option value="5">Final Approval</option>
                             </select>
                         </div>
                     </div>
@@ -89,11 +89,11 @@
                             <label for="status">Status :</label>
                             <select id="status" class="form-control form-control-sm">
                                 <option value="">All</option>
-                                <option value="1">Belum disubmit</option>
-                                <option value="2">Direview Atasan 1</option>
-                                <option value="3">Direview Atasan 2</option>
-                                <option value="4">Revisi</option>
-                                <option value="5">Selesai</option>
+                                <option value="1">Not Yet Submitted</option>
+                                <option value="2">Submitted</option>
+                                <option value="3">First Approval</option>
+                                <option value="4">Need Revised</option>
+                                <option value="5">Final Approval</option>
                             </select>
                         </div>
                     </div>
@@ -119,32 +119,32 @@
                             <td><?= $v['divisi'] ?></td>
                             <td><?= $v['departement'] ?></td>
                             <td><?= $v['posisi'] ?></td>
-                            <td><?= $v['name'] ?></td>
+                            <td><?= $v['emp_name'] ?></td>
                             <?php if($v['status_approval'] == 0): ?>
                                 <td data-filter="1">
-                                    <span class="badge badge-danger">Belum disubmit</span>
+                                    <span class="badge badge-danger">Not Yet Submitted</span>
                                 </td>
                             <?php elseif($v['status_approval'] == 1): ?>
                                 <td data-filter="2">
-                                    <span class="badge badge-warning">Direview Atasan 1</span>
+                                    <span class="badge badge-warning">Submitted</span>
                                 </td>
                             <?php elseif($v['status_approval'] == 2): ?>
                                 <td data-filter="3">
-                                    <span class="badge badge-warning">Direview Atasan 2</span>
+                                    <span class="badge badge-warning">First Approval</span>
                                 </td>
                             <?php elseif($v['status_approval'] == 3): ?>
                                 <td data-filter="4">
-                                    <span class="badge badge-danger">Revisi</span>
+                                    <span class="badge badge-danger">Need Revised</span>
                                 </td>
                             <?php elseif($v['status_approval'] == 4): ?>
                                 <td data-filter="5">
-                                    <span class="badge badge-success">Selesai</span>
+                                    <span class="badge badge-success">Final Approval</span>
                                 </td>
                             <?php endif; ?>
                             <td>
                                 <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
                                     <div class="row justify-content-center align-self-center w-100 m-0">
-                                        <a id="myTask-button" href="<?= base_url('jobs/reportjp'); ?>?task=<?= $v['nik']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
+                                        <a id="myTask-button" href="<?= base_url('jobs/reportjp'); ?>?task=<?= $v['nik'] ?>&id=<?= $v['id_posisi']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
                                     </div>
                                 </div>
                             </td>

@@ -159,6 +159,7 @@ class Jobpro_model extends CI_Model {
     }
 
     public function getMyTask($id_position, $atasan, $status_approval){
+        $this->db->join('position', 'position.id = job_approval.id_posisi', 'left');
         return $this->db->get_where('job_approval', [$atasan => $id_position, 'status_approval' => $status_approval])->result_array();
     }
 
@@ -174,6 +175,12 @@ class Jobpro_model extends CI_Model {
         $this->db->from('position');
         $this->db->where(array('id' => $id_posisi, 'assistant' => 1));
         return $this->db->get()->row_array();
+    }
+
+    public function getJoin2tables($select, $table, $join, $where){
+        $this->db->select($select);
+        $this->db->join($join['table'], $join['index'], $join['position']);
+        return $this->db->get_where($table, $where)->result_array();
     }
 
     public function getWhoisSama($id_atasan1){
@@ -197,8 +204,8 @@ class Jobpro_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function updateApproval($data, $nik){
-        $this->db->where('nik', $nik);
+    public function updateApproval($data, $id_posisi){
+        $this->db->where('id_posisi', $id_posisi);
         $this->db->update('job_approval', $data);
     }
 
