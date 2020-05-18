@@ -19,23 +19,23 @@
 			
 			<?php if($approval['status_approval'] == 0): ?>
 				<div class="card-footer badge-danger">
-					<p class="text-center m-0 p-0">Silakan isi, lengkapi, dan submit Job Profile Anda. </p>
+					<p class="text-center m-0 p-0">Kindly complete your job profile and submit for approvals.</p>
 				</div>
 			<?php elseif($approval['status_approval'] == 1): ?>
 				<div class="card-footer badge-warning">
-					<p class="text-center m-0 p-0">Job Profile sudah dikirim ke Atasan 1 anda, silakan tunggu hingga proses berikutnya. </p>
+					<p class="text-center m-0 p-0">Your job profile is awaiting for approvals.</p>
 				</div>
 			<?php elseif($approval['status_approval'] == 2): ?>
 				<div class="card-footer badge-warning">
-					<p class="text-center m-0 p-0">Job Profile sudah dikirim ke Atasan 2 anda, silakan tunggu hingga proses berikutnya. </p>
+					<p class="text-center m-0 p-0">Your job profile is awaiting for final approval.</p>
 				</div>
 			<?php elseif($approval['status_approval'] == 3): ?>
 				<div class="card-footer badge-danger">
-					<p class="text-center m-0 p-0">Anda diminta untuk merevisi job profle anda, klik tombol pesan untuk melihat revisi anda. </p>
+					<p class="text-center m-0 p-0">Your job profile need to be revised. Kindly click notes button for comments and re-submit. </p>
 				</div>
 			<?php elseif($approval['status_approval'] == 4): ?>
 				<div class="card-footer badge-success">
-					<p class="text-center m-0 p-0">Job Profile Anda sudah siap, selamat bekerja. </p>
+					<p class="text-center m-0 p-0">Your job profile is approved.</p>
 				</div>
 			<?php endif; ?>
 		</div>

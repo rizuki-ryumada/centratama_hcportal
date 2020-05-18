@@ -75,6 +75,58 @@ $(document).ready(function () {
         
         
     });
+
+    $('#myTask').on('change', '.status_approval', function() {
+        let id = $(this).data('id');
+        let value = $(this).find("option:selected").val();
+
+        if(value == 0){
+            console.log('Need to be Submitted');
+            $('.status_approval[data-id='+id+']').css('background-color', 'red');
+            $('.status_approval[data-id='+id+']').css('color', 'white');
+        }else if(value == 1){
+            console.log('Submitted');
+            $('.status_approval[data-id='+id+']').css('background-color', 'yellow');
+            $('.status_approval[data-id='+id+']').css('color', 'black');
+        }else if(value == 2){
+            console.log('first Approval');
+            $('.status_approval[data-id='+id+']').css('background-color', 'yellow');
+            $('.status_approval[data-id='+id+']').css('color', 'black');
+        }else if(value == 3){
+            console.log('Need to be revised');
+            $('.status_approval[data-id='+id+']').css('background-color', 'orange');
+            $('.status_approval[data-id='+id+']').css('color', 'white');
+        }else if(value == 4){
+            console.log('Final Approval');
+            $('.status_approval[data-id='+id+']').css('background-color', 'green');
+            $('.status_approval[data-id='+id+']').css('color', 'white');
+        }
+
+        $.ajax({
+            url: '<?= base_url('report/setStatusApproval') ?>',
+            data: {
+                id: id,
+                status_approval: value
+            },
+            method: "POST",
+            success: function(data) {
+                Swal.fire(
+                    'Berhasil!',
+                    'Status Approval berhasil diubah.',
+                    'success'
+                );
+            },
+            error: function(data) {
+                Swal.fire(
+                    'ERROR!',
+					'*&%*@(&){(UYY BDS(*A&(*^*&^!',
+					'error'
+                );
+            }
+        })
+        console.log(id);
+        console.log(value);
+    });
 });
 
 //if using ajax

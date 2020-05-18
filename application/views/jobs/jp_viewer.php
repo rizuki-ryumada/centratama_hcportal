@@ -70,11 +70,19 @@
                 			<h5 class="font-weight-bold">Tujuan Jabatan</h5>
                 		</div>
                 	</div>
-                	<div class="row ml-1 mb-2">
-                		<div class="col-lg-12 view-tujuan">
-                			<?= $tujuanjabatan['tujuan_jabatan']; ?>
-                		</div>
-                	</div>
+					<?php if(empty($tujuanjabatan)): ?>
+						<div class="row ml-0 mb-2">
+							<div class="col-lg-12 view-tujuan alert alert-danger">
+								<i>Karyawan belum mengisi Tujuan Jabatan</i>
+							</div>
+						</div>
+					<?php else: ?>
+						<div class="row ml-1 mb-2">
+							<div class="col-lg-12 view-tujuan">
+								<?= $tujuanjabatan['tujuan_jabatan']; ?>
+							</div>
+						</div>
+					<?php endif; ?>
 
                 	<!-- start tanggung jawab utama -->
                 	<hr>
@@ -86,30 +94,35 @@
 
                 	<div class="row">
                 		<div class="table-responsive">
-
-                			<table id="tanggung-jawab" class="table">
-                				<thead>
-                					<tr>
-                						<!-- <td>No</td> -->
-                						<th>Tanggung Jawab Utama</th>
-                						<th>Aktivitas Utama</th>
-                						<th>Pengukuran</th>
-                					</tr>
-                				</thead>
-                				<tbody id="table-body">
-                					<?php foreach ($tgjwb as $t) : ?>
-                					<tr id="<?= $t['id_tgjwb']; ?>">
-                						<td><?= $t['keterangan']; ?></td>
-                						<td>
-                							<?= $t['list_aktivitas']; ?>
-                						</td>
-                						<td>
-                							<?= $t['list_pengukuran']; ?>
-                						</td>
-                					</tr>
-                					<?php endforeach; ?>
-                				</tbody>
-                			</table>
+							<?php if(empty($tgjwb)): ?>
+								<div class="col-12 alert alert-danger">
+									<i>Karyawan belum mengisi Tanggung Jawab Utama, Aktivitas Utama & Indikator Kinerja</i>
+								</div>
+							<?php else: ?>
+                				<table id="tanggung-jawab" class="table">
+									<thead>
+										<tr>
+											<!-- <td>No</td> -->
+											<th>Tanggung Jawab Utama</th>
+											<th>Aktivitas Utama</th>
+											<th>Pengukuran</th>
+										</tr>
+									</thead>
+									<tbody id="table-body">
+										<?php foreach ($tgjwb as $t) : ?>
+										<tr id="<?= $t['id_tgjwb']; ?>">
+											<td><?= $t['keterangan']; ?></td>
+											<td>
+												<?= $t['list_aktivitas']; ?>
+											</td>
+											<td>
+												<?= $t['list_pengukuran']; ?>
+											</td>
+										</tr>
+										<?php endforeach; ?>
+									</tbody>
+                				</table>
+							<?php endif; ?>
                 		</div>
                 	</div>
 
@@ -124,9 +137,15 @@
                 		</div>
                 	</div>
                 	<div class="row">
-                		<div class="col-11 view-ruang">
-                			<?= $ruangl['r_lingkup']; ?>
-                		</div>
+						<?php if(empty($ruangl)): ?>
+							<div class="col-12 alert alert-danger">
+								<i>Karyawan belum mengisi Ruang Lingkup Jabatan</i>
+							</div>
+						<?php else: ?>
+							<div class="col-12 view-ruang">
+								<?= $ruangl['r_lingkup']; ?>
+							</div>
+						<?php endif; ?>
                 	</div>
                 	
                 	<!-- start wewenang -->
@@ -140,39 +159,47 @@
                 		</div>
                 	</div>
                 	<div class="col-lg table-responsive">
-                		<table class="table">
-                			<thead class="font-weight-bold">
-                				<tr>
-                					<td>Kewenangan</td>
-                					<td>Anda</td>
-                					<td>Atasan 1</td>
-                					<td>Atasan 2</td>
-                				</tr>
-                			</thead>
-                			<tbody>
-                				<?php foreach ($wen as $w) : ?>
-                				<tr>
-                					<td><?= $w['kewenangan']; ?></td>
-                					<td><?= $w['wen_sendiri']; ?></td>
-                					<td><?= $w['wen_atasan1']; ?></td>
-                					<td><?= $w['wen_atasan2']; ?></td>
-                				</tr>
-                				<?php endforeach; ?>
-                			</tbody>
-                		</table>
-                		<div class="note py-2">
-                			<ul class="ml-2 mb-0">
-                				<li>R : Responsibility = Memiliki tanggung jawab dan wewenang untuk mengambil keputusan
-                				</li>
-                				<li>A : Accountability = tidak dapat mengambil keputusan tetapi bertanggung jawab dalam
-                					pelaksanaan dan hasilnya</li>
-                				<li>V : Veto = dapat meng-anulir atau mem-blok suatu keputusan</li>
-                				<li>C : Consult= sebelum mengambil keputusan harus memberi masukan dan mengkonsultasikan
-                					lebih
-                					dahulu dengan atasan</li>
-                				<li>I : Informed = harus diberi informasi setelah keputusan diambil</li>
-                			</ul>
-                		</div>
+						<?php if(empty($wen)): ?>
+							<div class="row">
+								<div class="col-12 alert alert-danger m-0">
+									<i>Karyawan belum mengisi Wewenang Pengambilan Keputusan Dan Pengawasan</i>
+								</div>
+							</div>
+						<?php else: ?>
+							<table class="table">
+								<thead class="font-weight-bold">
+									<tr>
+										<td>Kewenangan</td>
+										<td>Anda</td>
+										<td>Atasan 1</td>
+										<td>Atasan 2</td>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ($wen as $w) : ?>
+									<tr>
+										<td><?= $w['kewenangan']; ?></td>
+										<td><?= $w['wen_sendiri']; ?></td>
+										<td><?= $w['wen_atasan1']; ?></td>
+										<td><?= $w['wen_atasan2']; ?></td>
+									</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+							<div class="note py-2">
+								<ul class="ml-2 mb-0">
+									<li>R : Responsibility = Memiliki tanggung jawab dan wewenang untuk mengambil keputusan
+									</li>
+									<li>A : Accountability = tidak dapat mengambil keputusan tetapi bertanggung jawab dalam
+										pelaksanaan dan hasilnya</li>
+									<li>V : Veto = dapat meng-anulir atau mem-blok suatu keputusan</li>
+									<li>C : Consult= sebelum mengambil keputusan harus memberi masukan dan mengkonsultasikan
+										lebih
+										dahulu dengan atasan</li>
+									<li>I : Informed = harus diberi informasi setelah keputusan diambil</li>
+								</ul>
+							</div>
+						<?php endif; ?>
                 	</div>
 
                 	<!-- start hubungan kerja -->
@@ -188,15 +215,21 @@
                 	</div>
 
                 	<div class="row ml-2">
-                		<div class="col-6">
-                			<h5><strong>Hubungan Internal</strong></h5>
-                			<div class="hubIntData"><?= $hub['hubungan_int']; ?></div>
-                		</div>
-                		<div class="col-6">
-                			<h5><strong>Hubungan Ekternal</strong></h5>
-                			<div class="hubEksData"> <?= $hub['hubungan_eks']; ?>
-                			</div>
-                		</div>
+						<?php if(empty($hub)): ?>
+							<div class="col-12 alert alert-danger m-0">
+								<i>Karyawan belum mengisi Hubungan Kerja</i>
+							</div>
+						<?php else: ?>
+							<div class="col-6">
+								<h5><strong>Hubungan Internal</strong></h5>
+								<div class="hubIntData"><?= $hub['hubungan_int']; ?></div>
+							</div>
+							<div class="col-6">
+								<h5><strong>Hubungan Ekternal</strong></h5>
+								<div class="hubEksData"> <?= $hub['hubungan_eks']; ?>
+								</div>
+							</div>
+						<?php endif; ?>
                 	</div>
 
                 	<!-- start jumlah staff -->
@@ -268,11 +301,17 @@
                 		</div>
                 	</div>
                 	<div class="row">
-                		<div class="col-12">
-                			<div class="view-tantangan">
-                				<?= $tu_mu['text']; ?>
-                			</div>
-                		</div>
+						<?php if(empty($tu_mu)): ?>
+							<div class="col-12 alert alert-danger m-0">
+								<i>Karyawan belum mengisi Tantangan Dan Masalah Utama</i>
+							</div>
+						<?php else: ?>
+							<div class="col-12">
+								<div class="view-tantangan">
+									<?= $tu_mu['text']; ?>
+								</div>
+							</div>
+						<?php endif; ?>
                 	</div>
 
                 	<!-- start kualifikasi dan pengalaman -->
@@ -285,28 +324,34 @@
                 					kualifikasi personal maupun profesional lainnya :</em></h6>
                 		</div>
                 	</div>
-                	<div class="table-responsive">
-                		<table id="tableK" class="table table-borderless tableK" width="25%">
-                			<tbody>
-                				<tr>
-                					<th class="head-kualifikasi">Pendidikan Formal</th>
-                					<td id="pendidikan">: <?= $kualifikasi['pendidikan']; ?></td>
-                				</tr>
-                				<tr>
-                					<th class="head-kualifikasi">Pengalaman Kerja</th>
-                					<td id="pengalaman">: <?= $kualifikasi['pengalaman']; ?></td>
-                				</tr>
-                				<tr>
-                					<th class="head-kualifikasi">Pengetahuan</th>
-                					<td id="pengetahuan">: <?= $kualifikasi['pengetahuan']; ?></td>
-                				</tr>
-                				<tr>
-                					<th class="head-kualifikasi">Kompetensi & Keterampilan</th>
-                					<td id="kompetensi">: <?= $kualifikasi['kompetensi']; ?></td>
-                				</tr>
-                			</tbody>
-                		</table>
-                	</div>
+					<?php if(empty($kualifikasi)): ?>
+						<div class="col-12 alert alert-danger m-0">
+							<i>Karyawan belum mengisi Tantangan Dan Masalah Utama</i>
+						</div>
+					<?php else: ?>
+						<div class="table-responsive">
+							<table id="tableK" class="table table-borderless tableK" width="25%">
+								<tbody>
+									<tr>
+										<th class="head-kualifikasi">Pendidikan Formal</th>
+										<td id="pendidikan">: <?= $kualifikasi['pendidikan']; ?></td>
+									</tr>
+									<tr>
+										<th class="head-kualifikasi">Pengalaman Kerja</th>
+										<td id="pengalaman">: <?= $kualifikasi['pengalaman']; ?></td>
+									</tr>
+									<tr>
+										<th class="head-kualifikasi">Pengetahuan</th>
+										<td id="pengetahuan">: <?= $kualifikasi['pengetahuan']; ?></td>
+									</tr>
+									<tr>
+										<th class="head-kualifikasi">Kompetensi & Keterampilan</th>
+										<td id="kompetensi">: <?= $kualifikasi['kompetensi']; ?></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					<?php endif; ?>
 
                 	<!-- start jenjang karir / karir berikutnya di masa depan-->
                 	<hr>
@@ -318,11 +363,17 @@
                 		</div>
                 	</div>
                 	<div class="row">
-                		<div class="col-12">
-                			<div class="view-jenjang">
-                				<?= $jenk['text']; ?>
-                			</div>
-                		</div>
+						<?php if(empty($jenk)): ?>
+							<div class="col-12 alert alert-danger">
+								<i>Karyawan belum mengisi Jabatan Berikutnya Di Masa Depan</i>
+							</div>
+						<?php else: ?>
+							<div class="col-12">
+								<div class="view-jenjang">
+									<?= $jenk['text']; ?>
+								</div>
+							</div>
+						<?php endif; ?>
                 	</div>
 
                 	<!-- start Struktur Organisasi -->

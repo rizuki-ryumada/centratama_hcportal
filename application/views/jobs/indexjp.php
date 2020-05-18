@@ -103,7 +103,7 @@
                     <div class="col-1 status-action"> <!-- status action -->
                         <div class="container d-flex h-100 m-0 p-2"> <!-- this container make the element to vertically and horizontally centered -->
                             <div class="row justify-content-center align-self-center p-0 m-0">
-                                <?php if($statusApproval['is_edit'] == 1): ?>
+                                <?php if($statusApproval['status_approval'] == 0 || $statusApproval['status_approval'] == 3): ?>
                                     <a href="<?= base_url('jobs/myjp')?>"><i class="fa fa-pencil-alt fa-2x"></i></a>
                                 <?php else: ?>
                                     <a href="<?= base_url('jobs/myjp')?>"><i class="fa fa-search fa-2x"></i></a>
@@ -117,23 +117,23 @@
             <!-- footer message -->
             <?php if($statusApproval['status_approval'] == 0): ?>
                 <div class="card-footer badge-danger">
-	                Silakan isi, lengkapi, dan submit Job Profile Anda.
+                    Kindly complete your job profile and submit for approvals.
                 </div>
             <?php elseif($statusApproval['status_approval'] == 1): ?>
                 <div class="card-footer badge-warning">
-                    Job Profile sudah dikirim ke Atasan 1 anda, silakan tunggu hingga proses berikutnya.
+                    Your job profile is awaiting for approvals.
                 </div>
             <?php elseif($statusApproval['status_approval'] == 2): ?>
                 <div class="card-footer badge-warning">
-                    Job Profile sudah dikirim ke Atasan 2 anda, silakan tunggu hingga proses berikutnya.
+                    Your job profile is awaiting for final approval.
                 </div>
             <?php elseif($statusApproval['status_approval'] == 3): ?>
                 <div class="card-footer badge-danger">
-                    Anda diminta untuk merevisi job profle anda, klik tombol pesan untuk melihat revisi anda.
+                    Your job profile need to be revised. Kindly click notes button for comments and re-submit.
                 </div>
             <?php elseif($statusApproval['status_approval'] == 4): ?>
                 <div class="card-footer badge-success">
-                    Job Profile Anda sudah siap, selamat bekerja.
+                    Your job profile is approved.
                 </div>
             <?php endif; ?>
 		</div>

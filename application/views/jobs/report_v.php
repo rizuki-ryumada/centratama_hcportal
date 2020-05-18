@@ -4,7 +4,7 @@
         <div class="card-body">
             <?php if($user['role_id']==1 || $user['position_id']==1): ?>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col">
                         <div class="form-group">
                             <label for="divisi">Divisi :</label>
                             <select id="divisi" class="form-control form-control-sm">
@@ -15,7 +15,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col">
                         <div class="form-group">
                             <label for="departement">Departement :</label>
                             <select id="departement" class="form-control form-control-sm">
@@ -26,7 +26,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col">
                         <div class="form-group">
                             <label for="status">Status :</label>
                             <select id="status" class="form-control form-control-sm">
@@ -37,6 +37,13 @@
                                 <option value="4">Need Revised</option>
                                 <option value="5">Final Approval</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-1 text-center">
+                        <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
+                            <div class="row justify-content-center align-self-center w-100 m-0">
+                                <a href="<?= base_url('report/') ?>settings" type="button" class="btn btn-primary" data-placement="left" title="Status Approval Settings"><i class="fa fa-cog text-white"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,7 +151,7 @@
                             <td>
                                 <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
                                     <div class="row justify-content-center align-self-center w-100 m-0">
-                                        <a id="myTask-button" href="<?= base_url('jobs/reportjp'); ?>?task=<?= $v['nik'] ?>&id=<?= $v['id_posisi']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
+                                        <a id="myTask-button" href="<?= base_url('jobs/reportjp'); ?>?task=<?= $v['nik'] ?>&id=<?= $v['id_posisi']; ?>&status=<?= $v['status_approval'] ?>" title="View Details"><i class="fa fa-search mx-auto"></i></a>    
                                     </div>
                                 </div>
                             </td>

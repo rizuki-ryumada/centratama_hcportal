@@ -1,3 +1,12 @@
+@font-face {
+	font-family: 'BRLNSR';
+	src: url('./BRLNSR.eot');
+	src: local('BRLNSR'), url('../font/BRLNSR.woff') format('woff'), url('../font/BRLNSR.ttf') format('truetype');
+}
+/* use this class to attach this font to any element i.e. <p class="fontsforweb_fontid_12421">Text with this font applied</p> */
+.font-berlinsans {
+	font-family: 'BRLNSR' !important;
+}
 
 .editor{
 display: none;
@@ -126,10 +135,10 @@ display: none;
     height: 15%;
 }
 .portal-body{
-    height: 15%;
+    height: 11%;
 }
 .portal-application{
-    height: 67%;
+    height: 71%;
 }
 .portal-footer{
     height: 3%;
@@ -150,15 +159,109 @@ div.banner-wrapper .banner-tema{
     position: absolute;
     top: 0;
     right: 0;
-    width: 110vh;
+    width: 100%;
     height: auto;
+    max-width: 115vh;
+    height: auto;
+    z-index:-9999;
 }
 div.banner-wrapper .banner-pengumuman{
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 80vh;
+    min-width: 80vh;
     height: auto;
+    z-index:-9999;
+}
+/* Navbar */
+.navbar-logo{
+    width: 9em;
+    height: auto;
+}
+.navbar-text-leftbordered{
+    border-left: 6px solid #0072C6;
+    color: #0072C6;
+    font-size: 1.5em;
+    padding-left: 0.5em;
+    height: 100%;
+    margin: 0px;
+    align-items: center;
+}
+.btn-navbar{
+    border-radius: 2em;
+    width: 10vw;
+    background-color: #0072C6;
+    color: #fff;
+    transition: 0,5s;
+}
+.btn-navbar:hover{
+    border-radius: 2em;
+    width: 10vw;
+    background-color: rgb(0, 82, 141);
+    color: #fff;
+}
+/* application bar */
+.bottom-right{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.app-circle{
+    border-radius: 10em;
+    height: 75px;
+    width: 75px;
+    font-weight: bold;
+    vertical-align: middle;
+    display: table-cell;
+    background-color: #0072C6;
+    border-radius: 60px;
+    transition: 0.5s;
+}
+.app-circle:hover{
+    border-radius: 10em;
+    height: 75px;
+    width: 75px;
+    font-weight: bold;
+    vertical-align: middle;
+    display: table-cell;
+    background-color: rgb(0, 82, 141);
+	border-radius: 60px;
+}
+.app-circle p{
+    vertical-align: middle;
+    display: table-cell;
+    color: #fff;
+}
+.app-more{
+    color: #0072C6;
+    background-color: rgb(255,255,255);
+    border-radius: 0px;
+    transition: 0.5s;
+}
+.app-more:hover{
+    color: #fff;
+    background-color: rgb(0, 82, 141);
+    /* transition: 0.5s; */
+    border-radius: 18px;
+}
+.app-more svg{
+    fill: #0072C6;
+    height: 50px;
+    width: 50px;
+    transition: 0.5s;
+}
+.app-more:hover svg{
+    fill: #fff;
+    height: 50px;
+    width: 50px;
+}
+.app-more p{
+    vertical-align: middle;
+    display: table-cell;
+}
+/* form login */
+.form-login-wrapper{
+    width: 100%;
 }
 
 /* sidebar */
@@ -166,4 +269,72 @@ div.banner-wrapper .banner-pengumuman{
     font-size: 1.25rem !important;
 }.sidebar-size-submenu{
     font-size: 1rem !important;
+}
+
+/* Validation Styles */
+.form-control.invalid-feedback{
+    display: block;
+	width: 100%;
+	height: calc(1.5em + .75rem + 2px);
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #6e707e;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #dc3545;
+    border-radius: .35rem;
+    box-shadow: #F6CCD0;
+	-webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+	/* transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out; */
+	/* transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; */
+	transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+}
+.form-control.valid-feedback{
+    display: block;
+	width: 100%;
+	height: calc(1.5em + .75rem + 2px);
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #6e707e;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #28a745;
+	border-radius: .35rem;
+	-webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+	/* transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out; */
+	/* transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; */
+	transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+}
+
+/* SETTINGS PAGE STYLES */
+/* HC Portal */
+.settings-image-wrapper{
+    background-color: white;
+    border: 1px solid #0072C6;
+    border-radius: 10px;
+}
+.settings-image{
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+}
+#tema-preview li, #tema-preview > p{
+    background: #eee;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    list-style-type: none;
+    border: 1px solid black;
+    height: 64px;
+    border-radius: 10px;
+    padding: 1.5px;
+}
+#tema-preview img{
+    height: auto;
+    order: 1;
+    max-height: 64px;
 }

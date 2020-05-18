@@ -33,26 +33,26 @@
 			<!-- JP Editor -->
 			<?php $this->load->view('jobs/jp_editor'); ?>
 			<!-- /JP Editor -->
-			
+
 			<?php if($statusApproval['status_approval'] == 0): ?>
-				<div class="card-footer text-center badge-danger">
-					Job Profil ini belum disubmit.
+				<div class="card-footer badge-danger">
+					<p class="text-center m-0 p-0">Kindly complete your job profile and submit for approvals.</p>
 				</div>
 			<?php elseif($statusApproval['status_approval'] == 1): ?>
-				<div class="card-footer text-center badge-warning text-dark">
-					Job Profile ini sedang di-<i>review</i> atasan 1
+				<div class="card-footer badge-warning">
+					<p class="text-center m-0 p-0">Your job profile is awaiting for approvals.</p>
 				</div>
 			<?php elseif($statusApproval['status_approval'] == 2): ?>
-				<div class="card-footer text-center badge-warning text-dark">
-					Job Profile ini sedang di-<i>review</i> atasan 2
+				<div class="card-footer badge-warning">
+					<p class="text-center m-0 p-0">Your job profile is awaiting for final approval.</p>
 				</div>
 			<?php elseif($statusApproval['status_approval'] == 3): ?>
-				<div class="card-footer text-center badge-danger">
-					Job Profile ini sedang dalam proses revisi.
+				<div class="card-footer badge-danger">
+					<p class="text-center m-0 p-0">Your job profile need to be revised. Kindly click notes button for comments and re-submit. </p>
 				</div>
 			<?php elseif($statusApproval['status_approval'] == 4): ?>
-				<div class="card-footer text-center badge-success">
-					Job Profile ini sudah siap.
+				<div class="card-footer badge-success">
+					<p class="text-center m-0 p-0">Your job profile is approved.</p>
 				</div>
 			<?php endif; ?>
 

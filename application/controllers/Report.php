@@ -150,7 +150,6 @@ class Report extends CI_Controller { // need to be separated because the user ac
             'recordsFiltered' => '0',
             'data' => $data
         ];
-
         // print_r($output);
     }
 
@@ -171,6 +170,50 @@ class Report extends CI_Controller { // need to be separated because the user ac
         print_r(json_encode($data));
 
         //bawa balik ke ajax
+    }
+
+    public function setStatusApproval(){
+        $id_posisi = $this->input->post('id');
+        // $status_approval = $this->input->post('value');
+
+        $data = [
+            'status_approval' => $this->input->post('status_approval')
+        ];
+        $this->Jobpro_model->updateApproval($data, $id_posisi);
+    }
+
+    public function settings() {
+        // cek role apa punya akses
+        $nik = $this->session->userdata('nik'); //get nik
+        $role_id = $this->Jobpro_model->getDetail('role_id', 'employe', array('nik' => $nik))['role_id']; //ambil role_id
+        if($role_id != 1){
+            $this->blocked();
+        }
+
+        // siapkan data
+        $task = $this->Jobpro_model->getAllAndOrder('id_posisi', 'job_approval');
+        $data['dept'] = $this->Jobpro_model->getAllAndOrder('nama_departemen', 'departemen');
+        $data['divisi'] = $this->Jobpro_model->getAllAndOrder('division', 'divisi');
+
+        $data['title'] = 'Report';
+        $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
+        $data['hirarki_org'] = $this->Jobpro_model->getDetail('hirarki_org', 'position', array('id' => $data['user']['position_id']))['hirarki_org'];
+        $data['approval_data'] = $this->getApprovalDetails($task);
+        
+
+        // print_r($data);
+        
+        $this->load->view('templates/user_header', $data);
+        $this->load->view('templates/user_sidebar', $data);
+        $this->load->view('templates/user_topbar', $data);
+        $this->load->view('jobs/settings_v', $data);
+        $this->load->view('templates/report_footer');
+        // tampilkan
+    }
+
+    public function blocked() {
+        show_404();
+        exit;
     }
 
 }
