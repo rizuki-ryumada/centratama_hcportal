@@ -1,4 +1,340 @@
+@font-face {
+	font-family: 'BRLNSR';
+	src: url('./BRLNSR.eot');
+	src: local('BRLNSR'), url('../font/BRLNSR.woff') format('woff'), url('../font/BRLNSR.ttf') format('truetype');
+}
+/* use this class to attach this font to any element i.e. <p class="fontsforweb_fontid_12421">Text with this font applied</p> */
+.font-berlinsans {
+	font-family: 'BRLNSR' !important;
+}
 
 .editor{
 display: none;
+}
+
+/* chart styles */
+#chart-container {
+    font-family: Arial;
+    /* height: 420px; */
+    border: 2px dashed #aaa;
+    border-radius: 5px;
+    overflow: auto;
+    text-align: center;
+}
+#chart-container { background-color: #eee; height: 100%; }
+.orgchart { background: #fff; }
+.orgchart.edit-state .edge { display: none; }
+.orgchart .node { width: 150px; }
+.orgchart .node .title { height: 30px; line-height: 30px; }
+.orgchart .node .title .symbol { margin-top: 1px; }
+#edit-panel {
+    position: relative;
+    left: 10px;
+    width: calc(100% - 40px);
+    border-radius: 4px;
+    float: left;
+    margin-top: 10px;
+    padding: 10px;
+    color: #fff;
+    background-color: #449d44;
+}
+/* edit panel */
+#edit-panel .btn-inputs { font-size: 24px; }
+#edit-panel.edit-state>:not(#chart-state-panel) { display: none; }
+#edit-panel label { font-weight: bold; }
+#edit-panel.edit-parent-node .selected-node-group { display: none; }
+#chart-state-panel, #selected-node, #btn-remove-input { margin-right: 20px; }
+#edit-panel button{
+    color: #333;
+    background-color: #fff;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+#edit-panel.edit-parent-node button:not(#btn-add-nodes) { display: none; }
+#edit-panel button:hover,.edit-panel button:focus,.edit-panel button:active {
+    border-color: #eea236;
+    box-shadow: 0 0 10px #eea236;
+}
+#new-nodelist{
+    display: inline-block;
+    list-style: none;
+    margin-top: -2px;
+    padding: 0;
+    vertical-align: text-top;
+}
+#new-nodelist>* { padding-bottom: 4px; }
+.btn-inputs { vertical-align: sub; }
+#edit-panel.edit-parent-node .btn-inputs { display: none; }
+.btn-inputs:hover { text-shadow: 0 0 4px #fff; }
+.radio-panel input[type='radio'] { display: inline-block; height: 24px; width: 24px; vertical-align: top; }
+#edit-panel.view-state .radio-panel input[type='radio']+label { vertical-align: -webkit-baseline-middle; }
+#btn-add-nodes { margin-left: 20px; }
+
+/* assistant node style - has been used in inline style on chartorg.js */
+.orgchart .assistant-node {
+    display: inline-block;
+    margin: 0;
+    padding: 3px;
+    border: 2px dashed transparent;
+    text-align: center;
+    width: 140px;
+    /* left: 140px; */ /* been used on chartorg.js */
+    /* top: 100px; */ /* been used on chartorg.js */
+    z-index: 2;
+    position: absolute;
+}
+.orgchart .assistant-node .connector {
+    /* border-left: #1180FF dashed 2px; */
+    border-bottom: #1180FF dashed 2px;
+    position: absolute;
+    /* left: -65px; */ /* been used on chartorg.js */
+    width: 72px;
+    height: 12.5px;
+    top: 21px;
+}
+/* my position style */
+.orgchart .my-position .title {
+    background-color: #e14141 !important;
+}
+
+/* indexjp page - card status */
+.status-logo {
+    /* background-color: #e14141;  */
+}
+.status-text {
+    /* background-color: aqua; */
+}
+.status-action {
+    /* background-color: brown; */
+    display: table-cell;
+}
+
+/* my task table view */
+#myTask_wrapper { 
+    width: 100% !important;
+}
+
+/* portal page css */
+.portal-header{
+    /* background-color: yellow !important; */
+    height: 15%;
+}
+.portal-body{
+    height: 11%;
+}
+.portal-application{
+    height: 71%;
+}
+.portal-footer{
+    height: 3%;
+}
+.portal-footer-text{
+    font-size: 0.80em;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin-right: 1em;
+}
+/* banner tema */
+div.banner-wrapper{
+    /* position: relative; */
+    height: 100%;
+    float: left;
+    z-index:-9999;
+}
+div.banner-wrapper .banner-tema{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    max-width: 115vh;
+    height: auto;
+    z-index:-9999;
+}
+div.banner-wrapper .banner-pengumuman{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    min-width: 80vh;
+    height: auto;
+    z-index:-9999;
+}
+/* Navbar */
+.navbar-logo{
+    width: 9em;
+    height: auto;
+}
+.navbar-text-leftbordered{
+    border-left: 6px solid #0072C6;
+    color: #0072C6;
+    font-size: 1.5em;
+    padding-left: 0.5em;
+    height: 100%;
+    margin: 0px;
+    align-items: center;
+}
+.btn-navbar{
+    border-radius: 2em;
+    width: 10vw;
+    background-color: #0072C6;
+    color: #fff;
+    transition: 0,5s;
+}
+.btn-navbar:hover{
+    border-radius: 2em;
+    width: 10vw;
+    background-color: rgb(0, 82, 141);
+    color: #fff;
+}
+/* application bar */
+.bottom-right{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.app-circle{
+    border-radius: 10em;
+    height: 75px;
+    width: 75px;
+    font-weight: bold;
+    vertical-align: middle;
+    display: table-cell;
+    background-color: #0072C6;
+    border-radius: 60px;
+    transition: 0.5s;
+}
+.app-circle:hover{
+    border-radius: 10em;
+    height: 75px;
+    width: 75px;
+    font-weight: bold;
+    vertical-align: middle;
+    display: table-cell;
+    background-color: rgb(0, 82, 141);
+	border-radius: 60px;
+}
+.app-circle p{
+    vertical-align: middle;
+    display: table-cell;
+    color: #fff;
+}
+.app-more{
+    color: #0072C6;
+    background-color: rgb(255,255,255);
+    border-radius: 0px;
+    transition: 0.5s;
+}
+.app-more:hover{
+    color: #fff;
+    background-color: rgb(0, 82, 141);
+    /* transition: 0.5s; */
+    border-radius: 18px;
+}
+.app-more svg{
+    fill: #0072C6;
+    height: 50px;
+    width: 50px;
+    transition: 0.5s;
+}
+.app-more:hover svg{
+    fill: #fff;
+    height: 50px;
+    width: 50px;
+}
+.app-more p{
+    vertical-align: middle;
+    display: table-cell;
+}
+/* form login */
+.form-login-wrapper{
+    width: 100%;
+}
+
+/* sidebar */
+.sidebar-size-menu{
+    font-size: 1.25rem !important;
+}.sidebar-size-submenu{
+    font-size: 1rem !important;
+}
+
+/* Validation Styles */
+.form-control.invalid-feedback{
+    display: block;
+	width: 100%;
+	height: calc(1.5em + .75rem + 2px);
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #6e707e;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #dc3545;
+    border-radius: .35rem;
+    box-shadow: #F6CCD0;
+	-webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+	/* transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out; */
+	/* transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; */
+	transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+}
+.form-control.valid-feedback{
+    display: block;
+	width: 100%;
+	height: calc(1.5em + .75rem + 2px);
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #6e707e;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #28a745;
+	border-radius: .35rem;
+	-webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+	/* transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out; */
+	/* transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; */
+	transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+}
+
+/* SETTINGS PAGE STYLES */
+/* HC Portal */
+.settings-image-wrapper{
+    background-color: white;
+    border: 1px solid #0072C6;
+    border-radius: 10px;
+}
+.settings-image{
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+}
+#tema-preview li, #tema-preview > p{
+    background: #eee;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    list-style-type: none;
+    border: 1px solid black;
+    height: 64px;
+    border-radius: 10px;
+    padding: 1.5px;
+}
+#tema-preview img{
+    height: auto;
+    order: 1;
+    max-height: 64px;
 }

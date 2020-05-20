@@ -11,6 +11,13 @@ function is_logged_in(){
         $menu = $CI->uri->segment(1);
 
         $queryMenu = $CI->db->get_where('user_menu', ['menu' => $menu])->row_array();
+
+        if(empty($queryMenu)){ // jika level menu utama tidak ada, cari di sub menu, access submenu level berbeda, ada menu yg gaada di list menu
+            $queryMenu = $CI->db->get_where('user_sub_menu', ['title' => $menu])->row_array();
+        }else{
+            //do nothing
+        }
+
         $menu_id = $queryMenu['id'];
 
         $userAccess = $CI->db->get_where('user_access_menu', ['role_id' => $role_id, 'menu_id' => $menu_id]);

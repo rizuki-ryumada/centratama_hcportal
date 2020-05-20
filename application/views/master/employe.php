@@ -29,7 +29,7 @@
                                     <tr>
                                         <td><?= $employe['nik']; ?></td>
                                         <td><?= $employe['emp_name']; ?></td>
-                                        <td><?= $employe['level_org']; ?></td>
+                                        <td><?= $employe['hirarki_org']; ?></td>
                                         <td><?= $employe['division']; ?></td>
                                         <td><?= $employe['nama_departemen']; ?></td>
                                         <td>

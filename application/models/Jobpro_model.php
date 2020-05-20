@@ -6,15 +6,19 @@ class Jobpro_model extends CI_Model {
 
     public function getMyprofile($nik)
     {
+        foreach($this->getDetail('position_id', 'employe', array('nik' => $nik)) as $v){
+            $id_position = $v;
+        }
+            
         $this->db->select('employe.*, divisi.division, departemen.nama_departemen, position.position_name, position.id_atasan1 as posnameatasan1,
                             position.id_atasan2, profile_jabatan.tujuan_jabatan, profile_jabatan.id_posisi');
-        $this->db->from('employe');
-		$this->db->join('divisi', 'divisi.id = employe.id_div', 'left');
-		$this->db->join('departemen', 'departemen.id = employe.id_dep', 'left');
-		$this->db->join('position', 'position.id = employe.position_id', 'left');
+        $this->db->from('position');
+		$this->db->join('divisi', 'divisi.id = position.div_id', 'left');
+		$this->db->join('employe', 'employe.position_id = position.id', 'left');
+		$this->db->join('departemen', 'departemen.id = position.dept_id', 'left');
 		$this->db->join('profile_jabatan', 'profile_jabatan.id_posisi = position.id', 'left');
         
-        $this->db->where('employe.nik', $nik);
+        $this->db->where('position.id', $id_position);
         return $this->db->get()->row_array();
     }
 
@@ -22,7 +26,8 @@ class Jobpro_model extends CI_Model {
     {
         $this->db->select('*');
         $this->db->from('divisi');
-        $this->db->join('employe', 'employe.id_div = divisi.id');
+        $this->db->join('position', 'position.div_id = divisi.id');
+        $this->db->join('employe', 'employe.position_id = position.id');
         $this->db->where('employe.nik', $nik);
         return $this->db->get()->row_array();        
     }
@@ -31,7 +36,8 @@ class Jobpro_model extends CI_Model {
     {
         $this->db->select('*');
         $this->db->from('departemen');
-        $this->db->join('employe', 'employe.id_dep = departemen.id');
+        $this->db->join('position', 'position.dept_id = departemen.id');
+        $this->db->join('employe', 'employe.position_id = position.id');
         $this->db->where('employe.nik', $nik);
         return $this->db->get()->row_array();        
     }
@@ -106,8 +112,111 @@ class Jobpro_model extends CI_Model {
 	public function getStaff($id)
 	{
 		return $this->db->get_where('jumlah_staff', ['id_posisi' => $id])->row_array();
-	}
+    }
+    
+    
+//Ryu codes start here ====================================================================================================
+    public function delete($table, $where){
+        $this->db->where($where['index'], $where['data']);
+        $this->db->delete($table);
+    }
 
+    public function getAll($table)
+    {
+        return $this->db->get($table)->result_array();
+    }
+    public function getAllAndOrder($order, $table)
+    {
+        $this->db->order_by($order, "asc");
+        return $this->db->get($table)->result_array();
+    }
+
+    public function getAtasanAssistant($id_atasan1){
+        $this->db->select('position_name');
+        $this->db->from('position');
+        $this->db->where(array('id' => $id_atasan1));
+        return $this->db->get()->row_array();
+    }
+
+    public function getDetail($select, $table, $where){
+        $this->db->select($select);
+        $this->db->from($table);
+        $this->db->where($where);
+        return $this->db->get()->row_array();
+    }
+    public function getDetails($select, $table, $where){
+        $this->db->select($select);
+        $this->db->from($table);
+        $this->db->where($where);
+        return $this->db->get()->result_array();
+    }
+    public function getEmployeDetail($select, $table, $where){
+        $this->db->select($select);
+        $this->db->from($table);
+        $this->db->join('position', 'position.id = employe.position_id', 'left');
+        $this->db->where($where);
+        return $this->db->get()->row_array();
+    }
+
+    public function getMyTask($id_position, $atasan, $status_approval){
+        $this->db->join('position', 'position.id = job_approval.id_posisi', 'left');
+        return $this->db->get_where('job_approval', [$atasan => $id_position, 'status_approval' => $status_approval])->result_array();
+    }
+
+    public function getPositionDetail($id_posisi){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id' => $id_posisi, 'assistant' => 0));
+        return $this->db->get()->row_array();
+    }
+
+    public function getPositionDetailAssistant($id_posisi){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id' => $id_posisi, 'assistant' => 1));
+        return $this->db->get()->row_array();
+    }
+
+    public function getJoin2tables($select, $table, $join, $where){
+        $this->db->select($select);
+        $this->db->join($join['table'], $join['index'], $join['position']);
+        return $this->db->get_where($table, $where)->result_array();
+    }
+
+    public function getWhoisSama($id_atasan1){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id_atasan1' => $id_atasan1, 'assistant' => 0));
+        return $this->db->get()->result_array();
+    }
+
+    public function getWhoisSamaAssistant($id_atasan1){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id_atasan1' => $id_atasan1, 'assistant' => 1));
+        return $this->db->get()->result_array();
+    }
+
+    public function getWhoisSamaCEOffice($id_atasan1, $div_id){
+        $this->db->select('*');
+        $this->db->from('position');
+        $this->db->where(array('id_atasan1' => $id_atasan1, 'assistant' => 0, 'div_id' => $div_id));
+        return $this->db->get()->result_array();
+    }
+
+    public function updateApproval($data, $id_posisi){
+        $this->db->where('id_posisi', $id_posisi);
+        $this->db->update('job_approval', $data);
+    }
+
+    public function insert($table, $data){
+        $this->db->insert($table, $data);
+    }
+
+    public function update($table, $where, $data){
+        $this->db->where($where['db'], $where['server']);
+        $this->db->update($table, $data);
+    }
 }
 
 /* End of file Jobpro_model.php */

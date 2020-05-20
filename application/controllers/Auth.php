@@ -8,16 +8,20 @@ class Auth extends CI_Controller
     {
         parent::__construct();
         $this->load->library('form_validation');
+        date_default_timezone_set('Asia/Jakarta');
     }
     public function index()
     {
+        if(empty($this->session->userdata('error'))){
+            $this->session->set_userdata(array('error' => 0));
+        }
         if ($this->session->userdata('nik')) {
-            redirect('user','refresh');
+            redirect('jobs','refresh');
         }
         $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
         if ($this->form_validation->run() == false){
-            $data['title'] = 'Login Page';
+            $data['title'] = 'HC Portal | Centratama Group';
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/login');
             $this->load->view('templates/auth_footer');
@@ -45,20 +49,23 @@ class Auth extends CI_Controller
                     ];
                     $this->session->set_userdata($data);
 					// target page if success
-					redirect('welcome', 'refresh');
+					redirect('jobs', 'refresh');
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                     Wrong Password! </div>');
+                    $this->session->set_userdata(array('error' => 1));
                     redirect('auth');
                 }
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                 Your NIK has not been activated! </div>');
+                $this->session->set_userdata(array('error' => 1));
                 redirect('auth');
             }
         } else {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
             Your Nik has not registered! </div>');
+            $this->session->set_userdata(array('error' => 1));
             redirect('auth');
         }
     }

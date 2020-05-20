@@ -25,7 +25,11 @@ class Divisi_model extends CI_Model {
 
     public function getDIvByOrg()
     {
-        return $this->db->get_where('employe', ['level_org' => 'N'])->result_array();
+        $this->db->select('employe.*');
+        $this->db->from('position');
+        $this->db->join('employe', 'employe.position_id = position_id', 'left');
+        $this->db->where(array('hirarki_org' => 'N'));
+        return $this->db->get()->result_array();
     }
 
     public function ajaxDIvById($id)
