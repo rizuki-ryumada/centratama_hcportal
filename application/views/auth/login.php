@@ -342,3 +342,8 @@
 
 </div> -->
 
+<!-- //TODO tambah menu kontak ke admin di setiap halaman hc_portal
+https://wa.me/6287789902289/?text=Saya%20ada%20masalah%20saat%20login%20dengan%20akun%20saya%20ketika%20mencoba%20masuk%20ke%20aplikasi%20Service%20Excellence%20Survey.
+[08:33, 5/27/2020] Mas Yudhi HR PT Centratama: Bukan no gw, kita ada nomor human capital (hc care)
+[08:34, 5/27/2020] Mas Yudhi HR PT Centratama: https://wa.me/6281384740074
+ -->

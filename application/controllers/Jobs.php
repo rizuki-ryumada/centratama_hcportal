@@ -1,7 +1,7 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+//TODO Reroute Jobs jadi job_profile
 class Jobs extends CI_Controller {
     
     public function __construct()
@@ -78,7 +78,6 @@ class Jobs extends CI_Controller {
         
         $data['my_task'] = $this->getApprovalDetails($my_task); //get Approval Details
 
-        
         $this->load->view('templates/user_header', $data);
 		$this->load->view('templates/user_sidebar', $data);
 		$this->load->view('templates/user_topbar', $data);
@@ -250,7 +249,42 @@ class Jobs extends CI_Controller {
         
         return $my_task_vacant;
     }
+    //TODO tambahkan fitur notifikasi ke email
+    /*
+kira-kira trigger notifikasinya ini ya mas berarti
+    1. karyawan submit JP -> kirim notif ke atasan1
+    2. atasan 1 approve JP -> kirim notif ke atasan2 dan kirim notif ke karyawan
+    3. atasan 2 approve JP -> kirim notif ke karyawan
+    4. revise atasan 1 atau 2 -> kirim notif ke karyawan
 
+    admin
+    5. admin klik tombol notifikasi
+ini ya mas berarti kondisinya
+[12:40, 5/26/2020] Mas Yudhi HR PT Centratama: Betul
+[12:40, 5/26/2020] Mas Yudhi HR PT Centratama: No 5 itu mksdnya gmn?
+Buat admin kalau misal ingin ngingetin karyawan atau atasannya lagi mas
+Yg terkirim yg no brp? Sesuai status?
+Rencana gitu mas langsung sesuai status, apa mau manual aja mas?
+[12:50, 5/26/2020] Mas Yudhi HR PT Centratama: Sesuai status lebih bagus
+[12:50, 5/26/2020] Mas Yudhi HR PT Centratama: Lebih bagus lagi setiap 24 jam auto email lagi
+[12:50, 5/26/2020] Mas Yudhi HR PT Centratama: Autosend
+[12:51, 5/26/2020] Mas Yudhi HR PT Centratama: Kyk hcis pengajuan cuti dan ijin begitu setiap 24 jam autosend email selama belum final approved
+kalo ini kyknya gua harus bikin aplikasi yg beda nih mas, jadi dia bakal selalu jalan di background dan ngecek semua table job_approval, soalnya aplikasi ini dia lebih buat ke end user mas
+kalo ini lebih ke proses di server, dan perlu jalan terus di server mas ini
+[12:59, 5/26/2020] Mas Yudhi HR PT Centratama: Iya betul ada program scheduler gt dia
+[12:59, 5/26/2020] Mas Yudhi HR PT Centratama: Paling send dr admin, tp bisa sekaligus semaua ga ki? Jd ga send berkali2
+[13:00, 5/26/2020] Mas Yudhi HR PT Centratama: Bisa send per status gt
+[13:00, 5/26/2020] Mas Yudhi HR PT Centratama: Masing2 bisa, send per status bisa
+bisa si mas, nanti ada tombol buat ngirim notifikasi gitu, nanti dia langsung cek tabel job_approval yang statusnya belum final trus langsung kirim email sesuai template
+kalo ini nanti ditambah tombol di masing2 karyawan
+gua taruh tombol notifikasinya di setting jp kali ya mas?
+[13:06, 5/26/2020] Mas Yudhi HR PT Centratama: Bentar
+[13:06, 5/26/2020] Mas Yudhi HR PT Centratama: No 5 itu rencananya nanti per position or per status?
+per position mas
+Ok, nanti tambahin per status yah
+kalo status nanti dia langsung baca otomatis mas dari table job approval
+Ok
+    */
     public function taskAction(){
         $pesan_revisi = $this->input->post('pesan_revisi');
         $id_posisi = $this->input->post('id_posisi');
@@ -311,6 +345,9 @@ class Jobs extends CI_Controller {
                 show_404(); //error
             }
         }
+
+        //kirim email notifikasi
+        
 
         header('location: ' . base_url('jobs'));
         exit;
@@ -877,7 +914,8 @@ class Jobs extends CI_Controller {
         }
         // End of Pengolahan data orgchart ==============================================================================
     }
-
+    
+    //TODO Make PrintJP
     public function printJp(){
         //load the main library TCPDF (.application/library/tcpdf)
         //I have created a Library loader in that folder, just load using this code below

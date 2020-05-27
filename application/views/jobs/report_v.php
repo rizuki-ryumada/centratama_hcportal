@@ -7,10 +7,10 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="divisi">Divisi :</label>
-                            <select id="divisi" class="form-control form-control-sm">
+                            <select id="divisi" class="custom-select form-control form-control-sm">
                                 <option value="">All</option>
                                 <?php foreach($divisi as $v): ?>
-                                    <option value="<?= $v['division'] ?>"><?= $v['division'] ?></option>
+                                    <option value="div-<?= $v['id'] ?>"><?= $v['division'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -18,10 +18,10 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="departement">Departement :</label>
-                            <select id="departement" class="form-control form-control-sm">
+                            <select id="departement" class="custom-select form-control form-control-sm">
                                 <option value="">All</option>
                                 <?php foreach($dept as $v): ?>
-                                    <option value="<?= $v['nama_departemen'] ?>"><?= $v['nama_departemen'] ?></option>
+                                    <option value="dept-<?= $v['id'] ?>"><?= $v['nama_departemen'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -29,7 +29,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="status">Status :</label>
-                            <select id="status" class="form-control form-control-sm">
+                            <select id="status" class="custom-select form-control form-control-sm">
                                 <option value="">All</option>
                                 <option value="1">Not Yet Submitted</option>
                                 <option value="2">Submitted</option>
@@ -57,10 +57,10 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label for="departement">Departement :</label>
-                            <select id="departement" class="form-control form-control-sm">
+                            <select id="departement" class="custom-select form-control form-control-sm">
                                 <option value="">All</option>
                                 <?php foreach($dept as $v): ?>
-                                    <option value="<?= $v['nama_departemen'] ?>"><?= $v['nama_departemen'] ?></option>
+                                    <option value="dept-<?= $v['id'] ?>"><?= $v['nama_departemen'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -68,7 +68,7 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label for="status">Status :</label>
-                            <select id="status" class="form-control form-control-sm">
+                            <select id="status" class="custom-select form-control form-control-sm">
                                 <option value="">All</option>
                                 <option value="1">Not Yet Submitted</option>
                                 <option value="2">Submitted</option>
@@ -94,7 +94,7 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label for="status">Status :</label>
-                            <select id="status" class="form-control form-control-sm">
+                            <select id="status" class="custom-select form-control form-control-sm">
                                 <option value="">All</option>
                                 <option value="1">Not Yet Submitted</option>
                                 <option value="2">Submitted</option>
@@ -123,8 +123,8 @@
                     <tbody>
                         <?php foreach($approval_data as$v): ?>
                         <tr id="myTask-list">
-                            <td><?= $v['divisi'] ?></td>
-                            <td><?= $v['departement'] ?></td>
+                            <td data-filter="div-<?= $v['id_div'] ?>"><?= $v['divisi'] ?></td>
+                            <td data-filter="dept-<?= $v['id_dept'] ?>"><?= $v['departement'] ?></td>
                             <td><?= $v['posisi'] ?></td>
                             <td><?= $v['emp_name'] ?></td>
                             <?php if($v['status_approval'] == 0): ?>

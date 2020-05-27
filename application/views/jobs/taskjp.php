@@ -23,10 +23,10 @@
             <div class="card-footer">
                 <div class="row justify-content-md-center">
                     <button type="button" class="col-5 btn btn-warning btn-sm" data-toggle="modal"
-                        data-target="#revisi-modal">Revisi</button>
+                        data-target="#revisi-modal">Revise</button>
                     <div class="col-1"></div>
                     <button type="button" class="col-5 btn btn-primary btn-sm" data-toggle="modal"
-                        data-target="#setujui-modal">Setujui</button>
+                        data-target="#setujui-modal">Approve</button>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@
 				</form>
             </div>
             <div class="modal-footer">
-				<input type="submit" form="revisi-form" style="btn btn-light" value="Setujui">
+				<input type="submit" form="revisi-form" style="btn btn-light" value="Approve">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Periksa lagi</button>
             </div>
         </div>
@@ -91,7 +91,7 @@
 				</form>
             </div>
             <div class="modal-footer">
-				<input type="submit" form="setuju_form" style="btn btn-light" value="Revisi">
+				<input type="submit" form="setuju_form" style="btn btn-light" value="Revise">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Periksa lagi</button>
             </div>
         </div>

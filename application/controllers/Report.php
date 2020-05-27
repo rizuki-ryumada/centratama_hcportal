@@ -34,9 +34,8 @@ class Report extends CI_Controller { // need to be separated because the user ac
         $data['hirarki_org'] = $this->Jobpro_model->getDetail('hirarki_org', 'position', array('id' => $data['user']['position_id']))['hirarki_org'];
         $data['approval_data'] = $this->getApprovalDetails($task);
         
-
-        // print_r($data);
         
+
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
         $this->load->view('templates/user_topbar', $data);
@@ -86,14 +85,20 @@ class Report extends CI_Controller { // need to be separated because the user ac
     function getPositionDetails($id_posisi){
         $temp_posisi = $this->Jobpro_model->getDetail("div_id, dept_id, id", "position", array('id' => $id_posisi));
         // print_r($temp_posisi);
-        foreach ($this->Jobpro_model->getDetail("position_name", "position", array('id' => $temp_posisi['id'])) as $v){
+        foreach ($this->Jobpro_model->getDetail("position_name", "position", array('id' => $temp_posisi['id'])) as $v){// tambahkan nama posisi
             $detail_posisi['posisi'] = $v;
         }
-        foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_posisi['dept_id'])) as $v){
+        foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_posisi['dept_id'])) as $v){// tambahkan nama departemen
             $detail_posisi['departement'] = $v;
         }
-        foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_posisi['div_id'])) as $v){
+        foreach($this->Jobpro_model->getDetail("id", "departemen", array('id' => $temp_posisi['dept_id'])) as $v){// tambahkan id departemen
+            $detail_posisi['id_dept'] = $v;
+        }
+        foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_posisi['div_id'])) as $v){// tambahkan nama divisi
             $detail_posisi['divisi'] = $v;
+        }
+        foreach($this->Jobpro_model->getDetail("id", "divisi", array('id' => $temp_posisi['div_id'])) as $v){// tambahkan id divisi
+            $detail_posisi['id_div'] = $v;
         }
         return $detail_posisi;
     }
@@ -154,16 +159,19 @@ class Report extends CI_Controller { // need to be separated because the user ac
     }
 
     public function getDepartement(){
-        if(!empty($this->input->post('divisi'))){
+        if(!empty($div = $this->input->post('divisi'))){
             //get id divisi
-            $divisi_id = $this->Jobpro_model->getDetail("id", "divisi", array('division' => $this->input->post('divisi')))['id'];
+            $div = explode('-', $div);
+            // print_r($id_div);
+            // exit;
+            // $divisi_id = $this->Jobpro_model->getDetail("id", "divisi", array('division' => $this->input->post('divisi')))['id'];
             //ambil data departemen dengan divisi itu
-            foreach($this->Jobpro_model->getDetails('nama_departemen', 'departemen', array('div_id' => $divisi_id)) as $k => $v){
-                $data[$k]=$v['nama_departemen'];
+            foreach($this->Jobpro_model->getDetails('*', 'departemen', array('div_id' => $div[1])) as $k => $v){
+                $data[$k]=$v;
             }
         } else {
-            foreach($this->Jobpro_model->getDetails('nama_departemen', 'departemen', array()) as $k => $v){
-                $data[$k]=$v['nama_departemen'];
+            foreach($this->Jobpro_model->getDetails('*', 'departemen', array()) as $k => $v){
+                $data[$k]=$v;
             }
         }
         
@@ -217,3 +225,4 @@ class Report extends CI_Controller { // need to be separated because the user ac
     }
 
 }
+// TODO tambahin fitur export report table ke excel

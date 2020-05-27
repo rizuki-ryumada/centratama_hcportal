@@ -19,6 +19,7 @@ class Settings extends CI_Controller {
         
     }
 
+    //TODO buat setting banner pengumuman dan banner tema
     function hcPortal() {
         $data = [
             'title' => 'HC Portal',

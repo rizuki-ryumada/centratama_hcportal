@@ -23,7 +23,7 @@
 <script src="<?= base_url('assets/'); ?>js/sb-admin-2.min.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/swall/sweetalert2.all.min.js"></script>
 
-<script src="<?= base_url('assets/'); ?>vendor/datatables/jquery.dataTables.min.js"></script>
+<!-- <script src="<?= base_url('assets/'); ?>vendor/datatables/jquery.dataTables.min.js"></script> -->
 <script src="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <!-- Page level custom scripts -->
@@ -36,15 +36,36 @@
 //activate dataTable
 $(document).ready(function () {
     var mTable = $('#myTask').DataTable({
-        "select": true,
+        'dom': 'Bfrtip',
+        'buttons': [
+            {text: 'Export Data to:'},
+            
+            {
+                extend: 'copy',
+                text: 'Clipboard'
+            },
+            {
+                extend: 'csv',
+                text: 'CSV'
+            },
+            {
+                extend: 'excel',
+                text: 'Excel'
+            }
+        ]
     });
 
     //filter table dengan DOM
     $('#divisi').change(function(){
-        mTable.column(0).search(this.value).order([0, 'asc']).draw();
+        mTable.column(0).search(this.value).order([0, 'asc']).draw();// filter kolom pertama
+        mTable.column(4).search('').order([4, 'asc']).draw();// hapus filter kolom ke 5
+        mTable.column(1).search('').order([1, 'asc']).draw();// hapus filter kolom kedua
+        $('#status').prop('selectedIndex',0);// kembalikan status ke default
     });
     $('#departement').change(function(){
         mTable.column(1).search(this.value).order([1, 'asc']).draw();
+        mTable.column(4).search('').order([4, 'asc']).draw();
+        $('#status').prop('selectedIndex',0);
     });
     $('#status').change(function(){
         mTable.column(4).search(this.value).order([4, 'asc']).draw();
@@ -55,11 +76,11 @@ $(document).ready(function () {
         var dipilih = $(this).val(); //ambil value dari yang terpilih
 
         if(dipilih == ""){
-            mTable.column(1).search(dipilih).order([1, 'asc']).draw(); //kosongkan filter dom
+            mTable.column(1).search(dipilih).order([1, 'asc']).draw(); //kosongkan filter dom departement
         }
 
         $.ajax({
-            url: "<?php echo base_url('report/getdepartement'); ?>",
+            url: "<?php echo base_url('master/getdepartement'); ?>",
             data: {
                 divisi: dipilih //kirim ke server php
             },
@@ -68,7 +89,8 @@ $(document).ready(function () {
                 $('#departement').empty().append('<option value="">All</option>'); //kosongkan selection value dan tambahkan satu selection option
 
                 $.each(JSON.parse(data), function(i, v) {
-                    $('#departement').append('<option value="' + v + '">' + v + '</option>'); //tambahkan 1 per 1 option yang didapatkan
+                    console.log(v);
+                    $('#departement').append('<option value="dept-' + v.id + '">' + v.nama_departemen + '</option>'); //tambahkan 1 per 1 option yang didapatkan
                 });
                 }
             })
@@ -184,3 +206,4 @@ $(document).ready(function() { //buat buka menu report, grgr ini aslinya report 
 
 </body>
 </html>
+

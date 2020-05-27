@@ -430,6 +430,12 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 					if (data == 'delete') {
 						$('.tabledit-deleted-row').remove();
 					}
+				},
+				onAjax: function(action, serialize) {
+					// open your xhr here 
+					console.log("on Ajax");
+					console.log("action : ", action);
+					console.log("data : ", serialize);
 				}
 			});
 		});
