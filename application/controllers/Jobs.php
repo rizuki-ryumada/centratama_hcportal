@@ -1,7 +1,7 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-//TODO Reroute Jobs jadi job_profile
+// TODO Reroute Jobs jadi job_profile
 class Jobs extends CI_Controller {
     
     public function __construct()
@@ -10,8 +10,47 @@ class Jobs extends CI_Controller {
         $this->load->model('Jobpro_model');
         $this->load->model('Divisi_model');
         $this->load->model('Dept_model');
+        $this->load->helper('email');
         is_logged_in();
         date_default_timezone_set('Asia/Jakarta');
+    }
+
+    // NOW This is a piece of code to send email, tryit to send email
+    public function testSendEmail(){
+        // $config = Array(
+        //     'protocol' => 'smtp',
+        //     'smtp_host' => 'smtp.mailtrap.io',
+        //     'smtp_port' => 2525,
+        //     'smtp_user' => '3fe58fce26b28e',
+        //     'smtp_pass' => '212fbd5e29efaf',
+        //     'charset' => 'iso-8859-1',
+        //     'wordwrap' => TRUE,
+        //     'crlf' => "\r\n",
+        //     'newline' => "\r\n"
+        //   );
+        
+        // configuration for send email
+        $config = $this->Jobpro_model->getDetail(
+            'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
+            'setting-email', 
+            array('id' => 1));
+        $config['crlf'] = "\r\n";
+        $config['newline'] = "\r\n";
+        $this->load->library('email');
+        $this->email->initialize($config);
+        // identitas email
+        $this->email->from('a4a81d98ec-3847f9@inbox.mailtrap.io', 'Ryumada');
+        $this->email->to('ryumada_rizuki@hotmail.cn');
+        // what to send?
+        $this->email->subject('Email Test');
+        // load email text from helper
+        // emailText($name_atasan, $name_karyawan, $date, $status){
+        $emailText = emailText('Wahyudi', 'Michael Loebis', date('o-Y'), 1);
+        $this->email->message($emailText);
+
+        $this->email->send();
+        
+        echo $this->email->print_debugger(); //show debugger if error
     }
 
     public function report()
@@ -85,6 +124,9 @@ class Jobs extends CI_Controller {
         $this->load->view('templates/indexjp_footer');
     }
 
+    // TODO tampilkan struktur pas si yg dibawahi oleh CEO
+    // Corporate Development Dept. Head - Indra Yudison
+    // 5 kepala divisi, 3 kepala department
     public function myJp(){
         $nik = $this->session->userdata('nik');
         $id_posisi = $this->Jobpro_model->getDetail('position_id', 'employe', array('nik' => $nik))['position_id'];
@@ -259,6 +301,12 @@ kira-kira trigger notifikasinya ini ya mas berarti
 
     admin
     5. admin klik tombol notifikasi
+     - tombol buat send email ke semua position, ke email karyawannya per status
+     - tombol send email ke masing2 position karyawan
+
+    additional
+    - system auto send email
+
 ini ya mas berarti kondisinya
 [12:40, 5/26/2020] Mas Yudhi HR PT Centratama: Betul
 [12:40, 5/26/2020] Mas Yudhi HR PT Centratama: No 5 itu mksdnya gmn?
@@ -290,10 +338,17 @@ Ok
         $id_posisi = $this->input->post('id_posisi');
         $status_sebelum = $this->input->post('status_sebelum');
         $status_approval = $this->input->post('status_approval');
-        $approver2 = $this->Jobpro_model->getDetail('id_approver2', 'position', array('id' => $id_posisi));
+        $approver = $this->Jobpro_model->getDetail('id_approver1, id_approver2', 'position', array('id' => $id_posisi));
+        $name_karyawan = $this->input->post('name_karyawan');
+
+        // NOW kirim email notifikasi
         
-        //cek apa punya approver2
-        if($approver2['id_approver2'] != 0){
+        
+
+        exit;
+        
+        // cek apa punya approver2
+        if($approver['id_approver2'] != 0){
             //cek status_approval
             if($status_approval == "true"){ //jika disetujui
                 if($status_sebelum == 1){ //atasan 1
@@ -303,6 +358,13 @@ Ok
                         'pesan_revisi' => $pesan_revisi
                     ];
                     $this->Jobpro_model->updateApproval($data, $id_posisi);
+
+                    //ambil email karyawan dengan id approver 1 atau 2
+                    $data_atasan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $approver['id_approver2']));
+                    
+                    // function sendEmail($data_atasan, $name_karyawan, $data, $subject_email)
+                    $this->sendEmail($data_atasan, $name_karyawan, $data, 'Job Profile - Need Approval'); // kirim email notifikasi
+                    //NOW
 
                 } elseif($status_sebelum == 2){ //atasan 2, selesaikan task
                     $data = [
@@ -346,14 +408,60 @@ Ok
             }
         }
 
-        //kirim email notifikasi
+        
+        
+        
+        exit;
         
 
         header('location: ' . base_url('jobs'));
-        exit;
     }
 
-    
+    //NOW
+    public function sendEmail($data_atasan, $name_karyawan, $data, $subject_email){
+        // configuration for send email
+        $config = $this->Jobpro_model->getDetail(
+            'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
+            'setting-email', 
+            array('id' => 1));
+        $config['crlf'] = "\r\n";
+        $config['newline'] = "\r\n";
+        $this->load->library('email');
+        $this->email->initialize($config);
+
+        $x = 0; $email_cc = array();
+        foreach($data_atasan as $value){
+            //ambil email buat cc
+            foreach($data_atasan as $v){
+                if($value['email'] != $v['email']){
+                    $email_cc[$x] = $v['email'];
+                    $x++;
+                }
+            }
+            // identitas email
+            $this->email->from('a4a81d98ec-3847f9@inbox.mailtrap.io', 'Ryumada');
+            // FIXME perlu nambahin email di tabel employe
+            // $this->email->to($value['email']);
+            $this->email->to('ryumada@dev.id'); //for testing
+            // cc email
+            if(!empty($email_cc)){
+                $this->email->cc($email_cc);
+            }
+            // what to send?
+            // $this->email->subject('Job Profile - Need Approval');
+            $this->email->subject($subject_email);
+            // load email text from helper
+            // emailText($name_atasan, $name_karyawan, $date, $status){
+            $emailText = emailText($name_karyawan, $value['emp_name'], date('j F Y, H.i', time()), $data['status_approval']);
+            $this->email->message($emailText);
+
+            if($this->email->send()){
+                echo("success");
+            } else {
+                echo $this->email->print_debugger(); //show debugger if error
+            }
+        }
+    }
     
     public function insatasan()
     {
@@ -661,15 +769,79 @@ Ok
 		$this->db->where('id_posisi', $this->input->post('id_posisi'));
 		$this->db->update('jumlah_staff', $data);
 		echo 'staff updated';
-	}
-	public function setApprove() //Submit to atasan
+    }
+    
+    // NOW
+	public function setApprove() //Submit to atasan 1
 	{
         $data = [
 			'diperbarui' => time(),
             'status_approval' => '1',
         ];
 
-        $this->Jobpro_model->updateApproval($data,$this->input->post('id_posisi'));
+        $id_posisi = $this->input->post('id_posisi');
+        // $this->Jobpro_model->updateApproval($data, $id_posisi);
+
+        $nik = $this->input->post('nik');
+        // $this->input->post('id_posisi');
+        // print_r($this->input->post('atasan1'));
+        // $this->input->post('atasan2');
+
+        //ambil nama karyawan
+        $name_karyawan = $this->Jobpro_model->getDetail('emp_name', 'employe', array('nik' => $nik))['emp_name'];
+
+        //cari approver1
+        $approver1 = $this->Jobpro_model->getDetail('id_approver1', 'position', array('id' => $id_posisi))['id_approver1'];
+        //ambil email karyawan dengan id approver 1 
+        $data_atasan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $approver1));
+        // print_r($data_atasan);
+        // exit;
+
+        // function sendEmail($data_atasan, $name_karyawan, $data, $subject_email)
+        $this->sendEmail($data_atasan, $name_karyawan, $data, 'Job Profile - Need Approval'); // kirim email notifikasi
+
+        // // configuration for send email
+        // $config = $this->Jobpro_model->getDetail(
+        //     'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
+        //     'setting-email', 
+        //     array('id' => 1));
+        // $config['crlf'] = "\r\n";
+        // $config['newline'] = "\r\n";
+        // $this->load->library('email');
+        // $this->email->initialize($config);
+        
+        // $x = 0; $email_cc = array();
+        // foreach($data_atasan as $value){
+        //     //ambil email buat cc
+        //     foreach($data_atasan as $v){
+        //         if($value['email'] != $v['email']){
+        //             $email_cc[$x] = $v['email'];
+        //             $x++;
+        //         }
+        //     }
+        //     // identitas email
+        //     $this->email->from('a4a81d98ec-3847f9@inbox.mailtrap.io', 'Ryumada');
+        //     // FIXME perlu nambahin email di tabel employe
+        //     // $this->email->to($value['email']);
+        //     $this->email->to('ryumada@dev.id'); //for testing
+        //     // cc email
+        //     if(!empty($email_cc)){
+        //         $this->email->cc($email_cc);
+        //     }
+        //     // what to send?
+        //     $this->email->subject('Job Profile - Need Approval');
+        //     // load email text from helper
+        //     // emailText($name_atasan, $name_karyawan, $date, $status){
+        //     $emailText = emailText($name_karyawan, $value['emp_name'], date('j F Y, H.i', time()), $data['status_approval']);
+        //     $this->email->message($emailText);
+
+        //     if($this->email->send()){
+        //         echo("success");
+        //     } else {
+        //         echo $this->email->print_debugger(); //show debugger if error
+        //     }
+// 
+        // }
     }
 
     public function getApprovalDetails($my_task){ // Copied from Jobs Controller

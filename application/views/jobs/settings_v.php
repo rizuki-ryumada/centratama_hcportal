@@ -30,7 +30,7 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="divisi">Divisi :</label>
+                        <label for="divisi">Division:</label>
                         <select id="divisi" class="custom-select form-control form-control-sm">
                             <option value="">All</option>
                             <?php foreach($divisi as $v): ?>

@@ -38,19 +38,20 @@ $(document).ready(function () {
     var mTable = $('#myTask').DataTable({
         'dom': 'Bfrtip',
         'buttons': [
-            {text: 'Export Data to:'},
-            
-            {
-                extend: 'copy',
-                text: 'Clipboard'
-            },
-            {
-                extend: 'csv',
-                text: 'CSV'
-            },
             {
                 extend: 'excel',
-                text: 'Excel'
+                text: 'Export to Excel',
+                title: '',
+                filename: 'Report Job Profile-<?= date("dmo-Hi"); ?>',
+                exportOptions: {
+                    modifier: {
+                        //Datatables Core
+                        order: 'index',
+                        page: 'all',
+                        search: 'none'
+                    },
+                    columns: [0,1,2,3,4]
+                }
             }
         ]
     });

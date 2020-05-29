@@ -938,7 +938,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 									atasan2: atasan2
 								},
 								success: function(data) {
-									// console.log(data);
+									console.log(data);
 									// location.reload();
 									document.location.href = "<?= base_url('jobs'); ?>";
 								},
@@ -946,7 +946,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 									console.log('fail');
 								}
 							});		
-						}, 5000);
+						}, 3000);
 					} else {
 						$('#submit-modal').modal('hide');// hide modal submit
 						swal.fire(

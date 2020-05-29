@@ -53,15 +53,16 @@
                 <p>
                     Anda akan memproses Job Profil karyawan ini ke proses selanjutnya.
 				</p>
-				<form id="revisi-form" action="<?= base_url('/jobs/taskAction'); ?>" method="post">
+				<form id="setuju-form" action="<?= base_url('/jobs/taskAction'); ?>" method="post">
 					<input type="hidden" name="pesan_revisi" value="null">
 					<input type="hidden" name="id_posisi" value="<?= $this->input->get('id'); ?>">
 					<input type="hidden" name="status_approval" value="true">
 					<input type="hidden" name="status_sebelum" value="<?= $status; ?>" />
+                    <input type="hidden" name="name_karyawan" value="<?= $emp_name['emp_name']; ?>" />
 				</form>
             </div>
             <div class="modal-footer">
-				<input type="submit" form="revisi-form" style="btn btn-light" value="Approve">
+				<input type="submit" form="setuju-form" style="btn btn-light" value="Approve">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Periksa lagi</button>
             </div>
         </div>
@@ -83,15 +84,16 @@
 				<h5>Pesan Revisi</h5>
 				<hr/>
 				<p>Silakan masukkan pesan untuk karyawan, agar mempermudah dalam melakukan revisi.</p>
-				<form id="setuju_form" action="<?= base_url('jobs/'); ?>taskAction" method="post">
+				<form id="revisi-form" action="<?= base_url('jobs/'); ?>taskAction" method="post">
 					<textarea rows="4" cols="45" name="pesan_revisi"></textarea>
 					<input type="hidden" name="id_posisi" value="<?= $this->input->get('id'); ?>">
 					<input type="hidden" name="status_approval" value="false" />
 					<input type="hidden" name="status_sebelum" value="<?= $status; ?>" />
+                    <input type="hidden" name="name_karyawan" value="<?= $emp_name['emp_name']; ?>" />
 				</form>
             </div>
             <div class="modal-footer">
-				<input type="submit" form="setuju_form" style="btn btn-light" value="Revise">
+				<input type="submit" form="revisi-form" style="btn btn-light" value="Revise">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Periksa lagi</button>
             </div>
         </div>

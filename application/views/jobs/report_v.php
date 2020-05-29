@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
-                            <label for="divisi">Divisi :</label>
+                            <label for="divisi">Division:</label>
                             <select id="divisi" class="custom-select form-control form-control-sm">
                                 <option value="">All</option>
                                 <?php foreach($divisi as $v): ?>
@@ -17,7 +17,7 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label for="departement">Departement :</label>
+                            <label for="departement">Departement:</label>
                             <select id="departement" class="custom-select form-control form-control-sm">
                                 <option value="">All</option>
                                 <?php foreach($dept as $v): ?>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label for="status">Status :</label>
+                            <label for="status">Status:</label>
                             <select id="status" class="custom-select form-control form-control-sm">
                                 <option value="">All</option>
                                 <option value="1">Not Yet Submitted</option>
