@@ -3,7 +3,7 @@
 
 	<!-- Sidebar - Brand -->
 	<!-- Sidebar - Brand -->
-	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url('jobs'); ?>">
+	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url('job_profile'); ?>">
 		<!-- <div class="sidebar-brand-icon rotate-n-15">
 				<i class="fab fa-contao"></i>
 			</div> -->
@@ -18,13 +18,13 @@
 
 	<!-- <?php if ($this->uri->segment(1) == 'welcome') : ?>
 		<li class="nav-item active">
-			<a class="nav-link" href="<?= base_url(); ?>jobs">
+			<a class="nav-link" href="<?= base_url(); ?>job_profile">
 				<i class="fas fa-fw fa-home"></i>
 				<span>Dashboard</span></a>
 		</li>
 	<?php else : ?>
 		<li class="nav-item">
-			<a class="nav-link" href="<?= base_url(); ?>jobs">
+			<a class="nav-link" href="<?= base_url(); ?>job_profile">
 				<i class="fas fa-fw fa-home"></i>
 				<span>Dashboard</span></a>
 		</li>

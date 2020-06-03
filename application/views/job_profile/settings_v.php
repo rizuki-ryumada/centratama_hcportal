@@ -1,4 +1,6 @@
 <div class="container-fluid">
+    <!-- load floating contact -->
+    <?php $this->load->view('templates/komponen/floating_contact') ?>
     <h1 class="h3 mb-3 text-gray-800">Settings</h1>
     <div class="card shadow mb-4">
         <div class="card-body">
@@ -24,7 +26,7 @@
                 <div class="col-1 text-center">
                     <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
                         <div class="row justify-content-center align-self-center w-100 m-0">
-                            <a href="<?= base_url('jobs/') ?>startJobApprovalSystem" type="button" class="btn btn-danger" data-placement="left" title="Refresh Approval - If there is a Employe not listed down here."><i class="fa fa-sync text-white"></i></a>
+                            <a href="<?= base_url('job_profile/') ?>startJobApprovalSystem" type="button" class="btn btn-danger" data-placement="left" title="Refresh Approval - If there is a Employe not listed down here."><i class="fa fa-sync text-white"></i></a>
                         </div>
                     </div>
                 </div>
@@ -85,28 +87,6 @@
                             <td data-filter="dept-<?= $v['id_dept'] ?>"><?= $v['departement'] ?></td>
                             <td><?= $v['posisi'] ?></td>
                             <td><?= $v['emp_name'] ?></td>
-                            <!-- <?php if($v['status_approval'] == 0): ?>
-                                <td data-filter="1">
-                                    <span class="badge badge-danger">Not Yet Submitted</span>
-                                </td>
-                            <?php elseif($v['status_approval'] == 1): ?>
-                                <td data-filter="2">
-                                    <span class="badge badge-warning">Submitted</span>
-                                </td>
-                            <?php elseif($v['status_approval'] == 2): ?>
-                                <td data-filter="3">
-                                    <span class="badge badge-warning">First Approval</span>
-                                </td>
-                            <?php elseif($v['status_approval'] == 3): ?>
-                                <td data-filter="4">
-                                    <span class="badge badge-danger">Need Revised</span>
-                                </td>
-                            <?php elseif($v['status_approval'] == 4): ?>
-                                <td data-filter="5">
-                                    <span class="badge badge-success">Final Approval</span>
-                                </td>
-                            <?php endif; ?> -->
-
                             <td data-filter="<?= $v['status_approval'] ?>">
                                 <div class="col-auto my-1">
                                     <!-- <label class="mr-sm-2" for="inlineFormCustomSelect">Preference</label> -->
@@ -129,6 +109,12 @@
                                         <option <?php if($v['status_approval'] == 3){echo ('selected');} ?> value="3">Need Revised</option>
                                         <option <?php if($v['status_approval'] == 4){echo ('selected');} ?> value="4">Final Approval</option>
                                     </select>
+                                </div>
+                                <div class="col text-center">
+                                    <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
+                                        <div class="row justify-content-center align-self-center w-100 m-0">
+                                            <a href=#" type="button" class="btn btn-primary" data-placement="left" title="Status Approval Settings"><i class="fa fa-bell text-white"></i></a>                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

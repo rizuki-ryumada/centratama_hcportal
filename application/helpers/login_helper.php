@@ -1,4 +1,4 @@
-<?php 
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 function is_logged_in(){
     
@@ -6,7 +6,7 @@ function is_logged_in(){
     
     if(!$CI->session->userdata('nik')){
         redirect('auth','refresh');
-    }else {
+    } else {
         $role_id = $CI->session->userdata('role_id');
         $menu = $CI->uri->segment(1);
 

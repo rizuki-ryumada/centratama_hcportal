@@ -1,7 +1,9 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
+	<!-- load floating contact -->
+	<?php $this->load->view('templates/komponen/floating_contact') ?>
 	<!-- Page Heading -->
-	<h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
+	<h1 class="h3 mb-4 text-gray-800">Job Profile</h1>
 
 	<div class="flash-jobs" data-flashdata="<?= $this->session->flashdata('flash'); ?>"></div>
 
@@ -14,7 +16,7 @@
 		<!-- Card Content - Collapse -->
 		<div class="collapse show">
 			<!-- JP Viewer -->
-			<?php $this->load->view('jobs/jp_viewer') ?>
+			<?php $this->load->view('job_profile/jp_viewer') ?>
 			<!-- JP Viewer -->
 			
 			<?php if($approval['status_approval'] == 0): ?>

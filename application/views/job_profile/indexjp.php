@@ -7,6 +7,8 @@
 </style>
 <div class="container-fluid">
 
+    <!-- load floating contact -->
+    <?php $this->load->view('templates/komponen/floating_contact') ?>
 	<!-- Page Heading -->
 	<h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
 
@@ -104,9 +106,9 @@
                         <div class="container d-flex h-100 m-0 p-2"> <!-- this container make the element to vertically and horizontally centered -->
                             <div class="row justify-content-center align-self-center p-0 m-0">
                                 <?php if($statusApproval['status_approval'] == 0 || $statusApproval['status_approval'] == 3): ?>
-                                    <a href="<?= base_url('jobs/myjp')?>"><i class="fa fa-pencil-alt fa-2x"></i></a>
+                                    <a href="<?= base_url('job_profile/myjp')?>"><i class="fa fa-pencil-alt fa-2x"></i></a>
                                 <?php else: ?>
-                                    <a href="<?= base_url('jobs/myjp')?>"><i class="fa fa-search fa-2x"></i></a>
+                                    <a href="<?= base_url('job_profile/myjp')?>"><i class="fa fa-search fa-2x"></i></a>
                                  <?php endif; ?>
                             </div>
                         </div>
@@ -165,7 +167,7 @@
                                     <td>
                                         <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
                                             <div class="row justify-content-center align-self-center w-100 m-0">
-                                                <a id="myTask-button" href="<?= base_url('jobs/taskJp'); ?>?task=<?= $v['nik']; ?>&id=<?= $v['id_posisi']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
+                                                <a id="myTask-button" href="<?= base_url('job_profile/taskJp'); ?>?task=<?= $v['nik']; ?>&id=<?= $v['id_posisi']; ?>&status=<?= $v['status_approval'] ?>"><i class="fa fa-search mx-auto"></i></a>    
                                             </div>
                                         </div>
                                     </td>

@@ -1,6 +1,7 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
-
+    <!-- load floating contact -->
+    <?php $this->load->view('templates/komponen/floating_contact') ?>
     <!-- Page Heading -->
     <h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
 
@@ -17,7 +18,7 @@
         <!-- Card Content - Collapse -->
         <div class="collapse show" id="collapseCardExample">
             <!-- JP Editor -->
-			<?php $this->load->view('jobs/jp_editor'); ?>
+			<?php $this->load->view('job_profile/jp_editor'); ?>
             <!-- /JP Editor -->
             
             <div class="card-footer">
@@ -53,7 +54,7 @@
                 <p>
                     Anda akan memproses Job Profil karyawan ini ke proses selanjutnya.
 				</p>
-				<form id="setuju-form" action="<?= base_url('/jobs/taskAction'); ?>" method="post">
+				<form id="setuju-form" action="<?= base_url('/job_profile/taskAction'); ?>" method="post">
 					<input type="hidden" name="pesan_revisi" value="null">
 					<input type="hidden" name="id_posisi" value="<?= $this->input->get('id'); ?>">
 					<input type="hidden" name="status_approval" value="true">
@@ -84,7 +85,7 @@
 				<h5>Pesan Revisi</h5>
 				<hr/>
 				<p>Silakan masukkan pesan untuk karyawan, agar mempermudah dalam melakukan revisi.</p>
-				<form id="revisi-form" action="<?= base_url('jobs/'); ?>taskAction" method="post">
+				<form id="revisi-form" action="<?= base_url('job_profile/'); ?>taskAction" method="post">
 					<textarea rows="4" cols="45" name="pesan_revisi"></textarea>
 					<input type="hidden" name="id_posisi" value="<?= $this->input->get('id'); ?>">
 					<input type="hidden" name="status_approval" value="false" />

@@ -39,7 +39,7 @@ class Report extends CI_Controller { // need to be separated because the user ac
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
         $this->load->view('templates/user_topbar', $data);
-        $this->load->view('jobs/report_v', $data);
+        $this->load->view('job_profile/report_v', $data);
         $this->load->view('templates/report_footer');
     }
 
@@ -214,7 +214,7 @@ class Report extends CI_Controller { // need to be separated because the user ac
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
         $this->load->view('templates/user_topbar', $data);
-        $this->load->view('jobs/settings_v', $data);
+        $this->load->view('job_profile/settings_v', $data);
         $this->load->view('templates/report_footer');
         // tampilkan
     }

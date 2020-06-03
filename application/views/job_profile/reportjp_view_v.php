@@ -1,6 +1,7 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
-
+	<!-- load floating contact -->
+    <?php $this->load->view('templates/komponen/floating_contact') ?>
 	<!-- Page Heading -->
 	<h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
 
@@ -31,7 +32,7 @@
 		<!-- Card Content - Collapse -->
 		<div class="collapse show" id="collapseCardExample">
 			<!-- JP Editor -->
-			<?php $this->load->view('jobs/jp_editor'); ?>
+			<?php $this->load->view('job_profile/jp_viewer'); ?>
 			<!-- /JP Editor -->
 
 			<?php if($statusApproval['status_approval'] == 0): ?>

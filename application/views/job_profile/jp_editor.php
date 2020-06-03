@@ -3,15 +3,15 @@
 <?php //this is for preparation data
 	$this->load->model('Jobpro_model');
 
-	$tujuanjabatan = $this->Jobpro_model->getProfileJabatan($posisi['id']); //data tujuan jabatan
-	$ruangl = $this->Jobpro_model->getDetail('*', 'ruang_lingkup', array('id_posisi' => $posisi['id'])); //data ruang lingkup
-	$tu_mu = $this->Jobpro_model->getDetail('*', 'tantangan', array('id_posisi' => $posisi['id'])); // data tanggung jawab dan masalah utama
-	$kualifikasi = $this->Jobpro_model->getDetail('*', 'kualifikasi', array('id_posisi' => $posisi['id']));
-	$jenk = $this->Jobpro_model->getDetail('*', 'jenjang_kar', array('id_posisi' => $posisi['id']));
-	$hub = $this->Jobpro_model->getDetail('*', 'hub_kerja', array('id_posisi' => $posisi['id']));
-	$tgjwb = $this->Jobpro_model->getDetails('*', 'tanggung_jawab', array('id_posisi' => $posisi['id']));
-	$wen = $this->Jobpro_model->getDetails('*', 'wewenang', array('id_posisi' => $posisi['id']));
-	$atasan = $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $posisi['id_atasan1']));
+	$tujuanjabatan = $this->Jobpro_model->getProfileJabatan($posisi['id']);                                              //data tujuan jabatan
+	$ruangl        = $this->Jobpro_model->getDetail('*', 'ruang_lingkup', array('id_posisi' => $posisi['id']));          //data ruang lingkup
+	$tu_mu         = $this->Jobpro_model->getDetail('*', 'tantangan', array('id_posisi' => $posisi['id']));              // data tanggung jawab dan masalah utama
+	$kualifikasi   = $this->Jobpro_model->getDetail('*', 'kualifikasi', array('id_posisi' => $posisi['id']));
+	$jenk          = $this->Jobpro_model->getDetail('*', 'jenjang_kar', array('id_posisi' => $posisi['id']));
+	$hub           = $this->Jobpro_model->getDetail('*', 'hub_kerja', array('id_posisi' => $posisi['id']));
+	$tgjwb         = $this->Jobpro_model->getDetails('*', 'tanggung_jawab', array('id_posisi' => $posisi['id']));
+	$wen           = $this->Jobpro_model->getDetails('*', 'wewenang', array('id_posisi' => $posisi['id']));
+	$atasan        = $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $posisi['id_atasan1']));
 ?>
 
                 <div class="card-body">
@@ -44,7 +44,7 @@
                 	<div class="row mb-2">
                 		<?php //if (empty($my['posnameatasan1'])) : ?>
                 		<?php if ($posisi['id_atasan1'] < 1) : ?>
-                		<!-- <form action="<?= base_url('jobs/insatasan'); ?>" method="post">
+                		<!-- <form action="<?= base_url('job_profile/insatasan'); ?>" method="post">
                 			<input type="hidden" value="<?= $posisi['id'] ?>" name="id">
                 			<div class="col mb-1">
                 				<select name="position" class="form-control form-control-sm  border border-danger">
@@ -153,7 +153,7 @@
                 								title="Edit"><i class="fas fa-pencil-alt"></i></a>
                 							<!-- <button data-id="<?= $t['id_tgjwb']; ?>"  class=" btn btn-sm btn-circle btn-danger" data-placement="top" title="Delete"><i class="fas fa-trash-alt"></i></button> -->
                 							<button
-                								href="<?= base_url('jobs/hapusTanggungJawab/')  .  $t['id_tgjwb']; ?>"
+                								href="<?= base_url('job_profile/hapusTanggungJawab/')  .  $t['id_tgjwb']; ?>"
                 								class="hapusJobs btn btn-sm btn-circle btn-danger"
                 								data-placement="bottom" title="Delete"><i
                 									class="fas fa-trash-alt"></i></button>
@@ -189,7 +189,7 @@
                 	</div>
                 	<?php if (empty($ruangl)) : ?>
                 	<div class="col-12 mb-3">
-                		<!-- <form action="<?= base_url('jobs/addruanglingkup'); ?>" method="post"> -->
+                		<!-- <form action="<?= base_url('job_profile/addruanglingkup'); ?>" method="post"> -->
                 		<div class="form-group">
                 			<textarea class="form-control" name="add-ruangl" id="add-ruangl" rows="2"></textarea>
                 		</div>
@@ -246,7 +246,7 @@
                 			</tbody>
                 			<table id="newWen" class="mb-3">
                 				<tr>
-                					<!-- <form action="<?= base_url('jobs/addwen'); ?>" method="post"> -->
+                					<!-- <form action="<?= base_url('job_profile/addwen'); ?>" method="post"> -->
                 					<td class="ml-0"><input type="text" name="wewenang" class="form-control" required
                 							placeholder="Masukkan Kewenangan"></td>
                 					<td>
@@ -319,7 +319,7 @@
                 	<?php if (empty($hub)) : ?>
                 	<div class="row">
                 		<div class="col-12">
-                			<!-- <form method="post" action="<?= base_url('jobs/addHubungan'); ?>"> -->
+                			<!-- <form method="post" action="<?= base_url('job_profile/addHubungan'); ?>"> -->
                 			<div class="form-group">
                 				<label for="internal">Hubungan Internal</label>
                 				<textarea class="form-control" name="internal" id="internal"></textarea>
@@ -460,7 +460,7 @@
                 	<?php if (empty($tu_mu)) : ?>
                 	<div class="row">
                 		<div class="col-12">
-                			<!-- <form method="post" action="<?= base_url('jobs/addtantangan/'); ?>"> -->
+                			<!-- <form method="post" action="<?= base_url('job_profile/addtantangan/'); ?>"> -->
                 			<div class="form-group">
                 				<textarea name="tantangan-baru" id="tantangan-baru"></textarea>
                 			</div>
@@ -507,7 +507,7 @@
                 	<?php if(empty($kualifikasi)) : ?>
                 	<div class="row">
                 		<div class="col-6 ml-2 mt-2">
-                			<!-- <form action="<?= base_url('jobs/addkualifikasi'); ?>" method="post"> -->
+                			<!-- <form action="<?= base_url('job_profile/addkualifikasi'); ?>" method="post"> -->
                 			<input type="hidden" name="id" value="<?= $posisi['id']; ?>">
                 			<div class="form-group">
                 				<label for="pend">Pendidikan Formal</label>
@@ -574,7 +574,7 @@
                 	<?php if (empty($jenk)) : ?>
                 	<div class="row">
                 		<div class="col-12">
-                			<!-- <form action="<?= base_url('jobs/addjenjangkarir'); ?>" method="post"> -->
+                			<!-- <form action="<?= base_url('job_profile/addjenjangkarir'); ?>" method="post"> -->
                 			<div class="form-group">
                 				<label for="jenkar">Jabatan Di Masa Depan :</label>
                 				<textarea class="form-control" name="jenkar" id="jenkar" rows="2"></textarea>
@@ -661,7 +661,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<!-- <form action="<?= base_url('jobs/updateKualifikasi'); ?>" method="post"> -->
+				<!-- <form action="<?= base_url('job_profile/updateKualifikasi'); ?>" method="post"> -->
 				<input type="hidden" name="id" id="id" value="<?= $posisi['id']; ?>">
 				<div class="form-group">
 					<label for="pend">Pendidikan Formal</label>

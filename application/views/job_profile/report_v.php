@@ -1,4 +1,6 @@
 <div class="container-fluid">
+    <!-- load floating contact -->
+    <?php $this->load->view('templates/komponen/floating_contact') ?>
     <h1 class="h3 mb-3 text-gray-800"><?= $title; ?></h1>
     <div class="card shadow mb-4">
         <div class="card-body">
@@ -151,7 +153,7 @@
                             <td>
                                 <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
                                     <div class="row justify-content-center align-self-center w-100 m-0">
-                                        <a id="myTask-button" href="<?= base_url('jobs/reportjp'); ?>?task=<?= $v['nik'] ?>&id=<?= $v['id_posisi']; ?>&status=<?= $v['status_approval'] ?>" title="View Details"><i class="fa fa-search mx-auto"></i></a>    
+                                        <a id="myTask-button" href="<?= base_url('job_profile/reportjp'); ?>?task=<?= $v['nik'] ?>&id=<?= $v['id_posisi']; ?>&status=<?= $v['status_approval'] ?>" title="View Details"><i class="fa fa-search mx-auto"></i></a>    
                                     </div>
                                 </div>
                             </td>

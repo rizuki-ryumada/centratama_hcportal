@@ -1,7 +1,9 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
+	<!-- load floating contact -->
+	<?php $this->load->view('templates/komponen/floating_contact') ?>
 	<!-- Page Heading -->
-	<h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
+	<h1 class="h3 mb-4 text-gray-800">Job Profile</h1>
 
 	<div class="flash-jobs" data-flashdata="<?= $this->session->flashdata('flash'); ?>"></div>
 
@@ -14,7 +16,7 @@
 		<!-- Card Content - Collapse -->
 		<div class="collapse show">
 			<!-- JP Editor -->
-			<?php $this->load->view('jobs/jp_editor'); ?>
+			<?php $this->load->view('job_profile/jp_editor'); ?>
 			<!-- /JP Editor -->
 
 			<div class="card-footer">
@@ -50,7 +52,7 @@
 	  </p>
       </div>
       <div class="modal-footer">
-		<button type="button" class="btn btn-light btnApprove" data-mynik="<?= $user['nik']; ?>" data-position="<?= $posisi['id']; ?>" data-atasan1="<?= $posisi['id_approver1']; ?>" data-atasan2="<?= $posisi['id_approver2']; ?>">Submit</button>
+		<button type="button" class="btn btn-light btnApprove" data-mynik="<?= $user['nik']; ?>" data-position="<?= $posisi['id']; ?>" data-approver1="<?= $posisi['id_approver1']; ?>" data-approver2="<?= $posisi['id_approver2']; ?>">Submit</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal">Periksa lagi</button>
       </div>
     </div>

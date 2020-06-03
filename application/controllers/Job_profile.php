@@ -1,18 +1,22 @@
-<?php
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-defined('BASEPATH') OR exit('No direct script access allowed');
-// TODO Reroute Jobs jadi job_profile
-class Jobs extends CI_Controller {
+class Job_profile extends CI_Controller {
     
     public function __construct()
     {
         parent::__construct();
+        // load model
         $this->load->model('Jobpro_model');
         $this->load->model('Divisi_model');
         $this->load->model('Dept_model');
+
+        // load helper
         $this->load->helper('email');
-        is_logged_in();
-        date_default_timezone_set('Asia/Jakarta');
+        // $this->load->helper('encryption');
+        // $this->load->helper('random_string');
+
+        is_logged_in(); //Cek Login
+        date_default_timezone_set('Asia/Jakarta'); // set timezone
     }
 
     // NOW This is a piece of code to send email, tryit to send email
@@ -120,7 +124,7 @@ class Jobs extends CI_Controller {
         $this->load->view('templates/user_header', $data);
 		$this->load->view('templates/user_sidebar', $data);
 		$this->load->view('templates/user_topbar', $data);
-		$this->load->view('jobs/indexjp', $data);
+		$this->load->view('job_profile/indexjp', $data);
         $this->load->view('templates/indexjp_footer');
     }
 
@@ -143,14 +147,14 @@ class Jobs extends CI_Controller {
             $this->load->view('templates/user_header', $data);
             $this->load->view('templates/user_sidebar', $data);
             $this->load->view('templates/user_topbar', $data);
-            $this->load->view('jobs/myjp', $data);
+            $this->load->view('job_profile/myjp', $data);
             $this->load->view('templates/jobs_footer_editor');
         } else {
             $data['approval'] = $approval;
             $this->load->view('templates/user_header', $data);
             $this->load->view('templates/user_sidebar', $data);
             $this->load->view('templates/user_topbar', $data);
-            $this->load->view('jobs/myjp_view', $data);
+            $this->load->view('job_profile/myjp_view', $data);
             $this->load->view('templates/jobs_footer_view');
         }
     }
@@ -169,7 +173,7 @@ class Jobs extends CI_Controller {
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
         $this->load->view('templates/user_topbar', $data);
-        $this->load->view('jobs/taskjp', $data);
+        $this->load->view('job_profile/taskjp', $data);
         $this->load->view('templates/jobs_footer_editor');
     }
 
@@ -211,13 +215,13 @@ class Jobs extends CI_Controller {
             $this->load->view('templates/user_header', $data);
             $this->load->view('templates/user_sidebar', $data);
             $this->load->view('templates/user_topbar', $data);
-            $this->load->view('jobs/reportjp_v', $data);
+            $this->load->view('job_profile/reportjp_v', $data);
             $this->load->view('templates/jobs_footer_editor');
         } else {
             $this->load->view('templates/user_header', $data);
             $this->load->view('templates/user_sidebar', $data);
             $this->load->view('templates/user_topbar', $data);
-            $this->load->view('jobs/reportjp_view_v', $data);
+            $this->load->view('job_profile/reportjp_view_v', $data);
             $this->load->view('templates/jobs_footer_editor');
         }
     }
@@ -342,11 +346,6 @@ Ok
         $name_karyawan = $this->input->post('name_karyawan');
 
         // NOW kirim email notifikasi
-        
-        
-
-        exit;
-        
         // cek apa punya approver2
         if($approver['id_approver2'] != 0){
             //cek status_approval
@@ -359,12 +358,30 @@ Ok
                     ];
                     $this->Jobpro_model->updateApproval($data, $id_posisi);
 
-                    //ambil email karyawan dengan id approver 1 atau 2
-                    $data_atasan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $approver['id_approver2']));
-                    
-                    // function sendEmail($data_atasan, $name_karyawan, $data, $subject_email)
-                    $this->sendEmail($data_atasan, $name_karyawan, $data, 'Job Profile - Need Approval'); // kirim email notifikasi
-                    //NOW
+                    $data_approver2 = $this->Jobpro_model->getDetail('emp_name, email', 'employe', array('position_id' => $approver['id_approver2']));  //ambil email karyawan dengan id approver 1 
+
+                    //ambil email karyawan buat cc
+                    $x = 0; $email_cc = array();
+                    foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $id_posisi)) as $v){
+                        $email_cc[$x] = $v['email'];
+                        $x++;
+                    }
+
+                    $data_penerima_email = array(
+                        'nama'      => $data_approver2['emp_name']. ",",
+                        'email'     => $data_approver2['email'],
+                        'email_cc'  => $email_cc,
+                        'id_posisi' => $approver['id_approver2'],
+                        'msg'       => 'There is a new employe waiting for your approval!'
+                    );
+
+                    $job_profile = array( //data job profile karyawan
+                        'id_posisi' => $id_posisi,
+                        'position_name' => $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $id_posisi))['position_name'],
+                        'status'        => $data['status_approval']
+                    );
+
+                    $this->notifikasi($nik, $job_profile, $data_penerima_email, '[Job Profile] First Approval');
 
                 } elseif($status_sebelum == 2){ //atasan 2, selesaikan task
                     $data = [
@@ -373,6 +390,39 @@ Ok
                         'pesan_revisi' => $pesan_revisi
                     ];
                     $this->Jobpro_model->updateApproval($data, $id_posisi);
+                    
+                    $data_karyawan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $id_posisi));  //ambil email karyawan dengan id approver 1 
+                    /* --------------------------- ambil nama karyawan -------------------------- */
+                    $counter_karyawan = count($data_karyawan);
+                    $karyawan = array('<ul>'); //buka ul
+                    foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
+                        $karyawan[$key + 1] = '<li>'. $value['emp_name'] .'</li>';
+                        if($key+1 == $counter_karyawan){ //tutup kode ul
+                            $karyawan[$key + 2] = '</ul>';
+                        }
+                    }
+                    /* -------------------------- ambil email karyawan -------------------------- */
+                    foreach($data_karyawan as $key => $value){
+                        $karyawan_email[$key] = $value['email'];
+                    }
+                    
+                    $email_cc[0] = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver1']))['email'];
+                    $email_cc[1] = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver2']))['email'];
+
+                    $data_penerima_email = array(
+                        'nama'      => implode(" ", $karyawan),
+                        'email'     => $karyawan_email,
+                        'email_cc'  => $email_cc,
+                        'id_posisi' => $id_posisi
+                    );
+
+                    $job_profile = array( //data job profile karyawan
+                        'id_posisi' => $id_posisi,
+                        'position_name' => $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $id_posisi))['position_name'],
+                        'status'        => $data['status_approval']
+                    );
+
+                    $this->notifikasi($nik, $job_profile, $data_penerima_email, '[Job Profile] Approved');
 
                 } else {
                     show_404(); //error
@@ -384,6 +434,40 @@ Ok
                     'pesan_revisi' => $pesan_revisi
                 ];
                 $this->Jobpro_model->updateApproval($data, $id_posisi);
+
+                $data_karyawan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $id_posisi));  //ambil email karyawan dengan id approver 1 
+                /* --------------------------- ambil nama karyawan -------------------------- */
+                $counter_karyawan = count($data_karyawan);
+                $karyawan = array('<ul>'); //buka ul
+                foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
+                    $karyawan[$key + 1] = '<li>'. $value['emp_name'] .'</li>';
+                    if($key+1 == $counter_karyawan){ //tutup kode ul
+                        $karyawan[$key + 2] = '</ul>';
+                    }
+                }
+                /* -------------------------- ambil email karyawan -------------------------- */
+                foreach($data_karyawan as $key => $value){
+                    $karyawan_email[$key] = $value['email'];
+                }
+
+                $email_cc[0] = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver1']))['email'];
+                $email_cc[1] = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver2']))['email'];
+
+                $data_penerima_email = array(
+                    'nama'      => implode(" ", $karyawan),
+                    'email'     => $karyawan_email,
+                    'email_cc'  => $email_cc,
+                    'id_posisi' => $id_posisi,
+                    'msg'       => 'Please revise your Job Profile.'
+                );
+
+                $job_profile = array( //data job profile karyawan
+                    'id_posisi' => $id_posisi,
+                    'position_name' => $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $id_posisi))['position_name'],
+                    'status'        => $data['status_approval']
+                );
+
+                $this->notifikasi($nik, $job_profile, $data_penerima_email, '[Job Profile] Need Revise');
             } else {
                 show_404(); //error
             }
@@ -396,6 +480,39 @@ Ok
                     'pesan_revisi' => $pesan_revisi
                 ];
                 $this->Jobpro_model->updateApproval($data, $id_posisi);
+
+                $data_karyawan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $id_posisi));  //ambil email karyawan dengan id approver 1 
+                /* --------------------------- ambil nama karyawan -------------------------- */
+                $counter_karyawan = count($data_karyawan);
+                $karyawan = array('<ul>'); //buka ul
+                foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
+                    $karyawan[$key + 1] = '<li>'. $value['emp_name'] .'</li>';
+                    if($key+1 == $counter_karyawan){ //tutup kode ul
+                        $karyawan[$key + 2] = '</ul>';
+                    }
+                }
+                /* -------------------------- ambil email karyawan -------------------------- */
+                foreach($data_karyawan as $key => $value){
+                    $karyawan_email[$key] = $value['email'];
+                }
+                
+                $email_cc = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver1']))['email'];
+
+                $data_penerima_email = array(
+                    'nama'      => implode(" ", $karyawan),
+                    'email'     => $karyawan_email,
+                    'email_cc'  => $email_cc,
+                    'id_posisi' => $id_posisi
+                );
+
+                $job_profile = array( //data job profile karyawan
+                    'id_posisi' => $id_posisi,
+                    'position_name' => $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $id_posisi))['position_name'],
+                    'status'        => $data['status_approval']
+                );
+
+                $this->notifikasi($nik, $job_profile, $data_penerima_email, '[Job Profile] Final Approval');
+
             } elseif($status_approval == "false") {
                 $data = [
                     'diperbarui' => time(),
@@ -403,64 +520,105 @@ Ok
                     'pesan_revisi' => $pesan_revisi
                 ];
                 $this->Jobpro_model->updateApproval($data, $id_posisi);
+
+                $data_karyawan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $id_posisi));  //ambil email karyawan dengan id approver 1 
+                /* --------------------------- ambil nama karyawan -------------------------- */
+                $counter_karyawan = count($data_karyawan);
+                $karyawan = array('<ul>'); //buka ul
+                foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
+                    $karyawan[$key + 1] = '<li>'. $value['emp_name'] .'</li>';
+                    if($key+1 == $counter_karyawan){ //tutup kode ul
+                        $karyawan[$key + 2] = '</ul>';
+                    }
+                }
+                /* -------------------------- ambil email karyawan -------------------------- */
+                foreach($data_karyawan as $key => $value){
+                    $karyawan_email[$key] = $value['email'];
+                }
+
+                $email_cc= $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver1']))['email'];
+
+                $data_penerima_email = array(
+                    'nama'      => implode(" ", $karyawan),
+                    'email'     => $karyawan_email,
+                    'email_cc'  => $email_cc,
+                    'id_posisi' => $id_posisi,
+                    'msg'       => 'Please revise your Job Profile.!'
+                );
+
+                $job_profile = array( //data job profile karyawan
+                    'id_posisi' => $id_posisi,
+                    'position_name' => $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $id_posisi))['position_name'],
+                    'status'        => $data['status_approval']
+                );
+
+                $this->notifikasi($nik, $job_profile, $data_penerima_email, '[Job Profile] Need Revise');
             } else {
                 show_404(); //error
             }
         }
-
-        
-        
-        
-        exit;
-        
-
-        header('location: ' . base_url('jobs'));
+        header('location: ' . base_url('job_profile'));
     }
-
-    //NOW
-    public function sendEmail($data_atasan, $name_karyawan, $data, $subject_email){
-        // configuration for send email
-        $config = $this->Jobpro_model->getDetail(
-            'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
-            'setting-email', 
-            array('id' => 1));
-        $config['crlf'] = "\r\n";
-        $config['newline'] = "\r\n";
-        $this->load->library('email');
-        $this->email->initialize($config);
-
-        $x = 0; $email_cc = array();
-        foreach($data_atasan as $value){
-            //ambil email buat cc
-            foreach($data_atasan as $v){
-                if($value['email'] != $v['email']){
-                    $email_cc[$x] = $v['email'];
-                    $x++;
-                }
+    
+    /**
+     * notifikasi
+     *
+     * @param  mixed $nik
+     * @param  mixed $job_profile
+     * @param  mixed $data_penerima_email
+     * @param  mixed $subject_email
+     * @return void
+     */
+    public function notifikasi($nik, $job_profile, $data_penerima_email, $subject_email){
+        if($job_profile['status'] != 4){ // cek jika status approval bukan final
+            /* ------------------- create webtoken buat penerima email ------------------ */
+            $resep = array( // buat resep token agar unik
+                'nik' => $nik,
+                'id_posisi' => $data_penerima_email['id_posisi'],
+                'date' => date('d-m-Y, H:i:s:v:u', time())
+            );
+            $token = md5(json_encode($resep)); // md5 encrypt buat id token
+            $temp_token  = array( // data buat disave di token
+                'direct'    => 'job_profile',
+                'id_posisi' => $data_penerima_email['id_posisi']
+            );
+            if(!empty($data_penerima_email['msg'])){ // sematkan pesan ke data token
+                $temp_token['msg'] = $data_penerima_email['msg'];
             }
-            // identitas email
-            $this->email->from('a4a81d98ec-3847f9@inbox.mailtrap.io', 'Ryumada');
-            // FIXME perlu nambahin email di tabel employe
-            // $this->email->to($value['email']);
-            $this->email->to('ryumada@dev.id'); //for testing
-            // cc email
-            if(!empty($email_cc)){
-                $this->email->cc($email_cc);
-            }
-            // what to send?
-            // $this->email->subject('Job Profile - Need Approval');
-            $this->email->subject($subject_email);
-            // load email text from helper
-            // emailText($name_atasan, $name_karyawan, $date, $status){
-            $emailText = emailText($name_karyawan, $value['emp_name'], date('j F Y, H.i', time()), $data['status_approval']);
-            $this->email->message($emailText);
+            $data_token = json_encode($temp_token);
 
-            if($this->email->send()){
-                echo("success");
-            } else {
-                echo $this->email->print_debugger(); //show debugger if error
+            // masukkan data token ke database
+            $this->Jobpro_model->insert(
+                'user_token',
+                array(
+                    'token'        => $token,
+                    'data'         => $data_token,
+                    'date_created' => date('Y-m-d H:i:s', time())
+                )
+            ); 
+            $url_token = urlencode($token);
+            //info penerima email tambahkan url
+            $data_penerima_email['link'] = base_url('direct').'?token='.$url_token;
+        }
+        
+        /* --------------------------- buat list karyawan --------------------------- */
+        $data_karyawan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $job_profile['id_posisi']));
+        $counter_karyawan = count($data_karyawan);
+        $karyawan = array('<ul>'); //buka ul
+        foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
+            $karyawan[$key + 1] = '<li>'. $value['emp_name'] .'</li>';
+            
+            if($key+1 == $counter_karyawan){ //tutup kode ul
+                $karyawan[$key + 2] = '</ul>';
             }
         }
+        // info job profile tambahkan karyawan
+        $job_profile['karyawan'] = implode(" ", $karyawan);
+
+        $emailText = jobProfileNotif($job_profile, $data_penerima_email); // generate emailText
+        //set penerima email adalah approver 1
+        // sendEmail($penerima, $emailText, $subject_email)
+        sendEmail($data_penerima_email, $emailText, $subject_email); // kirim email notifikasi pakai helper
     }
     
     public function insatasan()
@@ -477,7 +635,7 @@ Ok
         ];
         $this->db->insert('profile_jabatan', $datajabatan);
         
-        redirect('jobs','refresh');
+        redirect('job_profile','refresh');
     }
     
     //tujuan jabatan
@@ -493,7 +651,7 @@ Ok
             $this->load->view('templates/user_header', $data);
             $this->load->view('templates/user_sidebar', $data);
             $this->load->view('templates/user_topbar', $data);
-            $this->load->view('jobs/edittujab', $data);
+            $this->load->view('job_profile/edittujab', $data);
             $this->load->view('templates/jobs_footer_editor');
         } else {
             $this->Jobpro_model->updateTuJab();
@@ -523,10 +681,10 @@ Ok
     public function addTanggungJawab()
     {
         $data = [
-            'keterangan' => $this->input->post('tanggung_jawab'),
-            'list_aktivitas' => $this->input->post('aktivitas'),
+            'keterangan'      => $this->input->post('tanggung_jawab'),
+            'list_aktivitas'  => $this->input->post('aktivitas'),
             'list_pengukuran' => $this->input->post('pengukuran'),
-            'id_posisi' => $this->input->post('id_posisi')
+            'id_posisi'       => $this->input->post('id_posisi')
         ];
         $this->Jobpro_model->insert('tanggung_jawab', $data);
     }
@@ -534,8 +692,8 @@ Ok
     public function editTanggungJawab()
     {
         $data = [
-            'keterangan' => $this->input->post('tanggung_jawab'),
-            'list_aktivitas' => $this->input->post('aktivitas'),
+            'keterangan'      => $this->input->post('tanggung_jawab'),
+            'list_aktivitas'  => $this->input->post('aktivitas'),
             'list_pengukuran' => $this->input->post('pengukuran')
         ];
         $where = array(
@@ -556,7 +714,7 @@ Ok
         // $this->db->delete('tanggung_jawab');
         $this->Jobpro_model->delete('tanggung_jawab', array('index' => 'id_tgjwb', 'data' => $id));
         // $this->session->set_flashdata('flash', 'Deleted');
-        // redirect('jobs', 'refresh');
+        // redirect('job_profile', 'refresh');
     }
 
     // -----ruang lingkup
@@ -771,80 +929,115 @@ Ok
 		echo 'staff updated';
     }
     
-    // NOW
+    // NOW 
 	public function setApprove() //Submit to atasan 1
 	{
+        //post all data
+        $nik            = $this->input->post('nik');
+        $id_posisi      = $this->input->post('id_posisi');
+        $approver1      = $this->input->post('approver1');
+
+        //data approval
         $data = [
-			'diperbarui' => time(),
-            'status_approval' => '1',
+			'diperbarui'      => time(),
+			'status_approval' => '1',
         ];
+        $this->Jobpro_model->updateApproval($data, $id_posisi); // set approval ke database
 
-        $id_posisi = $this->input->post('id_posisi');
-        // $this->Jobpro_model->updateApproval($data, $id_posisi);
+        $data_approver1 = $this->Jobpro_model->getDetail('emp_name, email', 'employe', array('position_id' => $approver1));  //ambil email karyawan dengan id approver 1 
 
-        $nik = $this->input->post('nik');
-        // $this->input->post('id_posisi');
-        // print_r($this->input->post('atasan1'));
-        // $this->input->post('atasan2');
+        //ambil email buat cc
+        $x = 0; $email_cc = array();
+        foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $id_posisi)) as $v){
+            $email_cc[$x] = $v['email'];
+            $x++;
+        }
 
-        //ambil nama karyawan
-        $name_karyawan = $this->Jobpro_model->getDetail('emp_name', 'employe', array('nik' => $nik))['emp_name'];
+        $data_penerima_email = array(
+            'nama'      => $data_approver1['emp_name'].",",
+            'email'     => $data_approver1['email'],
+            'email_cc'  => $email_cc,
+            'id_posisi' => $approver1,
+            'msg'       => 'There is a new employe waiting for your approval!'
+        );
 
-        //cari approver1
-        $approver1 = $this->Jobpro_model->getDetail('id_approver1', 'position', array('id' => $id_posisi))['id_approver1'];
-        //ambil email karyawan dengan id approver 1 
-        $data_atasan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $approver1));
-        // print_r($data_atasan);
-        // exit;
+        $job_profile = array( //data job profile karyawan
+            'id_posisi'     => $id_posisi,
+            'position_name' => $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $id_posisi))['position_name'],
+            'status'        => $data['status_approval']
+        );
 
-        // function sendEmail($data_atasan, $name_karyawan, $data, $subject_email)
-        $this->sendEmail($data_atasan, $name_karyawan, $data, 'Job Profile - Need Approval'); // kirim email notifikasi
+        $this->notifikasi($nik, $job_profile, $data_penerima_email, '[Job Profile] Need Approval');
 
-        // // configuration for send email
-        // $config = $this->Jobpro_model->getDetail(
-        //     'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
-        //     'setting-email', 
-        //     array('id' => 1));
-        // $config['crlf'] = "\r\n";
-        // $config['newline'] = "\r\n";
-        // $this->load->library('email');
-        // $this->email->initialize($config);
         
-        // $x = 0; $email_cc = array();
-        // foreach($data_atasan as $value){
-        //     //ambil email buat cc
-        //     foreach($data_atasan as $v){
-        //         if($value['email'] != $v['email']){
-        //             $email_cc[$x] = $v['email'];
-        //             $x++;
-        //         }
-        //     }
-        //     // identitas email
-        //     $this->email->from('a4a81d98ec-3847f9@inbox.mailtrap.io', 'Ryumada');
-        //     // FIXME perlu nambahin email di tabel employe
-        //     // $this->email->to($value['email']);
-        //     $this->email->to('ryumada@dev.id'); //for testing
-        //     // cc email
-        //     if(!empty($email_cc)){
-        //         $this->email->cc($email_cc);
-        //     }
-        //     // what to send?
-        //     $this->email->subject('Job Profile - Need Approval');
-        //     // load email text from helper
-        //     // emailText($name_atasan, $name_karyawan, $date, $status){
-        //     $emailText = emailText($name_karyawan, $value['emp_name'], date('j F Y, H.i', time()), $data['status_approval']);
-        //     $this->email->message($emailText);
+        
+        // //create webtoken
+        // $resep = array( // buat resep token agar unik
+        //     'nik' => $nik,
+        //     'id_posisi' => $id_posisi,
+        //     'date' => date('d-m-Y, H:i:s:v:u', time())
+        // );
+        // // encrypt with keys
+        // // $encryption_key = encryption_key(); //ambil encryption key
+        // // $token = encrypt(json_encode($resep), $encryption_key); //encrypt resep dengan mengubah array menjadi string json
 
-        //     if($this->email->send()){
-        //         echo("success");
-        //     } else {
-        //         echo $this->email->print_debugger(); //show debugger if error
+        // // print_r($link);
+        // // echo('<br/>');
+        // // echo('<br/>');
+        // // //lets try to decrypt it
+        // // $a = json_decode((decrypt(urldecode($link), $encryption_key)), true);
+        // // print_r($a);
+        // // exit;
+
+        // $token = md5(json_encode($resep)); // md5 encrypt buat id token
+        // $data_token  = json_encode(array( // data buat disave di token
+        //     'direct'    => 'job_profile',
+        //     'id_posisi' => $approver1
+        // ));
+        // // masukkan data token ke database
+        // $this->Jobpro_model->insert(
+        //     'user_token',
+        //     array(
+        //         'token'        => $token,
+        //         'data'         => $data_token,
+        //         'date_created' => date('Y-m-d H:i:s', time())
+        //     )
+        // ); 
+        // $url_token = urlencode($token);
+        
+        // /* --------------------------- buat list karyawan --------------------------- */
+        // $data_karyawan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $id_posisi));
+        // $counter_karyawan = count($data_karyawan);
+        // $karyawan = array('<ul>'); //buka ul
+        // foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
+        //     $karyawan[$key + 1] = '<li>'. $value['emp_name'] .'</li>';
+            
+        //     if($x == $counter_karyawan){ //tutup kode ul
+        //         $karyawan[$key + 2] = '</ul>';
         //     }
-// 
         // }
+        // // info posisi karyawan
+        // $posisi = array(
+        //     'karyawan'      => implode(" ", $karyawan),
+        //     'status'        => $data['status_approval'],
+        //     'position_name' => $this->Jobpro_model->getDetail('position_name', 'position', array('id' => $id_posisi))['position_name']
+        // );
+        // //info approver
+        // $penerima = array(
+        //     'name'     => $data_approver1['emp_name'],
+        //     'email'    => $data_approver1['email'],
+        //     'email_cc' => $email_cc,
+        //     'link'     => base_url('direct').'?token='.$url_token
+        // );
+
+        // $emailText = jobProfileNotif($posisi, $penerima); // generate emailText
+        // //set penerima email adalah approver 1
+        // // sendEmail($penerima, $emailText, $subject_email)
+        
+        // sendEmail($penerima, $emailText, '[Job Profile] First Approval'); // kirim email notifikasi pakai helper
     }
 
-    public function getApprovalDetails($my_task){ // Copied from Jobs Controller
+    public function getApprovalDetails($my_task){ // Copied from Job_profile Controller
         //lengkapi data my_task
         $tugas = array(); $x = 0;
         foreach($my_task as $key => $value){
@@ -890,10 +1083,10 @@ Ok
             $job_approval = $this->Jobpro_model->getDetail('*', 'job_approval', array('id_posisi' => $v['id']));//cek apa sudah ada job_approvalnya
             if(empty($job_approval)){
                 $data = [
-                    'id_posisi' => $v['id'],
-                    'diperbarui' => time(),
+                    'id_posisi'       => $v['id'],
+                    'diperbarui'      => time(),
                     'status_approval' => 0,
-                    'pesan_revisi' => "null"
+                    'pesan_revisi'    => "null"
                 ];
                 $this->db->insert('job_approval', $data);
             }else{
@@ -1404,7 +1597,7 @@ Ok
     }
 }
 
-/* End of file Jobs.php */
+/* End of file Job_profile.php */
 
 /* Status Approval Infomation
 0 = Belum diisi
