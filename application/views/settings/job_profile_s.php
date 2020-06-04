@@ -38,7 +38,7 @@
                                     <p><b>Not Submitted Yet</b></p>
                                 </div>
                                 <div class="col-1">
-                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-danger"><i class="fa fa-bell text-white"></i></a>
+                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-danger"><i class="fa fa-envelope text-white"></i></a>
                                 </div>
                                 <div class="col my-1">
                                     <p>Last sent: 27 Agustus 2020</p>
@@ -49,7 +49,7 @@
                                     <p><b>Submitted</b></p>
                                 </div>
                                 <div class="col-1">
-                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-warning"><i class="fa fa-bell text-white"></i></a>
+                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-warning"><i class="fa fa-envelope text-white"></i></a>
                                 </div>
                                 <div class="col my-1">
                                     <p>Last sent: 27 Agustus 2020</p>
@@ -60,7 +60,7 @@
                                     <p><b>First Approval</b></p>
                                 </div>
                                 <div class="col-1">
-                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-warning"><i class="fa fa-bell text-white"></i></a>
+                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-warning"><i class="fa fa-envelope text-white"></i></a>
                                 </div>
                                 <div class="col my-1">
                                     <p>Last sent: 27 Agustus 2020</p>
@@ -71,7 +71,7 @@
                                     <p><b>Revise</b></p>
                                 </div>
                                 <div class="col-1">
-                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-info"><i class="fa fa-bell text-white"></i></a>
+                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-info"><i class="fa fa-envelope text-white"></i></a>
                                 </div>
                                 <div class="col my-1">
                                     <p>Last sent: 27 Agustus 2020</p>
@@ -82,7 +82,7 @@
                                     <p><b>Approved</b></p>
                                 </div>
                                 <div class="col-1">
-                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-success"><i class="fa fa-bell text-white"></i></a>
+                                    <a href="<?= base_url('job_profile/') ?>settingNotification" class="btn btn-circle btn-success"><i class="fa fa-envelope text-white"></i></a>
                                 </div>
                                 <div class="col my-1">
                                     <p>Last sent: 27 Agustus 2020</p>

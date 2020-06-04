@@ -125,7 +125,7 @@
                                                 echo("background-color: green; color: white;");
                                             endif; ?>
                                         ">
-                                            <i class="fa fa-bell"></i>
+                                            <i class="fa fa-envelope"></i>
                                         </button>
                                     </div>
                                 </div>
