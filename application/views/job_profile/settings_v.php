@@ -19,7 +19,7 @@
                 <div class="col-1 text-center">
                     <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
                         <div class="row justify-content-center align-self-center w-100 m-0">
-                            <a href="<?= base_url('report/') ?>" type="button" class="btn btn-primary" data-placement="left" title="Back to Report Page"><i class="fa fa-chevron-left text-white"></i></a>
+                            <a href="<?= base_url('job_profile/report') ?>" type="button" class="btn btn-primary" data-placement="left" title="Back to Report Page"><i class="fa fa-chevron-left text-white"></i></a>
                         </div>
                     </div>
                 </div>

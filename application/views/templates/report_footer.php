@@ -90,7 +90,6 @@ $(document).ready(function () {
                 $('#departement').empty().append('<option value="">All</option>'); //kosongkan selection value dan tambahkan satu selection option
 
                 $.each(JSON.parse(data), function(i, v) {
-                    console.log(v);
                     $('#departement').append('<option value="dept-' + v.id + '">' + v.nama_departemen + '</option>'); //tambahkan 1 per 1 option yang didapatkan
                 });
                 }
@@ -126,7 +125,7 @@ $(document).ready(function () {
         }
 
         $.ajax({
-            url: '<?= base_url('report/setStatusApproval') ?>',
+            url: '<?= base_url('job_profile/setStatusApproval') ?>',
             data: {
                 id: id,
                 status_approval: value
@@ -147,8 +146,8 @@ $(document).ready(function () {
                 );
             }
         })
-        console.log(id);
-        console.log(value);
+        // console.log(id);
+        // console.log(value);
     });
 });
 
@@ -196,13 +195,13 @@ $(document).ready(function () {
 
 // $('#my_div').myfunction();
 
-$(document).ready(function() { //buat buka menu report, grgr ini aslinya report page bukan submenu.
-    // $('a[data-target="#collapseUser"]').addClass('d-none');
-    if('report' == '<?php print_r($this->uri->segment(1)); ?>'){
-        $('a.nav-link').removeClass('collapsed');
-        $('div#collapseJobs').addClass('show');
-    }
-});
+// $(document).ready(function() { //buat buka menu report, grgr ini aslinya report page bukan submenu.
+//     // $('a[data-target="#collapseUser"]').addClass('d-none');
+//     if('report' == '<?php print_r($this->uri->segment(1)); ?>'){
+//         $('a.nav-link').removeClass('collapsed');
+//         $('div#collapseJobs').addClass('show');
+//     }
+// });
 </script>
 
 </body>

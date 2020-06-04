@@ -30,12 +30,16 @@ function jobProfileNotif($job_profile, $data_penerima_email){
 
     return '
     <style>
-    ul{
-        margin: 0;
-    }
-    .body-message p{
-        margin: 0;
-    }
+        .body-message p{
+            margin: 0;
+        }
+        table tr td{
+            vertical-align: top;
+        }
+        ul{
+            padding-left: 1em;
+            margin: 0 0.5em;
+        }
     </style>
 
     <div> <!-- container -->
@@ -60,10 +64,7 @@ function jobProfileNotif($job_profile, $data_penerima_email){
                         <tr>
                             <td>Employe Name</td>
                             <td>:</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">'. $job_profile['karyawan'] .'</td>
+                            <td>'. $job_profile['karyawan'] .'</td>
                         </tr>
                     </table>
                 </div>

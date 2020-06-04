@@ -19,57 +19,9 @@ class Job_profile extends CI_Controller {
         date_default_timezone_set('Asia/Jakarta'); // set timezone
     }
 
-    // NOW This is a piece of code to send email, tryit to send email
-    public function testSendEmail(){
-        // $config = Array(
-        //     'protocol' => 'smtp',
-        //     'smtp_host' => 'smtp.mailtrap.io',
-        //     'smtp_port' => 2525,
-        //     'smtp_user' => '3fe58fce26b28e',
-        //     'smtp_pass' => '212fbd5e29efaf',
-        //     'charset' => 'iso-8859-1',
-        //     'wordwrap' => TRUE,
-        //     'crlf' => "\r\n",
-        //     'newline' => "\r\n"
-        //   );
-        
-        // configuration for send email
-        $config = $this->Jobpro_model->getDetail(
-            'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
-            'setting-email', 
-            array('id' => 1));
-        $config['crlf'] = "\r\n";
-        $config['newline'] = "\r\n";
-        $this->load->library('email');
-        $this->email->initialize($config);
-        // identitas email
-        $this->email->from('a4a81d98ec-3847f9@inbox.mailtrap.io', 'Ryumada');
-        $this->email->to('ryumada_rizuki@hotmail.cn');
-        // what to send?
-        $this->email->subject('Email Test');
-        // load email text from helper
-        // emailText($name_atasan, $name_karyawan, $date, $status){
-        $emailText = emailText('Wahyudi', 'Michael Loebis', date('o-Y'), 1);
-        $this->email->message($emailText);
-
-        $this->email->send();
-        
-        echo $this->email->print_debugger(); //show debugger if error
-    }
-
-    public function report()
-    {
-        $data['title'] = 'Report';
-        $data['divisi'] = $this->Divisi_model->getDivisi();
-        $data['dept'] = $this->Dept_model->getAll();
-        $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
-        $this->load->view('templates/report_header', $data);
-        $this->load->view('templates/user_sidebar', $data);
-        $this->load->view('templates/user_topbar', $data);
-        $this->load->view('reportjobs/index', $data);
-        $this->load->view('templates/report_footer');
-    }
-
+/* -------------------------------------------------------------------------- */
+/*                             main Job Profile                               */
+/* -------------------------------------------------------------------------- */
     public function index(){
         $nik = $this->session->userdata('nik');
         $data['posisi'] = $this->Jobpro_model->getPosisi($nik);
@@ -226,6 +178,46 @@ class Job_profile extends CI_Controller {
         }
     }
 
+/* -------------------------------------------------------------------------- */
+/*                             report main method                             */
+/* -------------------------------------------------------------------------- */
+    public function report(){
+        $nik = $this->session->userdata('nik'); //get nik
+        $my_position = $this->Jobpro_model->getDetail('position_id', 'employe', array('nik' => $nik))['position_id']; //ambil my_position
+        $role_id = $this->Jobpro_model->getDetail('role_id', 'employe', array('nik' => $nik))['role_id']; //ambil role_id
+
+        if($role_id == 1){ // cek role_id apakah punya hak akses admin
+            $task = $this->Jobpro_model->getAllAndOrder('id_posisi', 'job_approval');
+            $data['dept'] = $this->Jobpro_model->getAllAndOrder('nama_departemen', 'departemen');
+            $data['divisi'] = $this->Jobpro_model->getAllAndOrder('division', 'divisi');
+        } else {
+            $task1 = $this->Jobpro_model->getJoin2tables('*', 'job_approval', array('table' => 'position', 'index' => 'position.id = job_approval.id_posisi', 'position' => 'left'), "(id_approver1=".$my_position." AND status_approval=0) OR (id_approver1=".$my_position." AND status_approval=2) OR (id_approver1=".$my_position." AND status_approval=3) OR (id_approver1=".$my_position." AND status_approval=4)"); //cari approval di my position
+            $task2 = $this->Jobpro_model->getJoin2tables('*', 'job_approval', array('table' => 'position', 'index' => 'position.id = job_approval.id_posisi', 'position' => 'left'), "(id_approver2=".$my_position." AND status_approval=0) OR (id_approver2=".$my_position." AND status_approval=1) OR (id_approver2=".$my_position." AND status_approval=3) OR (id_approver2=".$my_position." AND status_approval=4)");
+            $task = array_merge($task1, $task2);
+
+            $my_div = $this->Jobpro_model->getDetail('div_id', 'position', array('id' => $my_position)); //ambil my_position
+            $data['dept'] = $this->Jobpro_model->getDetails('nama_departemen', 'departemen', $my_div); //ambil departemen sesuai divisinya
+        }
+
+        $data['title'] = 'Report';
+        $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
+        $data['hirarki_org'] = $this->Jobpro_model->getDetail('hirarki_org', 'position', array('id' => $data['user']['position_id']))['hirarki_org'];
+        $data['approval_data'] = $this->getApprovalDetails($task);
+        
+        
+
+        $this->load->view('templates/user_header', $data);
+        $this->load->view('templates/user_sidebar', $data);
+        $this->load->view('templates/user_topbar', $data);
+        $this->load->view('job_profile/report_v', $data);
+        $this->load->view('templates/report_footer');
+    }
+/* -------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------- */
+/*                                another code                                */
+/* -------------------------------------------------------------------------- */
     public function getDataJP($nik, $id_posisi){
         $data['posisi'] = $this->Jobpro_model->getDetail('*', 'position', array('id' => $id_posisi));
         $data['mydiv'] = $this->Jobpro_model->getDetail("*", 'divisi', array('id' => $data['posisi']['div_id']));
@@ -969,8 +961,6 @@ Ok
 
         $this->notifikasi($nik, $job_profile, $data_penerima_email, '[Job Profile] Need Approval');
 
-        
-        
         // //create webtoken
         // $resep = array( // buat resep token agar unik
         //     'nik' => $nik,
@@ -1037,7 +1027,8 @@ Ok
         // sendEmail($penerima, $emailText, '[Job Profile] First Approval'); // kirim email notifikasi pakai helper
     }
 
-    public function getApprovalDetails($my_task){ // Copied from Job_profile Controller
+    public function getApprovalDetails($my_task){ // Copied from Jobs Controller
+        // print_r($my_task);
         //lengkapi data my_task
         $tugas = array(); $x = 0;
         foreach($my_task as $key => $value){
@@ -1056,25 +1047,47 @@ Ok
                 $x++; //increment the identifier
             }
         }
+        
+        //lengkapi division, departement, nama position, nama employee nya
+        // foreach($my_task as $key => $value){
+            // $temp_employe = $this->Jobpro_model->getEmployeDetail("emp_name, position.div_id, position.dept_id, position_id", "employe", array('nik' => $value['nik']));
+        //     $my_task[$key]['name'] = $temp_employe['emp_name'];
+        //     foreach ($this->Jobpro_model->getDetail("position_name", "position", array('id' => $temp_employe['position_id'])) as $v){
+        //         $my_task[$key]['posisi'] = $v;
+        //     }
+        //     foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_employe['dept_id'])) as $v){
+        //         $my_task[$key]['departement'] = $v;
+        //     }
+        //     foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_employe['div_id'])) as $v){
+        //         $my_task[$key]['divisi'] = $v;
+        //     }
+        // }
+
         return $tugas;
     }
 
     function getPositionDetails($id_posisi){
         $temp_posisi = $this->Jobpro_model->getDetail("div_id, dept_id, id", "position", array('id' => $id_posisi));
         // print_r($temp_posisi);
-        foreach ($this->Jobpro_model->getDetail("position_name", "position", array('id' => $temp_posisi['id'])) as $v){
+        foreach ($this->Jobpro_model->getDetail("position_name", "position", array('id' => $temp_posisi['id'])) as $v){// tambahkan nama posisi
             $detail_posisi['posisi'] = $v;
         }
-        foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_posisi['dept_id'])) as $v){
+        foreach($this->Jobpro_model->getDetail("nama_departemen", "departemen", array('id' => $temp_posisi['dept_id'])) as $v){// tambahkan nama departemen
             $detail_posisi['departement'] = $v;
         }
-        foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_posisi['div_id'])) as $v){
+        foreach($this->Jobpro_model->getDetail("id", "departemen", array('id' => $temp_posisi['dept_id'])) as $v){// tambahkan id departemen
+            $detail_posisi['id_dept'] = $v;
+        }
+        foreach($this->Jobpro_model->getDetail("division", "divisi", array('id' => $temp_posisi['div_id'])) as $v){// tambahkan nama divisi
             $detail_posisi['divisi'] = $v;
+        }
+        foreach($this->Jobpro_model->getDetail("id", "divisi", array('id' => $temp_posisi['div_id'])) as $v){// tambahkan id divisi
+            $detail_posisi['id_div'] = $v;
         }
         return $detail_posisi;
     }
 
-    //this function to generate job_approval starter data
+    //this function to regenerate job_approval starter data
     public function startJobApprovalSystem(){
         foreach($this->Jobpro_model->getDetails('*', 'position', array()) as $k => $v){ //ambil semua nik
             $nik=$v['id'];// pindahkan ke variabel
@@ -1099,7 +1112,105 @@ Ok
         exit;
     }
 
-    //function buat mengolah data chart olahDataChart(id_position)
+    public function getDepartement(){
+        if(!empty($div = $this->input->post('divisi'))){
+            //get id divisi
+            $div = explode('-', $div);
+            // print_r($id_div);
+            // exit;
+            // $divisi_id = $this->Jobpro_model->getDetail("id", "divisi", array('division' => $this->input->post('divisi')))['id'];
+            //ambil data departemen dengan divisi itu
+            foreach($this->Jobpro_model->getDetails('*', 'departemen', array('div_id' => $div[1])) as $k => $v){
+                $data[$k]=$v;
+            }
+        } else {
+            foreach($this->Jobpro_model->getDetails('*', 'departemen', array()) as $k => $v){
+                $data[$k]=$v;
+            }
+        }
+        
+        print_r(json_encode($data));
+
+        //bawa balik ke ajax
+    }
+
+    public function setStatusApproval(){
+        $id_posisi = $this->input->post('id');
+        // $status_approval = $this->input->post('value');
+
+        $data = [
+            'status_approval' => $this->input->post('status_approval')
+        ];
+        $this->Jobpro_model->updateApproval($data, $id_posisi);
+    }
+
+    public function settings() {
+        // cek role apa punya akses
+        $nik = $this->session->userdata('nik'); //get nik
+        $role_id = $this->Jobpro_model->getDetail('role_id', 'employe', array('nik' => $nik))['role_id']; //ambil role_id
+        if($role_id != 1){
+            show_404();
+        }
+
+        // siapkan data
+        $task = $this->Jobpro_model->getAllAndOrder('id_posisi', 'job_approval');
+        $data['dept'] = $this->Jobpro_model->getAllAndOrder('nama_departemen', 'departemen');
+        $data['divisi'] = $this->Jobpro_model->getAllAndOrder('division', 'divisi');
+
+        $data['title'] = 'Report';
+        $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
+        $data['hirarki_org'] = $this->Jobpro_model->getDetail('hirarki_org', 'position', array('id' => $data['user']['position_id']))['hirarki_org'];
+        $data['approval_data'] = $this->getApprovalDetails($task);
+        
+        $this->load->view('templates/user_header', $data);
+        $this->load->view('templates/user_sidebar', $data);
+        $this->load->view('templates/user_topbar', $data);
+        $this->load->view('job_profile/settings_v', $data);
+        $this->load->view('templates/report_footer');
+        // tampilkan
+    }
+
+    // NOW This is a piece of code to send email, tryit to send email
+    public function testSendEmail(){
+        // $config = Array(
+        //     'protocol' => 'smtp',
+        //     'smtp_host' => 'smtp.mailtrap.io',
+        //     'smtp_port' => 2525,
+        //     'smtp_user' => '3fe58fce26b28e',
+        //     'smtp_pass' => '212fbd5e29efaf',
+        //     'charset' => 'iso-8859-1',
+        //     'wordwrap' => TRUE,
+        //     'crlf' => "\r\n",
+        //     'newline' => "\r\n"
+        //   );
+        
+        // configuration for send email
+        $config = $this->Jobpro_model->getDetail(
+            'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
+            'setting-email', 
+            array('id' => 1));
+        $config['crlf'] = "\r\n";
+        $config['newline'] = "\r\n";
+        $this->load->library('email');
+        $this->email->initialize($config);
+        // identitas email
+        $this->email->from('a4a81d98ec-3847f9@inbox.mailtrap.io', 'Ryumada');
+        $this->email->to('ryumada_rizuki@hotmail.cn');
+        // what to send?
+        $this->email->subject('Email Test');
+        // load email text from helper
+        // emailText($name_atasan, $name_karyawan, $date, $status){
+        $emailText = emailText('Wahyudi', 'Michael Loebis', date('o-Y'), 1);
+        $this->email->message($emailText);
+
+        $this->email->send();
+        
+        echo $this->email->print_debugger(); //show debugger if error
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /*        function buat mengolah data chart olahDataChart(id_position)        */
+    /* -------------------------------------------------------------------------- */
     public function olahDataChart($my_positionId) {
         // MENGOLAH DATA Master Position menjadi orgchart data ===========================================================
         //sebelumnya ingat ada beberapa hal yang harus diperhatikan
@@ -1233,7 +1344,6 @@ Ok
                         // array_push($org_assistant[$x], $nilai); //tambah nama posisi atasannya
                         $org_assistant1[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
                     }
-
                     $x++;
                 }
             }
@@ -1246,7 +1356,6 @@ Ok
                             // array_push($org_assistant[$x], $nilai); //tambah nama posisi atasannya
                             $org_assistant2[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
                         }
-
                         $x++;
                     }
                 }

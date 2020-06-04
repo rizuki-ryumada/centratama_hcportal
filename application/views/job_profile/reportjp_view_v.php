@@ -12,7 +12,7 @@
 			<div class="col-0,5 h-100 my-0">
 				<div class="h-100">
 					<div class="my-0">
-						<a class="btn btn-primary btn-sm" href="<?= base_url('report/'); ?>" style="width: 50px;"><strong><i class="fa fa-chevron-left"></i></strong></a>
+						<a class="btn btn-primary btn-sm" href="<?= base_url('job_profile/report'); ?>report" style="width: 50px;"><strong><i class="fa fa-chevron-left"></i></strong></a>
 					</div>
 				</div>
 			</div>
