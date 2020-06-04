@@ -14,15 +14,10 @@ class Settings extends CI_Controller {
     }
     
 
-    public function index()
+    public function home()
     {
-        
-    }
-
-    //TODO buat setting banner pengumuman dan banner tema
-    function hcPortal() {
         $data = [
-            'title' => 'HC Portal',
+            'title' => 'Home',
             'user' => $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array(),
             'divisi' => $this->Divisi_model->getAll(),
             'div_head' => $this->Divisi_model->getDivByOrg()
@@ -30,7 +25,22 @@ class Settings extends CI_Controller {
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
         $this->load->view('templates/user_topbar', $data);
-        $this->load->view('settings/hcportal_s_v', $data);
+        $this->load->view('settings/home_s.php', $data);
+        $this->load->view('templates/settings_footer');
+    }
+
+    //TODO buat setting banner pengumuman dan banner tema
+    function jobProfile() {
+        $data = [
+            'title' => 'Job Profile',
+            'user' => $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array(),
+            'divisi' => $this->Divisi_model->getAll(),
+            'div_head' => $this->Divisi_model->getDivByOrg()
+        ];
+        $this->load->view('templates/user_header', $data);
+        $this->load->view('templates/user_sidebar', $data);
+        $this->load->view('templates/user_topbar', $data);
+        $this->load->view('settings/job_profile_s', $data);
         $this->load->view('templates/settings_footer');
     }
 

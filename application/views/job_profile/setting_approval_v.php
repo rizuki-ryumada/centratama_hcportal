@@ -1,9 +1,9 @@
 <div class="container-fluid">
     <!-- load floating contact -->
     <?php $this->load->view('templates/komponen/floating_contact') ?>
-    <h1 class="h3 mb-3 text-gray-800">Settings</h1>
+    <h1 class="h3 mb-3 text-gray-800">Approval Settings</h1>
     <div class="card shadow mb-4">
-        <div class="card-body">
+        <div class="card-header">
             <?php if(!empty($this->session->userdata('msgapproval'))): ?>
                 <div class="row">
                     <div class="alert alert-success alert-dismissible fade show col" role="alert">
@@ -16,17 +16,18 @@
             <?php endif; ?>
             <?php $this->session->unset_userdata('msgapproval'); ?>
             <div class="row">
-                <div class="col-1 text-center">
-                    <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
+                <div class="col-2 mx-0 px-0">
+                    <div class="container d-flex h-100 m-0 px-0"> <!-- this container make the element to vertically and horizontally centered -->
                         <div class="row justify-content-center align-self-center w-100 m-0">
-                            <a href="<?= base_url('job_profile/report') ?>" type="button" class="btn btn-primary" data-placement="left" title="Back to Report Page"><i class="fa fa-chevron-left text-white"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-1 text-center">
-                    <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
-                        <div class="row justify-content-center align-self-center w-100 m-0">
-                            <a href="<?= base_url('job_profile/') ?>startJobApprovalSystem" type="button" class="btn btn-danger" data-placement="left" title="Refresh Approval - If there is a Employe not listed down here."><i class="fa fa-sync text-white"></i></a>
+                            <div class="d-inline-block">
+                                <a href="<?= base_url('settings/') ?>jobProfile" type="button" class="btn btn-primary" data-placement="left" title="Back to Report Page"><i class="fa fa-chevron-left text-white"></i></a>
+                                <a href="<?= base_url('job_profile/') ?>startJobApprovalSystem" class="btn btn-danger btn-icon-split" title="Refresh Approval - If there is a Employe not listed down here.">
+                                    <span class="icon text-white">
+                                        <i class="fa fa-sync"></i>
+                                    </span>
+                                    <span class="text">Refesh</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -67,8 +68,8 @@
                     </div>
                 </div>
             </div>
-            
-
+        </div>
+        <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-striped table-hover" id="myTask" width="100%">
                     <thead>
@@ -88,32 +89,44 @@
                             <td><?= $v['posisi'] ?></td>
                             <td><?= $v['emp_name'] ?></td>
                             <td data-filter="<?= $v['status_approval'] ?>">
-                                <div class="col-auto my-1">
-                                    <!-- <label class="mr-sm-2" for="inlineFormCustomSelect">Preference</label> -->
-                                    <select class="custom-select mr-sm-2 status_approval" id="inlineFormCustomSelect" data-id="<?= $v['id_posisi'] ?>" style="
-                                        <?php if($v['status_approval'] == 0): //styling buat warna select
-                                            echo("background-color: red; color: white;");
-                                       elseif($v['status_approval'] == 1): 
-                                            echo("background-color: yellow; color: black;");
-                                       elseif($v['status_approval'] == 2): 
-                                            echo("background-color: yellow; color: black;");
-                                       elseif($v['status_approval'] == 3): 
-                                            echo("background-color: orange; color: white;");
-                                       elseif($v['status_approval'] == 4): 
-                                            echo("background-color: green; color: white;");
-                                        endif; ?>
-                                    ">
-                                        <option <?php if($v['status_approval'] == 0){echo ('selected');} ?> value="0">Not Yet Submitted</option>
-                                        <option <?php if($v['status_approval'] == 1){echo ('selected');} ?> value="1">Submitted</option>
-                                        <option <?php if($v['status_approval'] == 2){echo ('selected');} ?> value="2">First Approval</option>
-                                        <option <?php if($v['status_approval'] == 3){echo ('selected');} ?> value="3">Need Revised</option>
-                                        <option <?php if($v['status_approval'] == 4){echo ('selected');} ?> value="4">Final Approval</option>
-                                    </select>
-                                </div>
-                                <div class="col text-center">
-                                    <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
-                                        <div class="row justify-content-center align-self-center w-100 m-0">
-                                            <a href=#" type="button" class="btn btn-primary" data-placement="left" title="Status Approval Settings"><i class="fa fa-bell text-white"></i></a>                                        </div>
+                                <div class="row w-100">
+                                    <div class="col my-1">
+                                        <!-- <label class="mr-sm-2" for="inlineFormCustomSelect">Preference</label> -->
+                                        <select class="custom-select mr-sm-2 status_approval" id="inlineFormCustomSelect" data-id="<?= $v['id_posisi'] ?>" style="
+                                            <?php if($v['status_approval'] == 0): //styling buat warna select
+                                                echo("background-color: red; color: white;");
+                                            elseif($v['status_approval'] == 1): 
+                                                echo("background-color: yellow; color: black;");
+                                            elseif($v['status_approval'] == 2): 
+                                                echo("background-color: yellow; color: black;");
+                                            elseif($v['status_approval'] == 3): 
+                                                echo("background-color: orange; color: white;");
+                                            elseif($v['status_approval'] == 4): 
+                                                echo("background-color: green; color: white;");
+                                            endif; ?>
+                                        ">
+                                            <option <?php if($v['status_approval'] == 0){echo ('selected');} ?> value="0">Not Yet Submitted</option>
+                                            <option <?php if($v['status_approval'] == 1){echo ('selected');} ?> value="1">Submitted</option>
+                                            <option <?php if($v['status_approval'] == 2){echo ('selected');} ?> value="2">First Approval</option>
+                                            <option <?php if($v['status_approval'] == 3){echo ('selected');} ?> value="3">Need Revised</option>
+                                            <option <?php if($v['status_approval'] == 4){echo ('selected');} ?> value="4">Final Approval</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-1 my-1 mr-3">
+                                        <button class="btn" data-id="<?= $v['id_posisi'] ?>" style="<?php if($v['status_approval'] == 0): //styling buat warna select
+                                                echo("background-color: red; color: white;");
+                                            elseif($v['status_approval'] == 1): 
+                                                echo("background-color: yellow; color: black;");
+                                            elseif($v['status_approval'] == 2): 
+                                                echo("background-color: yellow; color: black;");
+                                            elseif($v['status_approval'] == 3): 
+                                                echo("background-color: orange; color: white;");
+                                            elseif($v['status_approval'] == 4): 
+                                                echo("background-color: green; color: white;");
+                                            endif; ?>
+                                        ">
+                                            <i class="fa fa-bell"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </td>

@@ -50,9 +50,19 @@
 			</div> -->
 				<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="<?= $m['target']; ?>" aria-expanded="true" aria-controls="<?= preg_replace("/[^a-zA-Z]/", "", $m['target']); ?>">
 					<i class="<?= $m['icon']; ?> sidebar-size-menu"></i>
-					<span class="sidebar-size-menu"><?php if($m['menu'] == 'Jobs'){echo('Job Profile');}else{echo($m['menu']);} ?></span>
+					<span class="sidebar-size-menu"><?= urldecode($m['menu']); ?></span>
 				</a>
-				<div id="<?= preg_replace("/[^a-zA-Z]/", "", $m['target']); ?>" class="collapse <?= $this->uri->segment(1) == strtolower($m['menu']) ? 'show' : ''; ?>" data-parent="#accordionSidebar">
+				<div id="<?= preg_replace("/[^a-zA-Z]/", "", $m['target']); ?>" class="collapse 
+					<?php
+						if(strpos($m['menu'], "%20")){ // cari menu yang ada string %20
+							$menu = strtolower(str_replace("%20","_",$m['menu'])); //replace dengan underscore
+							if($this->uri->segment(1) == $menu){ // samakan dengan uri
+								echo "show"; // beri class show untuk menampilkan submenu
+							}
+						} elseif($this->uri->segment(1) == strtolower($m['menu'])){
+							echo "show";
+						}
+					?>" data-parent="#accordionSidebar">
 					<div class="bg-white py-2 collapse-inner rounded sidebar-size-submenu">
 						<!-- Sisipkan Submenu -->
 						<?php

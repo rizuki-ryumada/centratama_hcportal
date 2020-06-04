@@ -54,7 +54,7 @@ function jobProfileNotif($job_profile, $data_penerima_email){
                     <b>Job Profile: '. $job_profile['status'] .'</b>
                 </p>
                 <br/>
-                <div style="background-color: #DEDEDE; border-radius: 15px; padding: 20px; width: 400px; margin: 0 auto;">
+                <div style="background-color: #DEDEDE; border-radius: 15px; padding: 20px;">
                     <table>
                         <tr>
                             <td>Position</td>
