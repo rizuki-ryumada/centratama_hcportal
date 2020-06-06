@@ -41,7 +41,7 @@ class Settings extends CI_Controller {
         $this->load->view('templates/user_sidebar', $data);
         $this->load->view('templates/user_topbar', $data);
         $this->load->view('settings/job_profile_s', $data);
-        $this->load->view('templates/settings_footer');
+        $this->load->view('templates/report_footer');
     }
 
 }

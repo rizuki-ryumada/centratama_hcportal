@@ -108,3 +108,6 @@
 
 </ul>
 <!-- End of Sidebar -->
+
+<!-- load floating contact -->
+<?php $this->load->view('templates/komponen/floating_contact') ?>

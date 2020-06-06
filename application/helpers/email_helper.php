@@ -10,6 +10,10 @@
 function jobProfileNotif($job_profile, $data_penerima_email){
 
     switch($job_profile['status']){
+        case 0:
+            $job_profile['status'] = 'Need to Submit';
+            $link = '<br/><p>Please click link below:</p><a href="'. $data_penerima_email['link'] .'">'. $data_penerima_email['link'] .'</a><br/>';
+            break;
         case 1:
             $job_profile['status'] = 'Need Approval';
             $link = '<br/><p>Please click link below:</p><a href="'. $data_penerima_email['link'] .'">'. $data_penerima_email['link'] .'</a><br/>';
@@ -113,12 +117,19 @@ function sendEmail($data_penerima_email, $emailText, $subject_email){
     // load email text from helper
     // emailText($name_atasan, $name_karyawan, $date, $status){
     $CI->email->message($emailText);
-        
-    if($CI->email->send()){
-        echo("success");
+    
+    // TODO ubah nama jadi email -> cek email apa dia punya email
+    if(!empty($data_penerima_email['nama'])){
+        //cek apa email kosong
+        if($CI->email->send()){
+            echo("success");
+        } else {
+            echo $CI->email->print_debugger(); //show debugger if error
+        }     
     } else {
-        echo $CI->email->print_debugger(); //show debugger if error
-    }        
+        // gausah kirim email tapi lempengin aja
+    }
+       
 }
 
     // public function sendEmail($data_penerima_email, $emailText, $subject_email){

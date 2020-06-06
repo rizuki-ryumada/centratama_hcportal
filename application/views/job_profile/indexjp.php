@@ -6,9 +6,6 @@
     }
 </style>
 <div class="container-fluid">
-
-    <!-- load floating contact -->
-    <?php $this->load->view('templates/komponen/floating_contact') ?>
 	<!-- Page Heading -->
 	<h1 class="h3 mb-4 text-gray-800"><?= $title; ?></h1>
 

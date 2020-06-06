@@ -11,9 +11,6 @@
     }
 </style>
 
-<!-- load floating contact -->
-<?php $this->load->view('templates/komponen/floating_contact') ?>
-
 <!-- banner -->
 <div class="banner-wrapper">
     <!-- banner tema -->

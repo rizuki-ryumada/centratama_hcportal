@@ -34,3 +34,6 @@
 </head>
 
 <body class="bg-white h-100 m-0">
+
+<!-- load floating contact -->
+<?php $this->load->view('templates/komponen/floating_contact') ?>

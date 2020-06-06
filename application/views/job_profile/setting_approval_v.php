@@ -1,6 +1,4 @@
 <div class="container-fluid">
-    <!-- load floating contact -->
-    <?php $this->load->view('templates/komponen/floating_contact') ?>
     <h1 class="h3 mb-3 text-gray-800">Approval Settings</h1>
     <div class="card shadow mb-4">
         <div class="card-header">
@@ -113,20 +111,22 @@
                                         </select>
                                     </div>
                                     <div class="col-1 my-1 mr-3">
-                                        <button class="btn" data-id="<?= $v['id_posisi'] ?>" style="<?php if($v['status_approval'] == 0): //styling buat warna select
-                                                echo("background-color: red; color: white;");
-                                            elseif($v['status_approval'] == 1): 
-                                                echo("background-color: yellow; color: black;");
-                                            elseif($v['status_approval'] == 2): 
-                                                echo("background-color: yellow; color: black;");
-                                            elseif($v['status_approval'] == 3): 
-                                                echo("background-color: orange; color: white;");
-                                            elseif($v['status_approval'] == 4): 
-                                                echo("background-color: green; color: white;");
-                                            endif; ?>
-                                        ">
-                                            <i class="fa fa-envelope"></i>
-                                        </button>
+                                        <?php if($v['nik'] != " "): ?>
+                                            <button class="btn status_approval sendNotification" data-nik="<?= $v['nik']; ?>" data-id="<?= $v['id_posisi'] ?>" style="<?php if($v['status_approval'] == 0): //styling buat warna select
+                                                    echo("background-color: red; color: white;");
+                                                elseif($v['status_approval'] == 1): 
+                                                    echo("background-color: yellow; color: black;");
+                                                elseif($v['status_approval'] == 2): 
+                                                    echo("background-color: yellow; color: black;");
+                                                elseif($v['status_approval'] == 3): 
+                                                    echo("background-color: orange; color: white;");
+                                                elseif($v['status_approval'] == 4): 
+                                                    echo("background-color: green; color: white;");
+                                                endif; ?>
+                                            ">
+                                                <i class="fa fa-envelope"></i>
+                                            </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </td>
@@ -135,21 +135,28 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+</div>
 
-            <!-- <div class="table-responsive">
-                <table class="table table-boredered" id="history" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Division</th>
-                            <th>Department</th>
-                            <th>Position</th>
-                            <th>Employee Name</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div> -->
+<!-- modal send notification -->
+<div class="modal fade" id="kirimNotifikasi" tabindex="-1" role="dialog" aria-labelledby="kirimNotifikasiLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="kirimNotifikasiLabel">Apa Anda yakin?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Kirim notifikasi lewat email ke karyawan ini?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary">Kirim</button>
+
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Tidak</button>
+            </div>
         </div>
     </div>
 </div>
