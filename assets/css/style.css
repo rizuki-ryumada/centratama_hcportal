@@ -346,9 +346,9 @@ div.banner-wrapper .banner-pengumuman{
     text-transform: uppercase;
     letter-spacing: 3px;
     padding: 4px;
-    width: 300px;
+    width: 170px;
     position: fixed;
-    right: -240px;
+    right: -100px;
     z-index: 1000;
     font: normal normal 10px Arial;
     -webkit-transition: all .25s ease;
@@ -356,7 +356,7 @@ div.banner-wrapper .banner-pengumuman{
     -ms-transition: all .25s ease;
     -o-transition: all .25s ease;
     transition: all .25s ease;
-    border-radius: 25px 0 0 25px;
+    border-radius: 30px 0 0 30px;
     opacity: 0.65;
 }
 .fl-fl:hover {
@@ -364,6 +364,7 @@ div.banner-wrapper .banner-pengumuman{
     opacity: 1;
 }
 .fl-fl a {
+    font-size: 12px;
     color: #fff !important;
     text-decoration: none;
     text-align: center;
@@ -371,6 +372,7 @@ div.banner-wrapper .banner-pengumuman{
     vertical-align: top !important;
 }
 .float-wa {
-    top: 90px;
+    height: 55px;
+    top: 80px;
 }
 /* -------------------------------------------------------------------------- */

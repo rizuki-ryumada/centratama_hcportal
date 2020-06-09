@@ -12,8 +12,7 @@
 		</div>
 		<div class="sidebar-brand-text mt-2 ml-1"><img src="<?= base_url('assets'); ?>/img/logo2.png" alt="" width="130px"> </div>
 	</a>
-
-	<!-- Divider -->
+	
 	<hr class="sidebar-divider mb-5">
 
 	<!-- <?php if ($this->uri->segment(1) == 'welcome') : ?>

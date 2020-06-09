@@ -291,6 +291,45 @@ class Master extends CI_Controller {
         $dept = $this->input->post('dept');
         echo(json_encode($this->Master_m->getDetails('id, position_name', 'position', array('div_id' => $div[1], 'dept_id' => $dept))));
     }
+
+    /* -------------------------------------------------------------------------- */
+    /*                              function tambahan                             */
+    /* -------------------------------------------------------------------------- */
+    function addEmail(){
+        $csv = array_map('str_getcsv', file(base_url('employe-email.csv'))); //ambil file csv di root
+        array_shift($csv); //hapus header
+        // print_r(json_encode($csv));
+
+        // bentuk output
+        // [
+        //     [
+        //         "CG000001",
+        //         "Yan Raymond Jafri",
+        //         "yan.raymond@centratamagroup.com"
+        //     ]
+        // ]
+
+        foreach($csv as $v){
+            $this->Master_m->update('employe', array('db' => 'nik', 'server' => $v[0]), array('email' => $v[2]));
+        }
+
+    }
+
+    function addEmailTest(){ // buat nambah satu data
+        $email = 'wahyudi@centratamagroup.com';
+
+        //ambil semua nik
+        $data_email = $this->Master_m->getDetails('nik', 'employe', array());
+        
+        foreach($data_email as $key => $value){
+            $data_email[$key]['email'] = $email;
+        }
+
+        foreach($data_email as $key => $value){
+            $this->Master_m->update('employe', array('db' => 'nik', 'server' => $value['nik']), array('email' => $value['email']));
+        }
+        // tambah email ke semua nik
+    }
 }
 
 /* End of file Master.php */

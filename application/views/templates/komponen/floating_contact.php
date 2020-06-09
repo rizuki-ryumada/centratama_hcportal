@@ -5,15 +5,19 @@
                 <i class="fab fa-whatsapp fa-3x text-white" ></i>
             </div>
         </div> -->
-        <div class="col-2 status-logo"> <!-- status logo -->
+        <div class="col-4"> <!-- status logo -->
             <div class="container d-flex h-100 m-0 p-0">
                 <div class="row justify-content-center align-self-center p-0 m-0">
-                    <i class="fab fa-whatsapp fa-3x text-white" ></i>
+                    <i class="fab fa-whatsapp fa-4x text-white" ></i>
                 </div>
             </div>
         </div>
-        <div class="col-10">
-            <a href="https://wa.me/6281384740074" target="_blank" >Need Help? Contact Us!</a>
+        <div class="col-8">
+            <div class="container d-flex h-100 m-0 p-0">
+                <div class="row justify-content-center align-self-center p-0 m-0">
+                    <a href="https://wa.me/6281384740074" target="_blank" >HC Care</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

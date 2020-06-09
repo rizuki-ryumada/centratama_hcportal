@@ -15,11 +15,11 @@ function jobProfileNotif($job_profile, $data_penerima_email){
             $link = '<br/><p>Please click link below:</p><a href="'. $data_penerima_email['link'] .'">'. $data_penerima_email['link'] .'</a><br/>';
             break;
         case 1:
-            $job_profile['status'] = 'Need Approval';
+            $job_profile['status'] = 'Need Approved';
             $link = '<br/><p>Please click link below:</p><a href="'. $data_penerima_email['link'] .'">'. $data_penerima_email['link'] .'</a><br/>';
             break;
         case 2:
-            $job_profile['status'] = 'Need Approval';
+            $job_profile['status'] = 'Need Approved';
             $link = '<br/><p>Please click link below:</p><a href="'. $data_penerima_email['link'] .'">'. $data_penerima_email['link'] .'</a><br/>';
             break;
         case 3:
@@ -66,7 +66,7 @@ function jobProfileNotif($job_profile, $data_penerima_email){
                             <td>'. $job_profile['position_name'] .'</td>
                         </tr>
                         <tr>
-                            <td>Employe Name</td>
+                            <td>Employee</td>
                             <td>:</td>
                             <td>'. $job_profile['karyawan'] .'</td>
                         </tr>
@@ -91,12 +91,22 @@ function jobProfileNotif($job_profile, $data_penerima_email){
  * @return void
  */
 function sendEmail($data_penerima_email, $emailText, $subject_email){
+
+// echo($subject_email);
+// exit;
+
     $CI =& get_instance();
 
     // configuration for send email
+    // FIXME tambahkan pengaturan smtp_crypto = tls
+    // $config = $CI->Jobpro_model->getDetail(
+    //     'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
+    //     'setting_email', 
+    //     array('id' => 1));
+        // configuration for send email
     $config = $CI->Jobpro_model->getDetail(
-        'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
-        'setting-email', 
+        'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype, smtp_crypto', 
+        'setting_email', 
         array('id' => 1));
     $config['crlf'] = "\r\n";
     $config['newline'] = "\r\n";
@@ -104,13 +114,16 @@ function sendEmail($data_penerima_email, $emailText, $subject_email){
     $CI->email->initialize($config);
 
     // SETTING identitas email
-    $CI->email->from('a4a81d98ec-3847f9@inbox.mailtrap.io', 'Ryumada');
-    // $CI->email->to($data_penerima_email['email']);
-    $CI->email->to('asd@ss.id'); //for testing
-    // cc email
-    // if(!empty($data_penerima_email['email_cc'])){
-    //     $CI->email->cc($data_penerima_email['email_cc']);
-    // }
+    // FIXME ubah from ke pengaturan server
+    // $CI->email->from($config['smtp_user'], $config['smtp_user']);
+    $CI->email->from('Ryumada@dev.github', 'Ryumada');
+    //FIXME ubah to ke pengatauran server
+    $CI->email->to($data_penerima_email['email']);
+    // $CI->email->to('asd@ss.id'); //for testing
+    // FIXME cc email
+    if(!empty($data_penerima_email['email_cc'])){
+        $CI->email->cc($data_penerima_email['email_cc']);
+    }
     // what to send?
     // $CI->email->subject('Job Profile - Need Approval');
     $CI->email->subject($subject_email);

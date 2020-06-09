@@ -230,13 +230,13 @@ $(document).ready(function () {
         let status = $(this).data('status');
 
         if(status == 0){
-            statusText = "<b class='badge badge-danger'>Need To Submit<b/>";
+            statusText = "<b class='badge badge-danger'>Need To Submit</b>";
         } else if(status == 1 || status == 2){
-            statusText = "<b class='badge badge-warning text-dark'>Need Approval<b/>";
+            statusText = "<b class='badge badge-warning text-dark'>Need Approval</b>";
         } else if(status == 3){
-            statusText = "<b class='badge badge-info'>Need Revise<b/>";
+            statusText = "<b class='badge badge-info'>Need Revise</b>";
         } else if(status == 4){
-            statusText = "<b class='badge badge-success'>Approved<b/>";
+            statusText = "<b class='badge badge-success'>Approved</b>";
         }
 
         Swal.fire({
@@ -299,6 +299,146 @@ $(document).ready(function () {
         })
     });
 
+
+    // $('#riwayat-nomor').DataTable({
+    //     'dom': 'Bfrtip',
+    //     'buttons': [
+    //         {
+    //             extend: 'excel',
+    //             text: 'Export to Excel',
+    //             title: '',
+    //             filename: 'Report Job Profile-<?= date("dmo-Hi"); ?>',
+    //             exportOptions: {
+    //                 modifier: {
+    //                     //Datatables Core
+    //                     order: 'index',
+    //                     page: 'all',
+    //                     search: 'none'
+    //                 },
+    //                 columns: [0,1,2,3,4]
+    //             }
+    //         }
+    //     ]
+    // });
+
+});
+
+$(document).ready(function() {
+    nTable = $('#table-nomor').DataTable({
+        "autoWidth" : true,
+        "processing" : true,
+		"language" : { processing: '<div class="spinner-grow text-primary" role="status"><span class="sr-only">Loading...</span></div>'},
+        "serverSide": true,
+        "order": [],
+        "ajax": {
+            "url": "<?= base_url('surat/ajax_no') ?>",
+            "type": "post",
+            "data": function(data){
+                data.jenis_surat = $('#jenis-surat').val();
+            }
+        },
+        "columnDefs": [
+            { "width": "185px", "targets": [0], "orderable": true },
+            { "width": "185px", "targets": [1], "orderable": true },
+            { "width": "100px", "targets": [2], "orderable": true },
+            { "width": "120px", "targets": [3], "orderable": true },
+            { "width": "185px", "targets": [4], "orderable": true },
+            { "width": "150px", "targets": [5], "orderable": true }
+        ]
+    });
+
+    $('#jenis-surat').change(function(){
+        nTable.ajax.reload();
+    });
+});
+
+
+$('.custom-file-input').on('change', function() {
+    let filename = $(this).val().split('\\').pop();
+    $(this).next('.custom-file-label').addClass("selected").html(filename);
+});
+
+$('.form-check-input').on('click', function() {
+    const menuId = $(this).data('menu');
+    const roleId = $(this).data('role');
+
+    $.ajax({
+        url: "<?= base_url('admin/changeaccess'); ?>",
+        type: 'post',
+        data: {
+            menuId: menuId,
+            roleId: roleId
+        },
+        success: function() {
+            document.location.href = "<?= base_url('admin/roleaccess/'); ?>" + roleId;
+        }
+    });
+});
+
+$(document).ready(function() {
+	$("#jenis").change(function() {
+		var id = $(this).val();
+
+		$.ajax({
+			url: "<?= base_url('surat/getSub') ?>",
+			method: "POST",
+			data: {
+				jenis: id
+			},
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				var html = "";
+				var i;
+				for (i = 0; i < data.length; i++) {
+					html +=
+						"<option value=" +
+						data[i].tipe_surat +
+						">" +
+						data[i].tipe_surat +
+						"</option>";
+				}
+				$("#tipe").html(html);
+			}
+		});
+		return false;
+	});
+});
+
+
+
+$(document).ready(function() {
+	$("#entity").change(function() {
+		var entity = $("#entity").val();
+		var jenis = $("#jenis").val();
+		var sub = $("#tipe").val();
+		var isi = "";
+
+		$.ajax({
+			url: "<?= base_url('surat/lihatnomor') ?>",
+			method: "POST",
+			data: {
+				jenis : jenis,
+				entity: entity,
+				sub: sub
+			},
+			async: true,
+			dataType: "json",
+			success: function(data) {
+				isi =
+					data.no +
+					"/" +
+					data.entity +
+					"-HC/" +
+					data.sub +
+					"/" +
+					data.bulan +
+					"/" +
+					data.tahun;
+				$(".hasil").val(isi);
+			}
+		});
+	});
 });
 
 //if using ajax

@@ -9,6 +9,7 @@ class Settings extends CI_Controller {
         parent::__construct();
         $this->load->model('Divisi_model');
         $this->load->model('Dept_model');
+        $this->load->model('Jobpro_model');
         is_logged_in();
         date_default_timezone_set('Asia/Jakarta');
     }
@@ -35,7 +36,8 @@ class Settings extends CI_Controller {
             'title' => 'Job Profile',
             'user' => $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array(),
             'divisi' => $this->Divisi_model->getAll(),
-            'div_head' => $this->Divisi_model->getDivByOrg()
+            'div_head' => $this->Divisi_model->getDivByOrg(),
+            'status_time' => $this->Jobpro_model->getDetails('*', 'jobprofile_setting-notifstatus', array())
         ];
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);
