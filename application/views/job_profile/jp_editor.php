@@ -601,7 +601,8 @@
                 	<?php endif; ?>
 
                 	<!-- start Struktur Organisasi -->
-                	<?php if($atasan != 0 && $posisi['id_atasan1'] != 1): ?>
+                	<?php // if($atasan != 0 && $posisi['id_atasan1'] != 1): ?>
+                	<?php if($atasan != 0): ?>
                 	<hr />
                 	<div class="row mt-3">
                 		<div class="col-12">

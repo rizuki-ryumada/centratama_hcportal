@@ -83,9 +83,7 @@ class Job_profile extends CI_Controller {
         $this->load->view('templates/indexjp_footer');
     }
 
-    // TODO tampilkan struktur pas si yg dibawahi oleh CEO
-    // Corporate Development Dept. Head - Indra Yudison
-    // 5 kepala divisi, 3 kepala department
+    // function untuk menampilkan JP karyawan yang login
     public function myJp(){
         $nik = $this->session->userdata('nik');
         $id_posisi = $this->Jobpro_model->getDetail('position_id', 'employe', array('nik' => $nik))['position_id'];
@@ -114,6 +112,7 @@ class Job_profile extends CI_Controller {
         }
     }
 
+    // function untuk menampilkan JP karyawan bawahan task
     public function taskJp(){
         // prepare the data
         $nik = $this->input->get('task');
@@ -132,6 +131,7 @@ class Job_profile extends CI_Controller {
         $this->load->view('templates/jobs_footer_editor');
     }
 
+    // function untuk menampilakn JP karyawan melalui halaman report
     public function reportJp(){
         $my_nik = $this->session->userdata('nik'); //get my nik
         $nik = $this->input->get('task');// get another nik
@@ -241,6 +241,8 @@ class Job_profile extends CI_Controller {
             $org_data = $this->olahDataChart($data['posisi']['id']);
         } elseif($data['posisi']['id_atasan1'] != 0 && $data['posisi']['div_id'] == 1){
             $org_data = $this->olahDataChart($data['posisi']['id']);
+        // } elseif($data['posisi']['id_atasan1'] == 1){
+        //     $org_data = $this->olahDataChart($data['posisi']['id']);
         } else {
             //siapkan data null
             $org_data[0] = json_encode(null);
@@ -379,7 +381,7 @@ class Job_profile extends CI_Controller {
                     $counter_karyawan = count($data_karyawan);
                     $karyawan = array('<ul>'); //buka ul
                     foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
-                        $karyawan[$key + 1] = '<li>- '. $value['emp_name'] .'</li>';
+                        $karyawan[$key + 1] = '<li> -  '. $value['emp_name'] .'</li>';
                         if($key+1 == $counter_karyawan){ //tutup kode ul
                             $karyawan[$key + 2] = '</ul>';
                         }
@@ -433,7 +435,7 @@ class Job_profile extends CI_Controller {
                 $counter_karyawan = count($data_karyawan);
                 $karyawan = array('<ul>'); //buka ul
                 foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
-                    $karyawan[$key + 1] = '<li>- '. $value['emp_name'] .'</li>';
+                    $karyawan[$key + 1] = '<li> -  '. $value['emp_name'] .'</li>';
                     if($key+1 == $counter_karyawan){ //tutup kode ul
                         $karyawan[$key + 2] = '</ul>';
                     }
@@ -443,14 +445,19 @@ class Job_profile extends CI_Controller {
                     $karyawan_email[$key] = $value['email'];
                 }
 
-                $email_cc = array(); $x = 0;
-                if(!empty($value = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver1']))['email'])){
-                    $email_cc[$x] = $value;
-                    $x++;
-                }
-                if(!empty($value = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver2']))['email'])){
-                    $email_cc[$x] = $value;
-                    $x++;
+                // pengaturan email cc
+                if($status_sebelum == 1){ // jika status sebelumnya adalah first approval
+                    $email_cc = array(); $x = 0;
+                    if(!empty($value = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver1']))['email'])){
+                        $email_cc[$x] = $value;
+                        $x++;
+                    }
+                } elseif($status_sebelum == 2){ // jika status sebelumnya adalah final approval
+                    $email_cc = array(); $x = 0;
+                    if(!empty($value = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $approver['id_approver2']))['email'])){
+                        $email_cc[$x] = $value;
+                        $x++;
+                    }
                 }
 
                 $data_penerima_email = array(
@@ -487,7 +494,7 @@ class Job_profile extends CI_Controller {
                 $counter_karyawan = count($data_karyawan);
                 $karyawan = array('<ul>'); //buka ul
                 foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
-                    $karyawan[$key + 1] = '<li>- '. $value['emp_name'] .'</li>';
+                    $karyawan[$key + 1] = '<li> -  '. $value['emp_name'] .'</li>';
                     if($key+1 == $counter_karyawan){ //tutup kode ul
                         $karyawan[$key + 2] = '</ul>';
                     }
@@ -531,7 +538,7 @@ class Job_profile extends CI_Controller {
                 $counter_karyawan = count($data_karyawan);
                 $karyawan = array('<ul>'); //buka ul
                 foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
-                    $karyawan[$key + 1] = '<li>- '. $value['emp_name'] .'</li>';
+                    $karyawan[$key + 1] = '<li> -  '. $value['emp_name'] .'</li>';
                     if($key+1 == $counter_karyawan){ //tutup kode ul
                         $karyawan[$key + 2] = '</ul>';
                     }
@@ -582,12 +589,13 @@ class Job_profile extends CI_Controller {
         // cek apa ada data approvernya
         $value = array(); $value = $this->Jobpro_model->getJoin2tables('id, status_approval, id_approver1, id_approver2, position_name', 'position', array('table' => 'job_approval', 'index' => 'job_approval.id_posisi = position.id', 'position' => 'left'), array('id' => $id_posisi))[0];
         if(!empty($value)){ //ambil data posisi
+            //FIXME
             $data_posisi = $value;
         } else {
             return "";
         }
         $email_cc = array(); $x = 0; //prepare variables
-        if($data_posisi['id_approver1'] != 0){
+        if($data_posisi['id_approver1'] != 0 && $data_posisi['id_approver1'] != 1){ //jika id atasannya bukan 0 dan CEO
             $value = array(); $value = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $data_posisi['id_approver1']));
             if(!empty($value)){
                 $email_cc[$x] = $value['email'];
@@ -596,14 +604,17 @@ class Job_profile extends CI_Controller {
                 // nothing
             }
         }
-        if($data_posisi['id_approver2'] != 0){
+        if($data_posisi['id_approver2'] != 0 && $data_posisi['id_approver2'] != 1){ // jika id atasannya bukan 0 dan CEO
             $value = array(); $value = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $data_posisi['id_approver2']));
             if(!empty($value)){
                 $email_cc[$x] = $value['email'];
                 $x++;
             }
         }
-        if($data_posisi['id_approver1'] == 0 && $data_posisi['id_approver2'] == 0){
+        if($data_posisi['id_approver1'] == 1){ // kosongkan cc jika id approver1 adalah CEO
+            $email_cc = "";
+        }
+        if($data_posisi['id_approver1'] == 0 && $data_posisi['id_approver2'] == 0){ // jika id approver 1 dan 2 nya 0
             $email_cc = "";
         }
 
@@ -659,7 +670,7 @@ class Job_profile extends CI_Controller {
         $counter_karyawan = count($data_karyawan);
         $karyawan = array('<ul>'); //buka ul
         foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
-            $karyawan[$key + 1] = '<li>- '. $value['emp_name'] .'</li>';
+            $karyawan[$key + 1] = '<li> -  '. $value['emp_name'] .'</li>';
             
             if($key+1 == $counter_karyawan){ //tutup kode ul
                 $karyawan[$key + 2] = '</ul>';
@@ -1299,40 +1310,71 @@ class Job_profile extends CI_Controller {
 
         } elseif($data_posisi['status_approval'] == 0 || $data_posisi['status_approval'] == 3 || $data_posisi['status_approval'] == 4) {
             // cek status approval
-            if($data_posisi['status_approval'] == 0){
+            if($data_posisi['status_approval'] == 0){ // status need to submit
                 $subject_email = '[Job Profile] Create Job Profile';
                 $penerima_msg = 'Please fill your Job Profile and submit it!';
-            } elseif ($data_posisi['status_approval'] == 3){
+            
+                // NOW untuk status 0 hanya cc approver 1
+                // cek apa ada data approvernya
+                $value = array(); $value = $this->Jobpro_model->getJoin2tables('id, status_approval, id_approver1, id_approver2, position_name', 'position', array('table' => 'job_approval', 'index' => 'job_approval.id_posisi = position.id', 'position' => 'left'), array('id' => $id_posisi))[0];
+                if(!empty($value)){ //ambil data posisi
+                    //FIXME
+                    $data_posisi = $value;
+                } else {
+                    return "";
+                }
+                $email_cc = array(); $x = 0; //prepare variables
+                if($data_posisi['id_approver1'] != 0 && $data_posisi['id_approver1'] != 1){ //jika id atasannya bukan 0 dan CEO
+                    $value = array(); $value = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $data_posisi['id_approver1']));
+                    if(!empty($value)){
+                        $email_cc[$x] = $value['email'];
+                        $x++;
+                    } else {
+                        // nothing
+                    }
+                }
+                if($data_posisi['id_approver1'] == 1){ // kosongkan email cc jika approver1 = 1
+                    $email_cc = "";
+                }
+                if($data_posisi['id_approver1'] == 0 && $data_posisi['id_approver2'] == 0){ // jika id approver 1 dan 2 nya 0
+                    $email_cc = "";
+                }
+
+            } elseif ($data_posisi['status_approval'] == 3){ // need revise
                 $subject_email = '[Job Profile] Need Revise';
                 $penerima_msg = 'Please revise your Job Profile and submit it!';
-            } elseif ($data_posisi['status_approval'] == 4){
+                $email_cc = $this->getEmailCCAtasan($id_posisi); // cc email atasan
+
+            } elseif ($data_posisi['status_approval'] == 4){ // approved
                 $subject_email = '[Job Profile] Approved';
                 $penerima_msg = 'Thank You!';
+                $email_cc = $this->getEmailCCAtasan($id_posisi); // cc email atasan
+
             } else {
                 show_404();
                 exit;
             }
             //ambil email buat cc
-            $x = 0; $email_cc = array();
-            foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $data_posisi['id_approver1'])) as $v){
-                if(!empty($v['email'])){
-                    $email_cc[$x] = $v['email'];
-                    $x++;
-                }
-            }
-            foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $data_posisi['id_approver2'])) as $v){
-                if(!empty($v['email'])){
-                    $email_cc[$x] = $v['email'];
-                    $x++;
-                }
-            }
+            // $x = 0; $email_cc = array();
+            // foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $data_posisi['id_approver1'])) as $v){
+            //     if(!empty($v['email'])){
+            //         $email_cc[$x] = $v['email'];
+            //         $x++;
+            //     }
+            // }
+            // foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $data_posisi['id_approver2'])) as $v){
+            //     if(!empty($v['email'])){
+            //         $email_cc[$x] = $v['email'];
+            //         $x++;
+            //     }
+            // }
 
             $data_karyawan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $id_posisi));  //ambil email karyawan
             // /* --------------------------- ambil nama karyawan -------------------------- */
             $counter_karyawan = count($data_karyawan);
             $karyawan = array('<ul>'); //buka ul
             foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
-                $karyawan[$key + 1] = '<li>'. $value['emp_name'] .'</li>';
+                $karyawan[$key + 1] = '<li> -  '. $value['emp_name'] .'</li>';
                 if($key+1 == $counter_karyawan){ //tutup kode ul
                     $karyawan[$key + 2] = '</ul>';
                 }
@@ -1355,7 +1397,7 @@ class Job_profile extends CI_Controller {
                 exit;
             }
             
-            $email_cc = $this->getEmailCCAtasan($id_posisi); // cc atasan
+            // $email_cc = $this->getEmailCCAtasan($id_posisi); // cc atasan
             $penerima_id_posisi = $data_posisi['id'];
             // to test and see the email
             // http_response_code(500);
@@ -1385,14 +1427,8 @@ class Job_profile extends CI_Controller {
         $this->notifikasi($nik, $job_profile, $data_penerima_email, $subject_email);
     }
 
-    //NOW Revisi $dataposisi
+    /* ----- kirim notifkasi dengan mengklik tombol pada setting job_profile ---- */
     function sendNotificatiOnStatus() {
-        //ambil id_posisi
-        //approver
-        //buat kondisi
-        //jika statusnya 1 dan 2 kirim ke atasan
-        //jika statusnya 0,3,4 kirim ke karyawan
-
         $status = $this->input->post('status'); //ambil status
 
         //update waktu terakhir kali dikirim notifikasi
@@ -1416,17 +1452,12 @@ class Job_profile extends CI_Controller {
                                                                 );
 
         //ambil id posisi yang punya status itu dan id posisinya memiliki karyawan
-        // $data_posisi = $this->Jobpro_model->getJoin2tables('id, position_name, id_approver1, id_approver2', 'position', array('table' => 'job_approval', 'index' => 'job_approval.id_posisi = position.id', 'position' => 'left'), array('status_approval' => $status));
-
-        // print_r(json_encode($temp_posisi_karyawan));
-        // exit;
-
-        //hapus duplikasi id
         $id_temp_posisi = array(); $x = 0 ;
         foreach($temp_posisi_karyawan as $v){
             $id_temp_posisi[$x] = $v['id'];
             $x++;
         }
+        //hapus duplikasi id
         $id_posisi_karyawan = array_unique($id_temp_posisi); // ambil 1 id aja kalo ada beberapa karyawan
         
         $counter_email = 0;
@@ -1535,31 +1566,61 @@ class Job_profile extends CI_Controller {
             if($status == 0){
                 $subject_email = '[Job Profile] Create Job Profile';
                 $penerima_msg = 'Please fill your Job Profile and submit it!';
+                
+                // cek apa ada data approvernya
+                $value = array(); $value = $this->Jobpro_model->getJoin2tables('id, status_approval, id_approver1, id_approver2, position_name', 'position', array('table' => 'job_approval', 'index' => 'job_approval.id_posisi = position.id', 'position' => 'left'), array('id' => $id_posisi))[0];
+                if(!empty($value)){ //ambil data posisi
+                    //FIXME
+                    $data_posisi = $value;
+                } else {
+                    return "";
+                }
+                $email_cc = array(); $x = 0; //prepare variables
+                if($data_posisi['id_approver1'] != 0 && $data_posisi['id_approver1'] != 1){ //jika id atasannya bukan 0 dan CEO
+                    $value = array(); $value = $this->Jobpro_model->getDetail('email', 'employe', array('position_id' => $data_posisi['id_approver1']));
+                    if(!empty($value)){
+                        $email_cc[$x] = $value['email'];
+                        $x++;
+                    } else {
+                        // nothing
+                    }
+                }
+                if($data_posisi['id_approver1'] == 1){ // kosongkan email cc jika approver1 = 1
+                    $email_cc = "";
+                }
+                if($data_posisi['id_approver1'] == 0 && $data_posisi['id_approver2'] == 0){ // jika id approver 1 dan 2 nya 0
+                    $email_cc = "";
+                }
+
             } elseif($status == 3){
                 $subject_email = '[Job Profile] Need Revise';
                 $penerima_msg = 'Please revise your Job Profile and submit it!';
+                $email_cc = $this->getEmailCCAtasan($id_posisi); // cc email atasan
+
             } elseif($status == 4){
                 $subject_email = '[Job Profile] Approved';
                 $penerima_msg = 'Thank You!';
+                $email_cc = $this->getEmailCCAtasan($id_posisi); // cc email atasan
+
             }else {
                  show_404();
                  exit;
             }
-
+            //NOW cari hanya approver 1 jika dia status need to submit
             //ambil email buat cc
-            $x = 0; $email_cc = array();
-            foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $id_approver1)) as $v){
-                if(!empty($v['email'])){
-                    $email_cc[$x] = $v['email'];
-                    $x++;
-                }
-            }
-            foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $id_approver2)) as $v){
-                if(!empty($v['email'])){
-                    $email_cc[$x] = $v['email'];
-                    $x++;
-                }
-            }
+            // $x = 0; $email_cc = array();
+            // foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $id_approver1)) as $v){
+            //     if(!empty($v['email'])){
+            //         $email_cc[$x] = $v['email'];
+            //         $x++;
+            //     }
+            // }
+            // foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $id_approver2)) as $v){
+            //     if(!empty($v['email'])){
+            //         $email_cc[$x] = $v['email'];
+            //         $x++;
+            //     }
+            // }
 
             //ambil email karyawan
             $data_karyawan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $id_posisi));  
@@ -1574,7 +1635,7 @@ class Job_profile extends CI_Controller {
             $counter_karyawan = count($data_karyawan);
             $karyawan = array('<ul>'); //buka ul
             foreach($data_karyawan as $key => $value){ //ambil nama karyawan)
-                $karyawan[$key + 1] = '<li>- '. $value['emp_name'] .'</li>';
+                $karyawan[$key + 1] = '<li> -  '. $value['emp_name'] .'</li>';
                 if($key+1 == $counter_karyawan){ //tutup kode ul
                     $karyawan[$key + 2] = '</ul>';
                 }
@@ -1599,11 +1660,8 @@ class Job_profile extends CI_Controller {
             $penerima_nama = implode(" ", $karyawan); // gabungkan nama karyawan
             $penerima_email = $karyawan_email;
             $penerima_id_posisi = $id_posisi;            
-            $email_cc = $this->getEmailCCAtasan($id_posisi); // cc email atasan
+            // $email_cc = $this->getEmailCCAtasan($id_posisi); // cc email atasan
             
-            // $penerima_nama = implode(" ", $karyawan);
-            //TODO tambahin identifier kalo email karyawan null
-
         } else {
             show_404();
             exit;
@@ -1635,7 +1693,7 @@ class Job_profile extends CI_Controller {
         //sebelumnya ingat ada beberapa hal yang harus diperhatikan
         // 1. posisi Asistant dan bukan assistant berbeda perlakuannya juga berbeda
         // 2. kode ini digunakan untuk mengolah data dari database menjadi JSON
-        // 3. nomor 200 dan 201 itu adalah id_posisi
+        // 3. nomor 200 dan 201 itu adalah id_posisi, dijadikan permisalan
 
         $my_pos_detail = $this->Jobpro_model->getPositionDetail($my_positionId); //ambil informasi detail posisi saya //200 //bukan assistant
         if(empty($my_pos_detail)){
@@ -1647,6 +1705,8 @@ class Job_profile extends CI_Controller {
             $my_atasan[$x]['id_atasan1'] = $my_pos_detail['id_atasan1'];
             $id_atasan1 = $my_pos_detail['id_atasan1'];
             $id_atasan2 = $my_pos_detail['id_atasan2'];
+            // NOW
+            // if($my_pos_detail['id_atasan2'] != 0 && $my_pos_detail['div_id'] != 1){//apakah atasan 2 nya bukan CEO atau dan dia punya atasan 2
             if($my_pos_detail['id_atasan2'] != 1 && $my_pos_detail['id_atasan2'] != 0 && $my_pos_detail['div_id'] != 1){//apakah atasan 2 nya bukan CEO atau dan dia punya atasan 2
                 //cari posisi yang bukan assistant
                 $whois_sama[0] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
@@ -1666,8 +1726,8 @@ class Job_profile extends CI_Controller {
                     //nothing
                 }
                 $atasan = 2; //penanda atasan
-            } elseif ($my_pos_detail['id_atasan2'] != 0 && $my_pos_detail['div_id'] == 1){
 
+            } elseif ($my_pos_detail['id_atasan2'] != 0 && $my_pos_detail['div_id'] == 1){
                 //cari posisi yang bukan assistant                
                 $whois_sama[0] = $this->Jobpro_model->getWhoisSamaCEOffice($id_atasan1, '1'); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
                 $whois_sama[1] = $this->Jobpro_model->getWhoisSamaCEOffice($id_atasan2, '1'); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
@@ -1686,6 +1746,7 @@ class Job_profile extends CI_Controller {
                     //nothing
                 }
                 $atasan = 2; //penanda atasan
+                // TODO tambah kondisi jika dia adalah division head ambil satu tingkat di atasnya
             } else {
                 if($my_pos_detail['id_atasan1'] != 1 && $my_pos_detail['id_atasan1'] != 0 && $my_pos_detail['div_id'] != 1){ //apakah atasan 1nya bukan CEO atau dia punya atasan
 

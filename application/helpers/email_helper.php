@@ -11,15 +11,15 @@ function jobProfileNotif($job_profile, $data_penerima_email){
 
     switch($job_profile['status']){
         case 0:
-            $job_profile['status'] = 'Need to Submit';
+            $job_profile['status'] = 'Create Job Profile';
             $link = '<br/><p>Please click link below:</p><a href="'. $data_penerima_email['link'] .'">'. $data_penerima_email['link'] .'</a><br/>';
             break;
         case 1:
-            $job_profile['status'] = 'Need Approved';
+            $job_profile['status'] = 'Need Approval';
             $link = '<br/><p>Please click link below:</p><a href="'. $data_penerima_email['link'] .'">'. $data_penerima_email['link'] .'</a><br/>';
             break;
         case 2:
-            $job_profile['status'] = 'Need Approved';
+            $job_profile['status'] = 'Need Approval';
             $link = '<br/><p>Please click link below:</p><a href="'. $data_penerima_email['link'] .'">'. $data_penerima_email['link'] .'</a><br/>';
             break;
         case 3:
@@ -43,6 +43,9 @@ function jobProfileNotif($job_profile, $data_penerima_email){
         ul{
             padding-left: 1em;
             margin: 0 0.5em;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
         }
     </style>
 
@@ -75,7 +78,7 @@ function jobProfileNotif($job_profile, $data_penerima_email){
                 '. $link .'
                 <br/>
                 <p>Thank You!,</p>
-                <p><b>HCPortal</b></p>
+                <p><b>HC Portal</b></p>
             </div>
         </div>
     </div>

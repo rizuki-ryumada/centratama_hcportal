@@ -106,22 +106,27 @@ $(document).ready(function () {
             console.log('Need to be Submitted');
             $('.status_approval[data-id='+id+']').css('background-color', 'red');
             $('.status_approval[data-id='+id+']').css('color', 'white');
+            $('.status_approval[data-id='+id+']').prop('selectedIndex',0);
         }else if(value == 1){
             console.log('Submitted');
             $('.status_approval[data-id='+id+']').css('background-color', 'yellow');
             $('.status_approval[data-id='+id+']').css('color', 'black');
+            $('.status_approval[data-id='+id+']').prop('selectedIndex',1);
         }else if(value == 2){
             console.log('first Approval');
             $('.status_approval[data-id='+id+']').css('background-color', 'yellow');
             $('.status_approval[data-id='+id+']').css('color', 'black');
+            $('.status_approval[data-id='+id+']').prop('selectedIndex',2);
         }else if(value == 3){
             console.log('Need to be revised');
             $('.status_approval[data-id='+id+']').css('background-color', 'orange');
             $('.status_approval[data-id='+id+']').css('color', 'white');
+            $('.status_approval[data-id='+id+']').prop('selectedIndex',3);
         }else if(value == 4){
             console.log('Final Approval');
             $('.status_approval[data-id='+id+']').css('background-color', 'green');
             $('.status_approval[data-id='+id+']').css('color', 'white');
+            $('.status_approval[data-id='+id+']').prop('selectedIndex',4);
         }
 
         $.ajax({
