@@ -37,6 +37,7 @@
 <script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
 <script src="<?= base_url('assets/'); ?>js/chartorg.js"></script>
 
+<!-- initial variabel orgchart -->
 <script>
 //masukkin data ke variabel javascript dari php
 
@@ -45,94 +46,6 @@ var atasan = <?= $atasan; ?>;
 var datasource = <?php echo $orgchart_data; ?>; 
 var datasource_assistant1 = <?php echo($orgchart_data_assistant1); ?>;
 var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
-
-//contoh data
-// var datasource_assistant = [
-//     {
-//         "id": "194",
-//         "position_name": "Employee Relation & Safety Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     },
-//     {
-//         "id": "195",
-//         "position_name": "HCIS Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     },
-//     {
-//         "id": "195",
-//         "position_name": "HCIS Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     },
-//     {
-//         "id": "195",
-//         "position_name": "HCIS Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     }
-// ];
-
-
-//pid 1
-//masukin data nodes ke form input juga
-//
-
-
-//id tampilkan id atasan 1 2 yang punya jabatan lebih tinggi
-//tampilkan id atasan 1 yang sama semua
-
-
-
-// var nodes = [
-// 	{
-// 		id: "1",
-// 		title: "Masukkan Jabatan Atasan Anda",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "2",
-// 		pid: "1",
-// 		title: "Masukkan Jabatan",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "3",
-// 		pid: "1",
-// 		title: "Masukkan Jabatan",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "4",
-// 		pid: "1",
-// 		title: "Masukkan Jabatan",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "5",
-// 		pid: "2",
-// 		title: "Masukkan Jabatan",
-// 		me: "Posisi Saya Ini Paling Tinggi Lo"
-// 	}
-// ];
-//
 </script>
 
 <script>

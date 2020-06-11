@@ -236,7 +236,8 @@ class Job_profile extends CI_Controller {
 
         //olah data chart
         //cek jika atasan 1 bukan CEO dan 0
-        if($data['posisi']['id_atasan1'] != 1 && $data['posisi']['id_atasan1'] != 0){
+        if($data['posisi']['id_atasan1'] != 0){
+            // if($data['posisi']['id_atasan1'] != 1 && $data['posisi']['id_atasan1'] != 0){
             // Olah data orgchart
             $org_data = $this->olahDataChart($data['posisi']['id']);
         } elseif($data['posisi']['id_atasan1'] != 0 && $data['posisi']['div_id'] == 1){
@@ -589,7 +590,6 @@ class Job_profile extends CI_Controller {
         // cek apa ada data approvernya
         $value = array(); $value = $this->Jobpro_model->getJoin2tables('id, status_approval, id_approver1, id_approver2, position_name', 'position', array('table' => 'job_approval', 'index' => 'job_approval.id_posisi = position.id', 'position' => 'left'), array('id' => $id_posisi))[0];
         if(!empty($value)){ //ambil data posisi
-            //FIXME
             $data_posisi = $value;
         } else {
             return "";
@@ -1314,11 +1314,9 @@ class Job_profile extends CI_Controller {
                 $subject_email = '[Job Profile] Create Job Profile';
                 $penerima_msg = 'Please fill your Job Profile and submit it!';
             
-                // NOW untuk status 0 hanya cc approver 1
                 // cek apa ada data approvernya
                 $value = array(); $value = $this->Jobpro_model->getJoin2tables('id, status_approval, id_approver1, id_approver2, position_name', 'position', array('table' => 'job_approval', 'index' => 'job_approval.id_posisi = position.id', 'position' => 'left'), array('id' => $id_posisi))[0];
                 if(!empty($value)){ //ambil data posisi
-                    //FIXME
                     $data_posisi = $value;
                 } else {
                     return "";
@@ -1570,7 +1568,6 @@ class Job_profile extends CI_Controller {
                 // cek apa ada data approvernya
                 $value = array(); $value = $this->Jobpro_model->getJoin2tables('id, status_approval, id_approver1, id_approver2, position_name', 'position', array('table' => 'job_approval', 'index' => 'job_approval.id_posisi = position.id', 'position' => 'left'), array('id' => $id_posisi))[0];
                 if(!empty($value)){ //ambil data posisi
-                    //FIXME
                     $data_posisi = $value;
                 } else {
                     return "";
@@ -1606,21 +1603,6 @@ class Job_profile extends CI_Controller {
                  show_404();
                  exit;
             }
-            //NOW cari hanya approver 1 jika dia status need to submit
-            //ambil email buat cc
-            // $x = 0; $email_cc = array();
-            // foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $id_approver1)) as $v){
-            //     if(!empty($v['email'])){
-            //         $email_cc[$x] = $v['email'];
-            //         $x++;
-            //     }
-            // }
-            // foreach($this->Jobpro_model->getDetails('email', 'employe', array('position_id' => $id_approver2)) as $v){
-            //     if(!empty($v['email'])){
-            //         $email_cc[$x] = $v['email'];
-            //         $x++;
-            //     }
-            // }
 
             //ambil email karyawan
             $data_karyawan = $this->Jobpro_model->getDetails('emp_name, email', 'employe', array('position_id' => $id_posisi));  
@@ -1705,8 +1687,7 @@ class Job_profile extends CI_Controller {
             $my_atasan[$x]['id_atasan1'] = $my_pos_detail['id_atasan1'];
             $id_atasan1 = $my_pos_detail['id_atasan1'];
             $id_atasan2 = $my_pos_detail['id_atasan2'];
-            // NOW
-            // if($my_pos_detail['id_atasan2'] != 0 && $my_pos_detail['div_id'] != 1){//apakah atasan 2 nya bukan CEO atau dan dia punya atasan 2
+
             if($my_pos_detail['id_atasan2'] != 1 && $my_pos_detail['id_atasan2'] != 0 && $my_pos_detail['div_id'] != 1){//apakah atasan 2 nya bukan CEO atau dan dia punya atasan 2
                 //cari posisi yang bukan assistant
                 $whois_sama[0] = $this->Jobpro_model->getWhoisSama($id_atasan1); //200 dan 201 ambil data yang sama sama saya yang bukan assistant
@@ -1746,7 +1727,15 @@ class Job_profile extends CI_Controller {
                     //nothing
                 }
                 $atasan = 2; //penanda atasan
-                // TODO tambah kondisi jika dia adalah division head ambil satu tingkat di atasnya
+
+            } elseif($my_pos_detail['id_atasan1'] == 1 && $my_pos_detail['hirarki_org'] == 'N'){
+                // cari posisi yang bukan assistant
+                $whois_sama[0] = $this->Jobpro_model->getDetails("*", 'position', 'id_atasan1 = "1" AND div_id != "1"');
+                $my_atasan[0] = $this->Jobpro_model->getDetail("*", 'position', array('id' => $my_pos_detail['id_atasan1']));
+                
+                $assistant_atasan1 = 0; //tandai buat nanti nampilin orgchartnya horizontal di level ke 3
+                $atasan = 1; // penanda jumlah atasan
+                
             } else {
                 if($my_pos_detail['id_atasan1'] != 1 && $my_pos_detail['id_atasan1'] != 0 && $my_pos_detail['div_id'] != 1){ //apakah atasan 1nya bukan CEO atau dia punya atasan
 
@@ -1781,6 +1770,7 @@ class Job_profile extends CI_Controller {
                     $atasan = 0;//penanada atasan
                 }
             }
+
             //cari id yang sama dengan $my_pos_detail di $whois_sama, lalu tambahin 'className': 'my-position' //jika my position bukan assistant
             foreach($whois_sama as $k => $v){
                 foreach ($v as $key => $value){
@@ -1817,15 +1807,17 @@ class Job_profile extends CI_Controller {
             //ASSISTANT DATA
             //keluarkan semua assistant jadi di level teratas
             $org_assistant1 = array(); $x = 0; //initialize assistant atasan 1
-            foreach($whois_sama_assistant1 as $k => $v){
-                foreach($v as $key => $value){
-                    $org_assistant1[$x] = $value; //tambah value ke org_struktur
-                    foreach($this->Jobpro_model->getAtasanAssistant($value['id_atasan1']) as $kunci => $nilai){ //cari atasannya 
-
-                        // array_push($org_assistant[$x], $nilai); //tambah nama posisi atasannya
-                        $org_assistant1[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
+            if(!empty($whois_sama_assistant1)){
+                foreach($whois_sama_assistant1 as $k => $v){
+                    foreach($v as $key => $value){
+                        $org_assistant1[$x] = $value; //tambah value ke org_struktur
+                        foreach($this->Jobpro_model->getAtasanAssistant($value['id_atasan1']) as $kunci => $nilai){ //cari atasannya 
+    
+                            // array_push($org_assistant[$x], $nilai); //tambah nama posisi atasannya
+                            $org_assistant1[$x]['atasan_assistant'] = $nilai; //tambah nama posisi atasannya
+                        }
+                        $x++;
                     }
-                    $x++;
                 }
             }
             if(!empty($whois_sama_assistant2)){
