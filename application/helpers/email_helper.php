@@ -105,8 +105,8 @@ function sendEmail($data_penerima_email, $emailText, $subject_email){
     // $config = $CI->Jobpro_model->getDetail(
     //     'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
     //     'setting_email', 
-    //     array('id' => 1));
-        // configuration for send email
+    //     array('id' => 2));
+    // configuration for send email
     $config = $CI->Jobpro_model->getDetail(
         'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype, smtp_crypto', 
         'setting_email', 

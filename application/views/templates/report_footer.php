@@ -226,9 +226,6 @@ $(document).ready(function () {
                 );
             }
         });
-
-        
-
     });
 
     $('.sendNotificatiOnStatus').click(function(){
@@ -288,6 +285,23 @@ $(document).ready(function () {
                                 'success'
                             );
                         }
+
+                        $.ajax({
+                            url: "<?= base_url('job_profile/getDate') ?>",
+                            success: data => {
+                                if(status == 0){
+                                    $('#status0').html(data);
+                                } else if(status == 1){
+                                    $('#status1').html(data);
+                                } else if(status == 2){
+                                    $('#status2').html(data);
+                                } else if(status == 3){
+                                    $('#status3').html(data);
+                                } else if(status == 4){
+                                    $('#status4').html(data);
+                                }
+                            }
+                        });
                     },
                     error: function(data){
                         Swal.close();
