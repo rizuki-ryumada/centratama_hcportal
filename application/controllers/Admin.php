@@ -1,5 +1,7 @@
 <?php 
 
+//TODO Need to perform Security Audit
+//TODO SQL Injection and XSS
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Admin extends CI_Controller

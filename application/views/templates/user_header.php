@@ -19,13 +19,14 @@
 
 	<!-- Custom styles for this template-->
 	<link href="<?= base_url('assets/'); ?>css/sb-admin-2.min.css" rel="stylesheet">
+	<!-- <link href="<?= base_url('assets/'); ?>vendor/bootstrap-toogle/css/bootstrap-toggle.min.css" rel="stylesheet"> -->
 	<link href="<?= base_url('assets/'); ?>css/style.css" rel="stylesheet">
 	<link href="<?= base_url('assets/'); ?>css/custom.jquery.orgchart.min.css" rel="stylesheet" > <!-- Customized by Ryu -->
 	<link href="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 	<script src="<?= base_url('assets'); ?>/js/ckeditor/ckeditor.js"></script>
-	<!-- <script src="<?php //base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script> moved from jobs_footer  and user_footer -->
+	<!-- <script src="<?php //base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script> moved from job_profile_footer  and user_footer -->
 	<!-- <script src="<?php //base_url('assets'); ?>/js/OrgChartJS/orgchart.js"></script> -->
 	<style>
 		.highlight {

@@ -166,7 +166,7 @@ class Employe_model extends CI_Model {
 
     public function getAllEmp()
     {
-        $this->db->select('employe.id as id_emp, employe.emp_name,nik, position.hirarki_org, position_id, position.div_id , position.dept_id, position.id, position_name, divisi.id, division, departemen.id, nama_departemen');
+        $this->db->select('employe.nik as id_emp, employe.emp_name,nik, position.hirarki_org, position_id, position.div_id , position.dept_id, position.id, position_name, divisi.id, division, departemen.id, nama_departemen');
         $this->db->from('position');
         $this->db->join('divisi', 'divisi.id = position.div_id');
         $this->db->join('departemen', 'departemen.id = position.dept_id');

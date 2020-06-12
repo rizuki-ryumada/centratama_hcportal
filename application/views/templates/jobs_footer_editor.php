@@ -37,6 +37,7 @@
 <script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
 <script src="<?= base_url('assets/'); ?>js/chartorg.js"></script>
 
+<!-- initial variabel orgchart -->
 <script>
 //masukkin data ke variabel javascript dari php
 
@@ -45,94 +46,6 @@ var atasan = <?= $atasan; ?>;
 var datasource = <?php echo $orgchart_data; ?>; 
 var datasource_assistant1 = <?php echo($orgchart_data_assistant1); ?>;
 var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
-
-//contoh data
-// var datasource_assistant = [
-//     {
-//         "id": "194",
-//         "position_name": "Employee Relation & Safety Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     },
-//     {
-//         "id": "195",
-//         "position_name": "HCIS Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     },
-//     {
-//         "id": "195",
-//         "position_name": "HCIS Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     },
-//     {
-//         "id": "195",
-//         "position_name": "HCIS Officer",
-//         "dept_id": "26",
-//         "div_id": "6",
-//         "id_atasan1": "196",
-//         "id_atasan2": "1",
-//         "assistant": "1",
-//         "atasan_assistant": "Human Capital Division Head"
-//     }
-// ];
-
-
-//pid 1
-//masukin data nodes ke form input juga
-//
-
-
-//id tampilkan id atasan 1 2 yang punya jabatan lebih tinggi
-//tampilkan id atasan 1 yang sama semua
-
-
-
-// var nodes = [
-// 	{
-// 		id: "1",
-// 		title: "Masukkan Jabatan Atasan Anda",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "2",
-// 		pid: "1",
-// 		title: "Masukkan Jabatan",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "3",
-// 		pid: "1",
-// 		title: "Masukkan Jabatan",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "4",
-// 		pid: "1",
-// 		title: "Masukkan Jabatan",
-// 		me: ""
-// 	},
-// 	{
-// 		id: "5",
-// 		pid: "2",
-// 		title: "Masukkan Jabatan",
-// 		me: "Posisi Saya Ini Paling Tinggi Lo"
-// 	}
-// ];
-//
 </script>
 
 <script>
@@ -182,7 +95,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			const tujuan = CKEDITOR.instances['tujuan'].getData();
 			$.ajax({
-				url: "<?php echo base_url('jobs/edittujuan'); ?>",
+				url: "<?php echo base_url('job_profile/edittujuan'); ?>",
 				data: {
 					id: id,
 					tujuan: tujuan
@@ -205,7 +118,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			const tujuan = CKEDITOR.instances['tujuanbaru'].getData();
 			$.ajax({
-				url: "<?= base_url('jobs/uptuj'); ?>",
+				url: "<?= base_url('job_profile/uptuj'); ?>",
 				data: {
 					id: id,
 					tujuan: tujuan
@@ -247,17 +160,17 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 				$('#tJwb-text').val("");
 				CKEDITOR.instances['aUtm-text'].setData("");
 				CKEDITOR.instances['pgkrn-text'].setData("");
-				// $('.modal-body form').attr('action', '<?= base_url('jobs/addtanggungjawab') ?>');
+				// $('.modal-body form').attr('action', '<?= base_url('job_profile/addtanggungjawab') ?>');
 			});
 
 			$('.eTgjwb').on('click', function() {
 				$('#modalTanggungJwbTitle').html('Edit Tanggung Jawab Utama, Aktivitas Utama & Indikator Kerja');
 				$('.modal-footer button[type=submit]').html('Simpan Perubahan');
-				$('.modal-body form').attr('action', '<?= base_url('jobs/edittanggungjawab') ?>');
+				$('.modal-body form').attr('action', '<?= base_url('job_profile/edittanggungjawab') ?>');
 				const id = $(this).data('id');
 
 				$.ajax({
-					url: '<?= base_url('jobs/getTjByID') ?>',
+					url: '<?= base_url('job_profile/getTjByID') ?>',
 					data: {
 						id: id
 					},
@@ -283,10 +196,10 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			
 			if(idtgjwb == ""){
 				// console.log("add mode");
-				var url_submit = '<?= base_url('jobs/addtanggungjawab'); ?>';
+				var url_submit = '<?= base_url('job_profile/addtanggungjawab'); ?>';
 			}else{
 				// console.log("edit mode");
-				var url_submit = '<?= base_url('jobs/edittanggungjawab') ?>';
+				var url_submit = '<?= base_url('job_profile/edittanggungjawab') ?>';
 			}
 
 			$.ajax({
@@ -338,7 +251,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			const ruang = CKEDITOR.instances['ruang'].getData();
 			$.ajax({
-				url: "<?php echo base_url('jobs/editruanglingkup'); ?>",
+				url: "<?php echo base_url('job_profile/editruanglingkup'); ?>",
 				data: {
 					id: id,
 					ruang: ruang
@@ -365,7 +278,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			const ruangl = CKEDITOR.instances['add-ruangl'].getData();
 			$.ajax({
-				url: "<?= base_url('jobs/addruanglingkup') ?>",
+				url: "<?= base_url('job_profile/addruanglingkup') ?>",
 				data: {
 					id: id,
 					ruangl: ruangl
@@ -401,7 +314,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 		// start edit wewenang
 		$(document).ready(function() {
 			$('#wewenang').Tabledit({
-				url: '<?= base_url('jobs/aksiwewenang') ?>',
+				url: '<?= base_url('job_profile/aksiwewenang') ?>',
 				inputClass: 'form-control input-sm',
 				editButton: false,
 				restoreButton: false,
@@ -430,6 +343,12 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 					if (data == 'delete') {
 						$('.tabledit-deleted-row').remove();
 					}
+				},
+				onAjax: function(action, serialize) {
+					// open your xhr here 
+					console.log("on Ajax");
+					console.log("action : ", action);
+					console.log("data : ", serialize);
 				}
 			});
 		});
@@ -455,7 +374,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 				)
 			}else{
 				$.ajax({
-					url: '<?= base_url('jobs/addwen') ?>',
+					url: '<?= base_url('job_profile/addwen') ?>',
 					data: {
 						id: id,
 						wewenang: wewenang,
@@ -508,7 +427,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			var tipe = 'internal';
 			$.ajax({
-				url: "<?php echo base_url('jobs/edithub'); ?>",
+				url: "<?php echo base_url('job_profile/edithub'); ?>",
 				data: {
 					id: id,
 					hubInt: hubInt,
@@ -550,7 +469,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			var tipe = 'eksternal';
 			$.ajax({
-				url: "<?php echo base_url('jobs/edithub'); ?>",
+				url: "<?php echo base_url('job_profile/edithub'); ?>",
 				data: {
 					id: id,
 					hubEks: hubEks,
@@ -584,7 +503,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const internal = CKEDITOR.instances['internal'].getData();
 			const eksternal = CKEDITOR.instances['eksternal'].getData();
 			$.ajax({
-				url: "<?= base_url('jobs/addHubungan'); ?>",
+				url: "<?= base_url('job_profile/addHubungan'); ?>",
 				data: {
 					id: id,
 					internal: internal,
@@ -625,7 +544,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			$("#totMgr, #totSpvr, #totStaf").keyup(function() {
 				hitung();
 				$.ajax({
-					url: "<?= base_url('jobs/updatestaff') ?>",
+					url: "<?= base_url('job_profile/updatestaff') ?>",
 					data: {
 						id_posisi: <?= $staff['id_posisi'] ?>,
 						mgr: mgr,
@@ -652,7 +571,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			const tantangan = CKEDITOR.instances['tantangan'].getData();
 			$.ajax({
-				url: "<?php echo base_url('jobs/edittantangan'); ?>",
+				url: "<?php echo base_url('job_profile/edittantangan'); ?>",
 				data: {
 					id: id,
 					tantangan: tantangan
@@ -675,7 +594,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			const tantangan = CKEDITOR.instances['tantangan-baru'].getData();
 			$.ajax({
-				url: "<?= base_url('jobs/addtantangan'); ?>",
+				url: "<?= base_url('job_profile/addtantangan'); ?>",
 				data: {
 					id: id,
 					tantangan: tantangan
@@ -706,7 +625,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 		$('.edit-kualifikasi').on('click', function() {
 			const id = $(this).data('id');
 			$.ajax({
-				url: '<?= base_url('jobs/getKualifikasiById') ?>',
+				url: '<?= base_url('job_profile/getKualifikasiById') ?>',
 				data: {
 					id: id
 				},
@@ -728,7 +647,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			var pengetahuan = $('#pengtahu').val();
 			var kompetensi = $('#kptnsi').val();
 			$.ajax({
-				url: '<?= base_url('jobs/updateKualifikasi') ?>',
+				url: '<?= base_url('job_profile/updateKualifikasi') ?>',
 				data: {
 					id_posisi: id_posisi,
 					pendidikan: pendidikan,
@@ -764,7 +683,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			//cek jika salah satu form ada yang kosong
 			if(pendidikan != "" && pengalaman != "" && pengetahuan != "" && kompetensi != ""){
 				$.ajax({
-					url: '<?= base_url('jobs/addkualifikasi') ?>',
+					url: '<?= base_url('job_profile/addkualifikasi') ?>',
 					data: {
 						id_posisi: id_posisi,
 						pendidikan: pendidikan,
@@ -806,7 +725,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			const jenkar = CKEDITOR.instances['jenkar'].getData();
 			$.ajax({
-				url: "<?php echo base_url('jobs/editjenjang'); ?>",
+				url: "<?php echo base_url('job_profile/editjenjang'); ?>",
 				data: {
 					id: id,
 					jenkar: jenkar
@@ -829,7 +748,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 			const id = $(this).data('id');
 			const jenkar = CKEDITOR.instances['jenkar'].getData();
 			$.ajax({
-				url: "<?= base_url('jobs/addjenjangkarir'); ?>",
+				url: "<?= base_url('job_profile/addjenjangkarir'); ?>",
 				data: {
 					id: id,
 					jenkar: jenkar
@@ -890,8 +809,8 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 		$('.btnApprove').on('click', function() {
 			const nik = $(this).data('mynik');
 			const id_posisi = $(this).data('position');
-			const atasan1 = $(this).data('atasan1');
-			const atasan2 = $(this).data('atasan2');
+			const approver1 = $(this).data('approver1');
+			const approver2 = $(this).data('approver2');
 
 			// console.log(valid_tujuanjabatan);
 			// console.log(valid_ruangl);
@@ -912,7 +831,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 				valid_tgjwb == "fill" &&
 				valid_wen == "fill" &&
 				valid_atasan == "fill"
-				)	{ //validator Job Profile, variabelnya ada di file ../application/views/jobs/jp_editor.php
+				)	{ //validator Job Profile, variabelnya ada di file ../application/views/job_profile/jp_editor.php
 
 						$('#submit-modal').modal('hide'); //hide modal submit
 						Swal.fire(
@@ -921,26 +840,25 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 							'success'
 						);
 						
-						setTimeout(function() { //nunggu waktu 2 detik lalu set approve status
+						
+						// setTimeout(function() { //nunggu waktu 1 detik lalu set approve status
 							$.ajax({
-								url: "<?= base_url('jobs/setApprove') ?>",
+								url: "<?= base_url('job_profile/setApprove') ?>",
 								type: 'post',
 								data: {
 									nik: nik,
 									id_posisi: id_posisi,
-									atasan1: atasan1,
-									atasan2: atasan2
+									approver1: approver1,
+									approver2: approver2
 								},
 								success: function(data) {
-									// console.log(data);
-									// location.reload();
-									document.location.href = "<?= base_url('jobs'); ?>";
+									document.location.href = "<?= base_url('job_profile'); ?>";
 								},
 								fail: function() {
 									console.log('fail');
 								}
 							});		
-						}, 5000);
+						// }, 1000);
 					} else {
 						$('#submit-modal').modal('hide');// hide modal submit
 						swal.fire(
@@ -951,7 +869,7 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 					}
 		});
 
-		//scroll ke atas jika submit modal ketutup, modal ada di ../application/view/jobs/myjp.php
+		//scroll ke atas jika submit modal ketutup, modal ada di ../application/view/job_profile/myjp.php
 		$('#submit-modal').on('hidden.bs.modal', function (e) {
 			$('html, body').animate({scrollTop:(0)}, '2000');
 		});

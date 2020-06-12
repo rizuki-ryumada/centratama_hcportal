@@ -7,16 +7,23 @@ class Auth extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        // load library
         $this->load->library('form_validation');
+        
         date_default_timezone_set('Asia/Jakarta');
     }
     public function index()
     {
-        if(empty($this->session->userdata('error'))){
+        if(empty($this->session->userdata('error'))){ // cek error message
             $this->session->set_userdata(array('error' => 0));
         }
-        if ($this->session->userdata('nik')) {
-            redirect('jobs','refresh');
+        if ($this->session->userdata('nik')) { // cek apa sudah login
+            if(empty($this->session->userdata('token'))){ // cek apa ada token
+                redirect('job_profile', 'refresh'); // target to home job profile
+            } else {
+                //targetkan sesuai token
+                header('location: '. base_url('direct/arahkan'));
+            }
         }
         $this->form_validation->set_rules('nik', 'NIK', 'trim|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
@@ -32,9 +39,9 @@ class Auth extends CI_Controller
     }
     private function _login()
     {
-        $nik = $this->input->post('nik');
+        $nik      = $this->input->post('nik');
         $password = $this->input->post('password');
-        $user = $this->db->get_where('employe', ['nik' => $nik])-> row_array();
+        $user     = $this->db->get_where('employe', ['nik' => $nik])->row_array();
         // jika usernya ada
         if($user) {
             // jika usernya aktif
@@ -48,8 +55,13 @@ class Auth extends CI_Controller
                         'role_id' => $user['role_id']
                     ];
                     $this->session->set_userdata($data);
-					// target page if success
-					redirect('jobs', 'refresh');
+
+                    if(empty($this->session->userdata('token'))){ // cek apa ada token
+					    redirect('job_profile', 'refresh'); // target to home job profile
+                    } else {
+                        //targetkan sesuai token
+                        header('location: '. base_url('direct/arahkan'));
+                    }
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
                     Wrong Password! </div>');
@@ -183,7 +195,8 @@ class Auth extends CI_Controller
         $this->session->unset_userdata('nik');
         $this->session->unset_userdata('role_id');
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        $this->session->set_userdata(array('error' => 1)); // buat munculin modal login form
+        $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert">
         Your Session Has been Ended </div>');
         redirect('auth');
     }

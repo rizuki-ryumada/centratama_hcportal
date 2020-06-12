@@ -2,8 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-
-
+//TODO tambah notifikasi untuk pengguna pertama kali login, mengganti password
 
 /**
  * undocumented class

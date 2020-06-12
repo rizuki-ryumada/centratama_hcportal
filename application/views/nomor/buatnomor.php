@@ -1,6 +1,7 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
-
+    <!-- load floating contact -->
+    <?php $this->load->view('templates/komponen/floating_contact') ?>
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>

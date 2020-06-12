@@ -12,4 +12,4 @@ project ini adalah project besar pertama saya. Didalamnya terdapat Javascript, B
 Release Information
 *******************
 
-V.0.0.1
+V.1.0.17 rev 27
