@@ -1,0 +1,26 @@
+{
+  "name": "centratama_hcportal",
+  "version": "1.1.0",
+  "description": "Portal Human Capital Centratama Group",
+  "main": "chart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rizuki-ryumada/centratama_hcportal.git"
+  },
+  "keywords": [
+    "hcportal",
+    "centratama"
+  ],
+  "author": "Rizuki Ryumada",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/rizuki-ryumada/centratama_hcportal/issues"
+  },
+  "homepage": "https://github.com/rizuki-ryumada/centratama_hcportal#readme",
+  "dependencies": {
+    "admin-lte": "^3.0.5"
+  }
+}

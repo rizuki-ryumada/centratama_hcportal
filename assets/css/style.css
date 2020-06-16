@@ -376,3 +376,148 @@ div.banner-wrapper .banner-pengumuman{
     top: 80px;
 }
 /* -------------------------------------------------------------------------- */
+
+.form-card-wrapper{
+    max-width: 50em;
+}
+.form-survey{
+    font-size: 1em;
+}
+
+/* Survey Style */
+@media screen and (max-width: 1080px) {
+    .form-survey{
+        font-size: 0.90em;
+    }
+
+    .col-7.departemen-name.d-flex.align-items-center{
+        flex: 0 0 40%;
+        max-width: 40%;
+    }
+
+    .col-1.departemen-nilai.d-flex.align-items-center.m-0.p-0.justify-content-center{
+        flex: 0 0 12%;
+        max-width: 12%;
+    }
+
+    .col-6.tombol-aksi{
+        width: 100%;
+    }
+
+    /* 0 0 40% ||| 0 0 60% */
+    /* 0 0 40% ||| 0 0 15%% */
+    
+    h1{
+        font-size: 30px;
+    }
+
+    h5{
+        font-size: 18px;
+    }
+
+    body{
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .col-1.pertanyaan-index-wrapper{
+        -ms-flex: 0 0 0%;
+        flex: 0 0 0%;
+        max-width: 60px;
+        width: 50px;
+    }
+    .col-11.pertanyaan-text-wrapper{
+        -ms-flex: 0 0 0%;
+        flex: 0 0 0%;
+        max-width: 93%;
+        flex-grow: 1;
+        padding-left: 0.5em !important;
+    }
+
+}
+@media screen and (max-width: 500px) {
+    .keterangan-penilaian{
+        font-size: 0.92em;
+    }
+
+    /* p{
+        font-size: 0.92em;
+    } */
+    
+    p.counter-text{
+        font-size: 0.80em;
+    }
+
+    p.text-center.m-0.badge{
+        font-size: 9px;
+    }
+
+    button{
+        font-size: 15px !important;
+    }
+}
+@media screen and (max-height: 500px){
+    h5{
+        font-size: 12px;
+    }
+
+    /* p{
+        font-size: 10px;
+    } */
+}
+/* pertanyaan survey styles */
+.pertanyaan-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+.col-1.pertanyaan-index-wrapper{
+    -ms-flex: 0 0 7%;
+    flex: 0 0 7%;
+    max-width: 7%;
+}
+.col-11.pertanyaan-text-wrapper{
+    -ms-flex: 0 0 93%;
+    flex: 0 0 93%;
+    max-width: 93%;
+}
+html {
+    scroll-behavior: smooth;
+}
+
+p.text-center.m-0.badge.badge-success, p.text-center.m-0.badge.badge-info, p.text-center.m-0.badge.badge-warning, p.text-center.m-0.badge.badge-danger{
+    min-width: 4em;
+    max-width: 15em;
+}
+
+ul.instruction-list{
+    padding-left: 1.5em;
+}
+
+.row-survey-striped{
+    background-color: #eee;
+}
+.row-survey{
+    min-height: 3em;
+    max-height: 8em;
+}
+
+/* preloader */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    /* background-color: #1089FF; */
+    background-image: url('../img/background.jpg');
+    background-size: cover;
+}
+.preloader .loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font: 14px arial;
+}
