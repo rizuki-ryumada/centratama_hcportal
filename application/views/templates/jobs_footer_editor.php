@@ -33,6 +33,7 @@
 
 <script src="<?= base_url('assets/'); ?>vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="<?= base_url('/assets/vendor/jquery-validate/jquery.validate.min.js'); ?>"></script>
 <!-- Page level custom scripts -->
 <script src="<?= base_url('assets/'); ?>js/demo/datatables-demo.js"></script>
 <script src="<?= base_url('assets/'); ?>js/chartorg.js"></script>
@@ -928,6 +929,90 @@ var datasource_assistant2 = <?php echo($orgchart_data_assistant2); ?>;
 		});
 
 		$('#departemen-table').DataTable();
+
+		/* ---------------------- baca input checkbox verify od --------------------- */
+		$('#verify_od').on('change', function(){
+			$verify_od = $('#verify_od:checked').val(); // get verify value on checked
+
+			$.ajax({
+				url: '<?= base_url('job_profile/setVerifyJP'); ?>',
+				type: 'POST',
+				data: {
+					verify_od: $verify_od,
+					id_posisi: $(this).data('id_posisi')
+				},
+				success: function(data){
+					if($verify_od == undefined){
+						// do nothing
+					} else {
+						Swal.fire(
+							'Sudah diverifikasi',
+							'Job Profile ini selesai diperiksa <br/> Terima kasih.',
+							'success'
+						);
+					}
+					
+				}
+			});
+			
+			// if($verify_od == undefined){
+			// 	console.log('data kosong');
+			// } else {
+			// 	Swal.fire({
+			// 		title: 'Sudah selesai memeriksa Job Profile ini?',
+			// 		text: "Menandai Job Profile ini sebagai sudah diperiksa",
+			// 		icon: 'warning',
+			// 		showCancelButton: true,
+			// 		confirmButtonText: 'Ya',
+			// 		cancelButtonText: 'Tidak, periksa kembali',
+			// 		reverseButtons: true
+			// 	}).then((result) => {
+			// 		if (result.value) {
+			// 			$.ajax({
+			// 				url: '<?= base_url('job_profile/setVerifyJP'); ?>',
+			// 				type: 'POST',
+			// 				data: {
+			// 					verify_od: $verify_od,
+			// 					id_posisi: $(this).data('id_posisi')
+			// 				},
+			// 				success: function(data){
+			// 					Swal.fire(
+			// 						'Sudah diverifikasi',
+			// 						'Job Profile ini sudah diperksa oleh OD',
+			// 						'success'
+			// 					);
+
+			// 					console.log(data);
+			// 				}
+			// 			});
+			// 		} else if (
+			// 			/* Read more about handling dismissals below */
+			// 			result.dismiss === Swal.DismissReason.cancel
+			// 		) {
+			// 			Swal.fire(
+			// 				'Dibatalkan',
+			// 				'Silakan periksa kembali Job Profile ini.',
+			// 				'error'
+			// 			);
+			// 			$('#verify_od').prop('checked', false); // uncheck kotak verufy od
+			// 		}
+			// 	})
+			// }
+
+		});
+		
+        $('#submitRevisi').on('click', function(){
+			$pesan_revisi = $('textarea[name="pesan_revisi"]').val();
+			if($pesan_revisi == ""){
+				swal.fire(
+					'Error',
+					'Harap isi pesan revisi.',
+					'error'
+				);
+			} else {
+				$('#revisiForm').submit();
+			}
+        });
 
 	});
 

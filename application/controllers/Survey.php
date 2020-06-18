@@ -16,6 +16,7 @@ class Survey extends CI_Controller {
     {
         $data['departemen'] = $this->Jobpro_model->getDetails('*', 'survey_ses_departemen', array());
         $data['survey1'] = $this->Jobpro_model->getDetails('*', 'survey_ses', array('id_tipesurvey' => 'A'));
+        $data['title'] = 'Survey';
         $this->load->view('survey/engagement/srvy_enggage_v', $data);
     }
 

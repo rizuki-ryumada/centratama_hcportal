@@ -145,7 +145,6 @@ class Job_profile extends CI_Controller {
         // }
         //ambil position id
         $id_posisi =$this->input->get('id'); //ambil position id
-        // error_reporting(0); //sembunyiin pesan error
         
         if($role_id != 1){
             if(empty($this->db->query("SELECT * FROM position WHERE (id_approver1='".$my_position_id."' AND id='".$id_posisi."') OR (id_approver2='".$my_position_id."' AND id='".$id_posisi."')")->result())){ //cek kalo dia punya akses terhadap karyawan tersebut
@@ -340,7 +339,8 @@ class Job_profile extends CI_Controller {
                     $data = [
                         'diperbarui' => time(),
                         'status_approval' => '2',
-                        'pesan_revisi' => $pesan_revisi
+                        'pesan_revisi' => 'null'
+                        //BUG pesan Revisi
                     ];
                     $this->Jobpro_model->updateApproval($data, $id_posisi);
 
@@ -373,7 +373,8 @@ class Job_profile extends CI_Controller {
                     $data = [
                         'diperbarui' => time(),
                         'status_approval' => '4',
-                        'pesan_revisi' => $pesan_revisi
+                        'pesan_revisi' => 'null'
+                        //BUG Persan Revisi
                     ];
                     $this->Jobpro_model->updateApproval($data, $id_posisi);
                     
@@ -423,11 +424,17 @@ class Job_profile extends CI_Controller {
                 } else {
                     show_404(); //error
                 }
-            } elseif($status_approval == "false") {
+            } elseif($status_approval == "false") { // revisi jika tidak diapprove
+                if(!empty($pesan_revisi)){
+                    $simpan_pesan = $pesan_revisi;
+                } else {
+                    $simpan_pesan = 'null';
+                }
+                // BUG Pesan Revisi
                 $data = [
                     'diperbarui' => time(),
                     'status_approval' => '3',
-                    'pesan_revisi' => $pesan_revisi
+                    'pesan_revisi' => $simpan_pesan
                 ];
                 $this->Jobpro_model->updateApproval($data, $id_posisi);
 
@@ -482,11 +489,11 @@ class Job_profile extends CI_Controller {
             }
         }else{
             //cek status_approval
-            if($status_approval == "true"){ //jika disetujui
+            if($status_approval == "true"){ //jika disetujui selesaikan approval
                 $data = [
                     'diperbarui' => time(),
                     'status_approval' => '4',
-                    'pesan_revisi' => $pesan_revisi
+                    'pesan_revisi' => 'null'
                 ];
                 $this->Jobpro_model->updateApproval($data, $id_posisi);
 
@@ -527,10 +534,16 @@ class Job_profile extends CI_Controller {
                 $subject_email = '[Job Profile] Approved';
 
             } elseif($status_approval == "false") {
+                //cek apa ada pesan revisi
+                if(!empty($pesan_revisi)){
+                    $simpan_pesan = $pesan_revisi;
+                } else {
+                    $simpan_pesan = 'null';
+                }
                 $data = [
                     'diperbarui' => time(),
                     'status_approval' => '3',
-                    'pesan_revisi' => $pesan_revisi
+                    'pesan_revisi' => $simpan_pesan
                 ];
                 $this->Jobpro_model->updateApproval($data, $id_posisi);
 
@@ -578,6 +591,16 @@ class Job_profile extends CI_Controller {
         //kirim notifikasi
         $this->notifikasi($nik, $job_profile, $data_penerima_email, $subject_email);
         header('location: ' . base_url('job_profile'));
+    }
+    public function setVerifyJP(){
+        $verify_od = $this->input->post('verify_od');
+        $id_posisi = $this->input->post('id_posisi');
+
+        if(!empty($verify_od)){
+            $this->Jobpro_model->update('job_approval', array('db' => 'id_posisi', 'server' => $id_posisi), array('verify' => '1'));
+        } else {
+            $this->Jobpro_model->update('job_approval', array('db' => 'id_posisi', 'server' => $id_posisi), array('verify' => '0'));
+        }
     }
     
     /**

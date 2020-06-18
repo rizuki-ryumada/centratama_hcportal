@@ -33,6 +33,21 @@
 			<?php $this->load->view('job_profile/jp_editor'); ?>
 			<!-- /JP Editor -->
 
+			<div class="card-card-body d-flex mb-3">
+				<div class="row justify-content-end align-content-end w-100">
+					<div class="col">
+						<div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
+                            <div class="row justify-content-end align-self-end w-100 m-0">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="verify_od" data-id_posisi='<?= $this->input->get('id'); ?>' <?php if(!empty($statusApproval['verify']) || $statusApproval['verify'] != 0){echo"checked";} ?>>
+									<label class="custom-control-label" for="verify_od"><b>Verify OD</b></label>
+								</div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+
 			<?php if($statusApproval['status_approval'] == 0): ?>
 				<div class="card-footer badge-danger">
 					<p class="text-center m-0 p-0">Kindly complete your job profile and submit for approvals.</p>

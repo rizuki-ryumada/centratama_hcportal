@@ -61,7 +61,7 @@
 				</form>
             </div>
             <div class="modal-footer">
-				<input type="submit" form="setuju-form" style="btn btn-light" value="Approve">
+				<input type="submit" form="setuju-form" class="btn btn-secondary" value="Approve">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Periksa lagi</button>
             </div>
         </div>
@@ -83,7 +83,7 @@
 				<h5>Pesan Revisi</h5>
 				<hr/>
 				<p>Silakan masukkan pesan untuk karyawan, agar mempermudah dalam melakukan revisi.</p>
-				<form id="revisi-form" action="<?= base_url('job_profile/'); ?>taskAction" method="post">
+				<form id="revisiForm" action="<?= base_url('job_profile/'); ?>taskAction" method="post">
 					<textarea rows="4" cols="45" name="pesan_revisi"></textarea>
 					<input type="hidden" name="id_posisi" value="<?= $this->input->get('id'); ?>">
 					<input type="hidden" name="status_approval" value="false" />
@@ -92,7 +92,7 @@
 				</form>
             </div>
             <div class="modal-footer">
-				<input type="submit" form="revisi-form" style="btn btn-light" value="Revise">
+				<button id="submitRevisi" class="btn btn-secondary" >Revise</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Periksa lagi</button>
             </div>
         </div>
@@ -101,6 +101,7 @@
 
 
 <script>
+    
 // // for submitting form
 // function submitForm(){
 // 	document.getElementById("setuju_form").submit();

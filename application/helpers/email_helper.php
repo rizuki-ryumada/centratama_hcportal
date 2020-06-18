@@ -102,15 +102,15 @@ function sendEmail($data_penerima_email, $emailText, $subject_email){
 
     // configuration for send email
     // FIXME tambahkan pengaturan smtp_crypto = tls
-    // $config = $CI->Jobpro_model->getDetail(
-    //     'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
-    //     'setting_email', 
-    //     array('id' => 2));
-    // configuration for send email
     $config = $CI->Jobpro_model->getDetail(
-        'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype, smtp_crypto', 
+        'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype', 
         'setting_email', 
-        array('id' => 1));
+        array('id' => 2));
+    // configuration for send email
+    // $config = $CI->Jobpro_model->getDetail(
+    //     'useragent, protocol, smtp_host, smtp_port, smtp_user, smtp_pass, charset, wordwrap, mailtype, smtp_crypto', 
+    //     'setting_email', 
+    //     array('id' => 1));
     $config['crlf'] = "\r\n";
     $config['newline'] = "\r\n";
     $CI->load->library('email');

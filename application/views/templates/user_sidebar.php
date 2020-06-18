@@ -1,4 +1,5 @@
 <!-- Sidebar -->
+<!-- TODO Surat ganti jadi Document -->
 <ul id="accordionSidebar" class="navbar-nav sidebar sidebar-dark accordion ml-0" style="background: #0072C6">
 
 	<!-- Sidebar - Brand -->
@@ -79,11 +80,11 @@
 						<?php foreach ($subMenu as $sm) : ?>
 							<?php if ($title == $sm['title']): ?>
 								<a class="collapse-item active" href="<?= base_url($sm['url']); ?>">
-								<?php else : ?>
-									<a class="collapse-item" href="<?= base_url($sm['url']); ?>">
-									<?php endif; ?>
+							<?php else : ?>
+								<a class="collapse-item" href="<?= base_url($sm['url']); ?>">
+							<?php endif; ?>
 									<?= $sm['title']; ?>
-									</a>
+								</a>
 						<?php endforeach; ?>
 					</div>
 				</div>
@@ -107,6 +108,10 @@
 
 </ul>
 <!-- End of Sidebar -->
+
+
+
+
 
 <!-- load floating contact -->
 <?php $this->load->view('templates/komponen/floating_contact') ?>

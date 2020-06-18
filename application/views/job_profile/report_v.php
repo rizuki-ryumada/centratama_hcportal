@@ -110,6 +110,9 @@
                             <th class="align-middle" >Employee Name</th>
                             <th class="align-middle" >Status</th>
                             <!-- <th class="align-middle"  style="min-width: 45px;" ></th> -->
+                            <?php if($user['role_id'] == 1): ?>
+                                <th class="align-middle">Verify OD</th>
+                            <?php endif; ?>
                             <th class="align-middle" >View Details</th>
                         </tr>
                     </thead>
@@ -139,6 +142,17 @@
                             <?php elseif($v['status_approval'] == 4): ?>
                                 <td data-filter="5">
                                     <span class="badge badge-success">Final Approval</span>
+                                </td>
+                            <?php endif; ?>
+                            <?php if($user['role_id'] == 1): ?>
+                                <td>
+                                    <div class="container d-flex h-100 m-0 px-auto"> <!-- this container make the element to vertically and horizontally centered -->
+                                        <div class="row justify-content-center align-self-center w-100 m-0">
+                                            <?php if(!empty($v['verify']) || $v['verify'] != 0): ?>
+                                                <i class="fa fa-check-circle text-success"></i>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
                                 </td>
                             <?php endif; ?>
                             <td>
