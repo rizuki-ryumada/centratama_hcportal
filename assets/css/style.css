@@ -176,7 +176,7 @@ div.banner-wrapper .banner-pengumuman{
 /* Navbar */
 .navbar-logo{
     width: 9em;
-    height: auto;
+    height: auto !important;
 }
 .navbar-text-leftbordered{
     border-left: 6px solid #0072C6;

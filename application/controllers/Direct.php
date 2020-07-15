@@ -13,7 +13,9 @@ class Direct extends CI_Controller {
         $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert">
                 Please Login first to continue. </div>');
         $this->session->set_userdata(array('error' => 1));
-        $this->session->set_userdata(array('token' => $this->input->get('token')));
+        if($this->input->get('token')){
+            $this->session->set_userdata(array('token' => $this->input->get('token')));
+        }
 
         header('location: '. base_url('auth'));
     }

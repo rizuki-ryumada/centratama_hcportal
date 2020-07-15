@@ -205,8 +205,6 @@ class Job_profile extends CI_Controller {
         $data['user'] = $this->db->get_where('employe', ['nik' => $this->session->userdata('nik')])->row_array();
         $data['hirarki_org'] = $this->Jobpro_model->getDetail('hirarki_org', 'position', array('id' => $data['user']['position_id']))['hirarki_org'];
         $data['approval_data'] = $this->getApprovalDetails($task);
-        
-        
 
         $this->load->view('templates/user_header', $data);
         $this->load->view('templates/user_sidebar', $data);

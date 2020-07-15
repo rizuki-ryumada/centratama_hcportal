@@ -36,6 +36,7 @@
 //activate dataTable
 $(document).ready(function () {
     var mTable = $('#myTask').DataTable({
+        responsive: true,
         'dom': 'Bfrtip',
         'buttons': [
             {
